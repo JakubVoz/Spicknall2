@@ -7,7 +7,7 @@ output: html_document
 
 
 
-```{r include=FALSE}install.packages("devtools")
+```{r include=FALSE}
 library(deSolve)
 N=10000
 ```
