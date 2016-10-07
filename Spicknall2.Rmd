@@ -11,15 +11,15 @@ output: html_document
 library(deSolve)
 options("scipen" = 10)
 N=10000
-a=50
-pbeta_w=0.0001
-pbeta_z=0.00005
-pgammaa=0.005
-pgamma_tilt=0.5
-pq=0.25
-prho=0.1
-pphi=0.01
-peps=0.7
+a=2
+pbeta_w=0.04
+pbeta_z=0.0015
+pgammaa=0.01
+pgamma_tilt=0.1
+pq=0.5
+prho=0.5
+pphi=0.05
+peps=0.15
 
 ```
 
