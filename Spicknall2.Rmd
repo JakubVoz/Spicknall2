@@ -222,7 +222,7 @@ In this model, when a patient infected with resistant strain is super-infected b
 The model is defined by following equations:
 
 
-$$
+
 \begin{aligned}
 \frac{dS}{dt} &=-{\beta_w} \times{I_w}\times{S} - {\beta_z} \times{I_z}\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1-{\epsilon})\times{I_w} + {\gamma `} \times {\epsilon} \times {I_w} \\
 
@@ -231,7 +231,7 @@ $$
 \frac{dI_z}{dt} &={\beta_z} \times{I_z}\times{S} - {\gamma} \times {I_z} - ({\beta_w} - {\beta_z})\times{I_w}\times{I_z} \\
 
 \end{aligned}
-$$
+
 
 
 
