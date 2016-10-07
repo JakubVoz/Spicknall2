@@ -64,6 +64,8 @@ out=as.data.frame(
   ode(y=state, times=times, func=SIS_single_strain, parms=parameters)
 )
 
+
+
 ```
 
 
@@ -74,12 +76,16 @@ plot(times, out$Iw/N, main="Plot n°1 - Single-strain model", xlab="time (yrs)",
 
 lines(times, out$Iz/N, lty=2, lwd=2)
 
+double_inf <- out$Iw*out$Iz
+
+lines(times, double_inf/N^2, lty=4, lwd=2)
+
 
 ```
 
 
 
-__Plot n°1 Single-strain model__: $\beta$ ~w~ = 0.0001, $\beta$ ~z~ = 0.00005, $\gamma$ = 0.005, $\gamma$?= 0.5 and $\epsilon$ = 0.7  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of population infected with sensitive strain (_dotted line_) and with resistant strain (_dashed line_) over 30 years.
+__Plot n°1 Single-strain model__: $\beta$ ~w~ = 0.0001, $\beta$ ~z~ = 0.00005, $\gamma$ = 0.005, $\gamma$?= 0.5 and $\epsilon$ = 0.7  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of population infected with sensitive strain (_dotted line_), with resistant strain (_dashed line_) and with both (_dashed-dotted line_) over 30 years.
 
 
 <center> <h2> Superinfection model </h2> </center>
