@@ -24,7 +24,7 @@ This model is based on an independent evolution of the resistant and sensitive s
 
 The model is defined by following equations:
 
-$$
+
  \begin{aligned}
  \frac{dS_1}{dt} &= -\beta_w \times{I_w}\times{S_1} +  \gamma\times(1-\epsilon)\times{I_w} + \gamma ` \times \epsilon \times {I_w} \\
  
@@ -36,7 +36,7 @@ $$
  
  \end{aligned}
  
- $$
+
 
 
 
@@ -88,7 +88,7 @@ In this model, the hosts can be infected with both resistant and sensitive strai
 
 The model is defined by following equations:
 
-$$
+
 \begin{aligned}
 
 \frac{dS}{dt} &=-{\beta_w} \times({I_w}+{q}\times{I_{wz}})\times{S} -{\beta_z} \times({I_z}+{q}\times{I_{wz}})\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1-{\epsilon})\times{I_w} + {\gamma `} \times {\epsilon} \times {I_w} \\
@@ -100,7 +100,7 @@ $$
 \frac{dI_{wz}}{dt} &={\beta_z} \times({I_z}+{q}\times{I_{wz}})\times{I_w}+{\beta_w} \times({I_w}+{q}\times{I_{wz}})\times{I_z}-{\gamma} \times {I_{wz}} -{\gamma}\times(1-{\epsilon})\times{I_{wz}} - {\gamma `} \times {\epsilon} \times {I_{wz}} \\
 
  \end{aligned}
-$$
+
 
 
 
@@ -155,7 +155,7 @@ This model is based on a relatively independent evolution of the resistant and s
 The model is defined by following equations:
 
 
-$$
+
 \begin{aligned}
 
 \frac{dS}{dt} &=-{\beta_w} \times{I_w}\times{S} -{\beta_z} \times{I_z}\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1-{\epsilon})\times{I_w} + {\gamma `} \times {\epsilon} \times {I_w} \\
@@ -165,7 +165,7 @@ $$
 \frac{dI_z}{dt} &={\beta_z} \times{I_z}\times{S} - {\gamma} \times {I_z} \\
 
 \end{aligned}
-$$
+
 
 
 
@@ -284,7 +284,7 @@ In this model, a patient patient that is treated by antibiotics and that is infe
 The model is defined by following equations:
 
 
-$$
+
 \begin{aligned}
 
 \frac{dS}{dt} &=-{\beta_w} \times{I_w}\times{S} - {\beta_z} \times{I_z}\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1-{\epsilon})\times{I_w} + {\gamma `} \times {\epsilon} \times {I_w} \\
@@ -294,7 +294,7 @@ $$
 \frac{dI_z}{dt} &={\beta_z} \times{I_z}\times{S} - {\gamma} \times {I_z} +{\rho}\times{\epsilon}\times{I_w} \\
 
 \end{aligned}
-$$
+
 
 
 
@@ -347,7 +347,7 @@ In addition to the preceding model, a transition from $Iz$ to $Iw$ is taken into
 The model is defined by following equations:
 
 
-$$
+
 \begin{aligned}
 \frac{dS}{dt} &=-{\beta_w} \times{I_w}\times{S} - {\beta_z} \times{I_z}\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1-{\epsilon})\times{I_w} + {\gamma `} \times {\epsilon} \times {I_w} \\
 
@@ -357,7 +357,7 @@ $$
 
 
 \end{aligned}
-$$
+
 
 
 
