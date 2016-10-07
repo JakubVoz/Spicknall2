@@ -70,8 +70,8 @@ out=as.data.frame(
 
 
 ```{r single_strain_trial, echo=FALSE, fig.align='center', cache=TRUE}
-plot(times, (out$S1 + out$Iw)/N, main="Plot n°1 - Single-strain model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2)
-lines(times, out$Iw/N, lty=3, lwd=2)
+plot(times, out$Iw/N, main="Plot n°1 - Single-strain model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+
 lines(times, out$Iz/N, lty=4, lwd=2)
 
 
@@ -136,8 +136,7 @@ out_super=as.data.frame(
 
 
 ```{r superinfection_trial, echo=FALSE, fig.align='center', cache=TRUE}
-plot(times, (out_super$S + out_super$Iw + out_super$Iz + out_super$Iwz)/N, main="Plot n°2 - Superinfection model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2)
-lines(times, out_super$S/N, lty=2, lwd=2)
+plot(times, out_super$S/N, main="Plot n°2 - Superinfection model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=2, lwd=2, type="l")
 lines(times, out_super$Iw/N, lty=3, lwd=2)
 lines(times, out_super$Iz/N, lty=4, lwd=2)
 lines(times, out_super$Iwz/N, lty=5, lwd=2)
@@ -201,8 +200,7 @@ out_exc=as.data.frame(
 
 
 ```{r exclusive_trial, echo=FALSE, fig.align='center', cache=TRUE}
-plot(times, (out_exc$S + out_exc$Iw + out_exc$Iz)/N, main="Plot n°3 - Exclusive infection model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2)
-lines(times, out_exc$S/N, lty=2, lwd=2)
+plot(times, out_exc$S/N, main="Plot n°3 - Exclusive infection model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=2, lwd=2, type="l")
 lines(times, out_exc$Iw/N, lty=3, lwd=2)
 lines(times, out_exc$Iz/N, lty=4, lwd=2)
 
@@ -326,8 +324,7 @@ out_uni=as.data.frame(
 
 
 ```{r unidir_trial, echo=FALSE, fig.align='center', cache=TRUE}
-plot(times, (out_uni$S + out_uni$Iw + out_uni$Iz)/N, main="Plot n°5 - Unidirectional conversion model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2)
-lines(times, out_uni$S/N, lty=2, lwd=2)
+plot(times, out_uni$S/N, main="Plot n°5 - Unidirectional conversion model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=2, lwd=2, type="l")
 lines(times, out_uni$Iw/N, lty=3, lwd=2)
 lines(times, out_uni$Iz/N, lty=4, lwd=2)
 
@@ -389,8 +386,7 @@ out_bi=as.data.frame(
 
 
 ```{r bidir_trial, echo=FALSE, fig.align='center', cache=TRUE}
-plot(times, (out_bi$S + out_bi$Iw + out_bi$Iz)/N, main="Plot n°6", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2)
-lines(times, out_bi$S/N, lty=2, lwd=2)
+plot(times, out_bi$S/N, main="Plot n°6", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=2, lwd=2, type="l")
 lines(times, out_bi$Iw/N, lty=3, lwd=2)
 lines(times, out_bi$Iz/N, lty=4, lwd=2)
 
