@@ -72,14 +72,14 @@ out=as.data.frame(
 ```{r single_strain_trial, echo=FALSE, fig.align='center', cache=TRUE}
 plot(times, out$Iw/N, main="Plot n°1 - Single-strain model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
-lines(times, out$Iz/N, lty=4, lwd=2)
+lines(times, out$Iz/N, lty=2, lwd=2)
 
 
 ```
 
 
 
-__Plot n°1 Single-strain model__: $\beta$ ~w~ = 0.0001, $\beta$ ~z~ = 0.00005, $\gamma$ = 0.005, $\gamma$?= 0.5 and $\epsilon$ = 0.7  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the whole population (_solid line_), population infected with sensitive strain (_dotted line_) and with resistant strain (_dashed-dotted line_) over 30 years.
+__Plot n°1 Single-strain model__: $\beta$ ~w~ = 0.0001, $\beta$ ~z~ = 0.00005, $\gamma$ = 0.005, $\gamma$?= 0.5 and $\epsilon$ = 0.7  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of population infected with sensitive strain (_dotted line_) and with resistant strain (_dashed line_) over 30 years.
 
 
 <center> <h2> Superinfection model </h2> </center>
@@ -136,15 +136,15 @@ out_super=as.data.frame(
 
 
 ```{r superinfection_trial, echo=FALSE, fig.align='center', cache=TRUE}
-plot(times, out_super$S/N, main="Plot n°2 - Superinfection model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=2, lwd=2, type="l")
+plot(times, out_super$S/N, main="Plot n°2 - Superinfection model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
 lines(times, out_super$Iw/N, lty=3, lwd=2)
-lines(times, out_super$Iz/N, lty=4, lwd=2)
-lines(times, out_super$Iwz/N, lty=5, lwd=2)
+lines(times, out_super$Iz/N, lty=2, lwd=2)
+lines(times, out_super$Iwz/N, lty=4, lwd=2)
 
 
 ```
 
-__Plot n°2 Superinfection model__: $\beta$ ~w~ = 0.0001, $\beta$ ~z~ = 0.00005, $\gamma$ = 0.005, $\gamma$?= 0.5 and $\epsilon$ = 0.7 and $q$ = 0.25  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the whole population (_solid line_), the sensitive subpopulation (_dashed line_), the subpopulation infected with sensitive strain exclusively (_dotted line_), with resistant strain exclusively (_dashed-dotted line_) and with both (_long-dashed line_) over 30 years.
+__Plot n°2 Superinfection model__: $\beta$ ~w~ = 0.0001, $\beta$ ~z~ = 0.00005, $\gamma$ = 0.005, $\gamma$?= 0.5 and $\epsilon$ = 0.7 and $q$ = 0.25  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_), with resistant strain exclusively (_dashed line_) and with both (_dashed-dotted line_) over 30 years.
 
 
 <center> <h2> Exclusive infection model </h2> </center>
@@ -200,15 +200,15 @@ out_exc=as.data.frame(
 
 
 ```{r exclusive_trial, echo=FALSE, fig.align='center', cache=TRUE}
-plot(times, out_exc$S/N, main="Plot n°3 - Exclusive infection model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=2, lwd=2, type="l")
+plot(times, out_exc$S/N, main="Plot n°3 - Exclusive infection model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
 lines(times, out_exc$Iw/N, lty=3, lwd=2)
-lines(times, out_exc$Iz/N, lty=4, lwd=2)
+lines(times, out_exc$Iz/N, lty=2, lwd=2)
 
 ```
 
 
 
-__Plot n°3 Exclusive infection model__: $\beta$ ~w~ = 0.0001, $\beta$ ~z~ = 0.00005, $\gamma$ = 0.005, $\gamma$?= 0.5, $\epsilon$ = 0.7 and $q$=0.25  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the whole population (_solid line_), the sensitive subpopulation (_dashed line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed-dotted line_) over 30 years.
+__Plot n°3 Exclusive infection model__: $\beta$ ~w~ = 0.0001, $\beta$ ~z~ = 0.00005, $\gamma$ = 0.005, $\gamma$?= 0.5, $\epsilon$ = 0.7 and $q$=0.25  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of  the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over 30 years.
 
 
 
@@ -264,16 +264,15 @@ out_rep=as.data.frame(
 
 
 ```{r replacement_trial, echo=FALSE, fig.align='center', cache=TRUE}
-plot(times, (out_rep$S + out_rep$Iw + out_rep$Iz)/N, main="Plot n°4 - Replacement infection model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2)
-lines(times, out_rep$S/N, lty=2, lwd=2)
+plot(times, out_rep$S/N, main="Plot n°4 - Replacement infection model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
 lines(times, out_rep$Iw/N, lty=3, lwd=2)
-lines(times, out_rep$Iz/N, lty=4, lwd=2)
+lines(times, out_rep$Iz/N, lty=2, lwd=2)
 
 ```
 
 
 
-__Plot n°4 Replacement infection model__: $\beta$ ~w~ = 0.0001, $\beta$ ~z~ = 0.00005, $\gamma$ = 0.005, $\gamma$?= 0.5 and $\epsilon$ = 0.7  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow its evolution during 30 years. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the whole population (_solid line_), the sensitive subpopulation (_dashed line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed-dotted line_) over 30 years.
+__Plot n°4 Replacement infection model__: $\beta$ ~w~ = 0.0001, $\beta$ ~z~ = 0.00005, $\gamma$ = 0.005, $\gamma$?= 0.5 and $\epsilon$ = 0.7  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow its evolution during 30 years. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over 30 years.
 
 <center> <h2> Unidirectional conversion model </h2> </center>
 
@@ -324,15 +323,15 @@ out_uni=as.data.frame(
 
 
 ```{r unidir_trial, echo=FALSE, fig.align='center', cache=TRUE}
-plot(times, out_uni$S/N, main="Plot n°5 - Unidirectional conversion model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=2, lwd=2, type="l")
+plot(times, out_uni$S/N, main="Plot n°5 - Unidirectional conversion model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
 lines(times, out_uni$Iw/N, lty=3, lwd=2)
-lines(times, out_uni$Iz/N, lty=4, lwd=2)
+lines(times, out_uni$Iz/N, lty=2, lwd=2)
 
 ```
 
 
 
-__Plot n°5 Unidirectional conversion model__: $\beta$ ~w~ = 0.0001, $\beta$ ~z~ = 0.00005, $\gamma$ = 0.005, $\gamma$?= 0.5, $\epsilon$ = 0.7 and $\rho$ = 0.01  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the whole population (_solid line_), the sensitive subpopulation (_dashed line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed-dotted line_) over 30 years.
+__Plot n°5 Unidirectional conversion model__: $\beta$ ~w~ = 0.0001, $\beta$ ~z~ = 0.00005, $\gamma$ = 0.005, $\gamma$?= 0.5, $\epsilon$ = 0.7 and $\rho$ = 0.01  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over 30 years.
 
 
 
@@ -386,15 +385,15 @@ out_bi=as.data.frame(
 
 
 ```{r bidir_trial, echo=FALSE, fig.align='center', cache=TRUE}
-plot(times, out_bi$S/N, main="Plot n°6", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=2, lwd=2, type="l")
+plot(times, out_bi$S/N, main="Plot n°6", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
 lines(times, out_bi$Iw/N, lty=3, lwd=2)
-lines(times, out_bi$Iz/N, lty=4, lwd=2)
+lines(times, out_bi$Iz/N, lty=2, lwd=2)
 
 ```
 
 
 
-__Plot n°6 Bidirectional conversion model__: $\beta$ ~w~ = 0.0001, $\beta$ ~z~ = 0.00005, $\gamma$ = 0.005, $\gamma$?= 0.5, $\epsilon$ = 0.7, $\rho$ = 0.01 and $\phi$=0.02 are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the whole population (_solid line_), the sensitive subpopulation (_dashed line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed-dotted line_) over 30 years.
+__Plot n°6 Bidirectional conversion model__: $\beta$ ~w~ = 0.0001, $\beta$ ~z~ = 0.00005, $\gamma$ = 0.005, $\gamma$?= 0.5, $\epsilon$ = 0.7, $\rho$ = 0.01 and $\phi$=0.02 are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over 30 years.
 
 
 
