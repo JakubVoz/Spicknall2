@@ -24,21 +24,19 @@ This model is based on an independent evolution of the resistant and sensitive s
 
 The model is defined by following equations:
 
-
 $$
-\frac{dS_1}{dt}= -\beta_w \times{I_w}\times{S_1} +  \gamma\times(1-\epsilon)\times{I_w} + \gamma ? \times \epsilon \times {I_w}
-$$
-$$
-\frac{dI_w}{dt}=\beta_w \times{I_w}\times{S_1} - \gamma\times(1-\epsilon)\times{I_w}- \gamma ? \times \epsilon \times {I_w}
-$$
-$$
-\frac{dS_2}{dt}= -\beta_z \times{I_z}\times{S_2} + \gamma \times {I_z} 
-$$
-
-$$
-\frac{dI_z}{dt}=\beta_z \times{I_z}\times{S_2} - \gamma \times {I_z} 
-$$
-
+ \begin{aligned}
+ \frac{dS_1}{dt} &= -\beta_w \times{I_w}\times{S_1} +  \gamma\times(1-\epsilon)\times{I_w} + \gamma ` \times \epsilon \times {I_w} \\
+ 
+ \frac{dI_w}{dt} &=\beta_w \times{I_w}\times{S_1} - \gamma\times(1-\epsilon)\times{I_w}- \gamma ` \times \epsilon \times {I_w} \\
+ 
+ \frac{dS_2}{dt} &= -\beta_z \times{I_z}\times{S_2} + \gamma \times {I_z}  \\
+ 
+ \frac{dI_z}{dt} &=\beta_z \times{I_z}\times{S_2} - \gamma \times {I_z} \\
+ 
+ \end{aligned}
+ 
+ $$
 
 
 
@@ -91,19 +89,21 @@ In this model, the hosts can be infected with both resistant and sensitive strai
 The model is defined by following equations:
 
 $$
-\frac{dS}{dt}=-{\beta_w} \times({I_w}+{q}\times{I_{wz}})\times{S} -{\beta_z} \times({I_z}+{q}\times{I_{wz}})\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1-{\epsilon})\times{I_w} + {\gamma ?} \times {\epsilon} \times {I_w}
+\begin{aligned}
+
+\frac{dS}{dt} &=-{\beta_w} \times({I_w}+{q}\times{I_{wz}})\times{S} -{\beta_z} \times({I_z}+{q}\times{I_{wz}})\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1-{\epsilon})\times{I_w} + {\gamma `} \times {\epsilon} \times {I_w} \\
+
+\frac{dI_w}{dt} &={\beta_w} \times({I_w}+{q}\times{I_{wz}})\times{S} + {\gamma} \times {I_{wz}}  - {\beta_z} \times({I_z}+{q}\times{I_{wz}})\times{I_w}- {\gamma}\times(1-{\epsilon})\times{I_w}- {\gamma `}\times {\epsilon} \times {I_w} \\
+
+\frac{dI_z}{dt} &={\beta_z} \times({I_z}+{q}\times{I_{wz}})\times{S} + {\gamma}\times(1-{\epsilon})\times{I_{wz}} + {\gamma `} \times {\epsilon} \times {I_{wz}} - {\beta_w} \times({I_w}+{q}\times{I_{wz}})\times{I_z} - {\gamma} \times {I_z} \\
+
+\frac{dI_{wz}}{dt} &={\beta_z} \times({I_z}+{q}\times{I_{wz}})\times{I_w}+{\beta_w} \times({I_w}+{q}\times{I_{wz}})\times{I_z}-{\gamma} \times {I_{wz}} -{\gamma}\times(1-{\epsilon})\times{I_{wz}} - {\gamma `} \times {\epsilon} \times {I_{wz}} \\
+
+ \end{aligned}
 $$
 
 
-$$
-\frac{dI_w}{dt}={\beta_w} \times({I_w}+{q}\times{I_{wz}})\times{S} + {\gamma} \times {I_{wz}}  - {\beta_z} \times({I_z}+{q}\times{I_{wz}})\times{I_w}- {\gamma}\times(1-{\epsilon})\times{I_w}- {\gamma} ? \times {\epsilon} \times {I_w}
-$$
-$$
-\frac{dI_z}{dt}={\beta_z} \times({I_z}+{q}\times{I_{wz}})\times{S} + {\gamma}\times(1-{\epsilon})\times{I_{wz}} + {\gamma ?} \times {\epsilon} \times {I_{wz}} - {\beta_w} \times({I_w}+{q}\times{I_{wz}})\times{I_z} - {\gamma} \times {I_z} 
-$$
-$$
-\frac{dI_{wz}}{dt}={\beta_z} \times({I_z}+{q}\times{I_{wz}})\times{I_w}+{\beta_w} \times({I_w}+{q}\times{I_{wz}})\times{I_z}-{\gamma} \times {I_{wz}} -{\gamma}\times(1-{\epsilon})\times{I_{wz}} - {\gamma ?} \times {\epsilon} \times {I_{wz}}
-$$
+
 
 
 
@@ -156,17 +156,17 @@ The model is defined by following equations:
 
 
 $$
-\frac{dS}{dt}=-{\beta_w} \times{I_w}\times{S} -{\beta_z} \times{I_z}\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1-{\epsilon})\times{I_w} + {\gamma ?} \times {\epsilon} \times {I_w}
+\begin{aligned}
+
+\frac{dS}{dt} &=-{\beta_w} \times{I_w}\times{S} -{\beta_z} \times{I_z}\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1-{\epsilon})\times{I_w} + {\gamma `} \times {\epsilon} \times {I_w} \\
+
+\frac{dI_w}{dt} &={\beta_w} \times{I_w}\times{S} - {\gamma}\times(1-{\epsilon})\times{I_w}- {\gamma `} \times {\epsilon} \times {I_w} \\
+
+\frac{dI_z}{dt} &={\beta_z} \times{I_z}\times{S} - {\gamma} \times {I_z} \\
+
+\end{aligned}
 $$
 
-
-$$
-\frac{dI_w}{dt}={\beta_w} \times{I_w}\times{S} - {\gamma}\times(1-{\epsilon})\times{I_w}- {\gamma ?} \times {\epsilon} \times {I_w}
-$$
-
-$$
-\frac{dI_z}{dt}={\beta_z} \times{I_z}\times{S} - {\gamma} \times {I_z} 
-$$
 
 
 
@@ -223,16 +223,14 @@ The model is defined by following equations:
 
 
 $$
-\frac{dS}{dt}=-{\beta_w} \times{I_w}\times{S} - {\beta_z} \times{I_z}\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1-{\epsilon})\times{I_w} + {\gamma ?} \times {\epsilon} \times {I_w}
-$$
+\begin{aligned}
+\frac{dS}{dt} &=-{\beta_w} \times{I_w}\times{S} - {\beta_z} \times{I_z}\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1-{\epsilon})\times{I_w} + {\gamma `} \times {\epsilon} \times {I_w} \\
 
+\frac{dI_w}{dt} &={\beta_w} \times{I_w}\times{S} + ({\beta_w}-{\beta_z})\times{I_w}\times{I_z} - {\gamma}\times(1-{\epsilon})\times{I_w}- {\gamma `} \times {\epsilon} \times {I_w} \\
 
-$$
-\frac{dI_w}{dt}={\beta_w} \times{I_w}\times{S} + ({\beta_w}-{\beta_z})\times{I_w}\times{I_z} - {\gamma}\times(1-{\epsilon})\times{I_w}- {\gamma ?} \times {\epsilon} \times {I_w}
-$$
+\frac{dI_z}{dt} &={\beta_z} \times{I_z}\times{S} - {\gamma} \times {I_z} - ({\beta_w} - {\beta_z})\times{I_w}\times{I_z} \\
 
-$$
-\frac{dI_z}{dt}={\beta_z} \times{I_z}\times{S} - {\gamma} \times {I_z} - ({\beta_w} - {\beta_z})\times{I_w}\times{I_z}
+\end{aligned}
 $$
 
 
@@ -287,20 +285,16 @@ The model is defined by following equations:
 
 
 $$
-\frac{dS}{dt}=-{\beta_w} \times{I_w}\times{S} - {\beta_z} \times{I_z}\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1-{\epsilon})\times{I_w} + {\gamma ?} \times {\epsilon} \times {I_w}
+\begin{aligned}
+
+\frac{dS}{dt} &=-{\beta_w} \times{I_w}\times{S} - {\beta_z} \times{I_z}\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1-{\epsilon})\times{I_w} + {\gamma `} \times {\epsilon} \times {I_w} \\
+
+\frac{dI_w}{dt} &={\beta_w}\times{I_w}\times{S}-{\gamma}\times(1-{\epsilon})\times{I_w}-{\gamma `}\times{\epsilon}\times{I_w}-{\rho}\times{\epsilon}\times{I_w} \\
+
+\frac{dI_z}{dt} &={\beta_z} \times{I_z}\times{S} - {\gamma} \times {I_z} +{\rho}\times{\epsilon}\times{I_w} \\
+
+\end{aligned}
 $$
-
-
-$$
-\frac{dI_w}{dt}={\beta_w}\times{I_w}\times{S}-{\gamma}\times(1-{\epsilon})\times{I_w}-{\gamma ?}\times{\epsilon}\times{I_w}-{\rho}\times{\epsilon}\times{I_w}
-$$
-
-$$
-\frac{dI_z}{dt}={\beta_z} \times{I_z}\times{S} - {\gamma} \times {I_z} +{\rho}\times{\epsilon}\times{I_w}
-$$
-
-
-
 
 
 
@@ -346,7 +340,6 @@ __Plot n°5 Unidirectional conversion model__: $\beta$ ~w~ = 0.0001, $\beta$ ~z~
 
 
 
-
 <center> <h2> Bidirectional conversion model </h2> </center>
 
 In addition to the preceding model, a transition from $Iz$ to $Iw$ is taken into account. In the absence of treatment, some resistant bacteria may revert into sensitive state. These will then be able of outcompeting the resistant one. $\phi$ is the rate at which this phenomenon takes place in untreated patients.
@@ -355,20 +348,16 @@ The model is defined by following equations:
 
 
 $$
-\frac{dS}{dt}=-{\beta_w} \times{I_w}\times{S} - {\beta_z} \times{I_z}\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1-{\epsilon})\times{I_w} + {\gamma ?} \times {\epsilon} \times {I_w}
+\begin{aligned}
+\frac{dS}{dt} &=-{\beta_w} \times{I_w}\times{S} - {\beta_z} \times{I_z}\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1-{\epsilon})\times{I_w} + {\gamma `} \times {\epsilon} \times {I_w} \\
+
+\frac{dI_w}{dt} &={\beta_w}\times{I_w}\times{S}-{\gamma}\times(1-{\epsilon})\times{I_w}-{\gamma `}\times{\epsilon}\times{I_w}-{\rho}\times{\epsilon}\times{I_w} \\
+
+\frac{dI_z}{dt} &={\beta_z} \times{I_z}\times{S} - {\gamma} \times {I_z} +{\rho}\times{\epsilon}\times{I_w} \\
+
+
+\end{aligned}
 $$
-
-
-$$
-\frac{dI_w}{dt}={\beta_w}\times{I_w}\times{S}-{\gamma}\times(1-{\epsilon})\times{I_w}-{\gamma ?}\times{\epsilon}\times{I_w}-{\rho}\times{\epsilon}\times{I_w}
-$$
-
-$$
-\frac{dI_z}{dt}={\beta_z} \times{I_z}\times{S} - {\gamma} \times {I_z} +{\rho}\times{\epsilon}\times{I_w}
-$$
-
-
-
 
 
 
