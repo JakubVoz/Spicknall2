@@ -20,6 +20,7 @@ pq=0.5
 prho=0.5
 pphi=0.05
 peps=0.15
+m=1/12
 
 ```
 
@@ -57,7 +58,7 @@ parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma
 
 state <- c(S1=N-1, S2=N-1, Iw=1, Iz=1)
 
-times=seq(0, a, by=1/12)
+times=seq(0, a, by=m)
 
 SIS_single_strain=function(times, state, parameters){
   with(as.list(c(state,parameters)),
@@ -129,7 +130,7 @@ parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma
 
 state <- c(S=N-2, Iw=1, Iz=1, Iwz=0)
 
-times=seq(0, a, by=1/12)
+times=seq(0, a, by=m)
 
 SIS_superinf=function(times, state, parameters){
   with(as.list(c(state,parameters)),
@@ -194,7 +195,7 @@ parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma
 
 state <- c(S=N-2, Iw=1, Iz=1)
 
-times=seq(0, a, by=1/12)
+times=seq(0, a, by=m)
 
 SIS_exclusive=function(times, state, parameters){
   with(as.list(c(state,parameters)),
@@ -260,7 +261,7 @@ parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma
 
 state <- c(S=N-2, Iw=1, Iz=1)
 
-times=seq(0, a, by=1/12)
+times=seq(0, a, by=m)
 
 SIS_replacement=function(times, state, parameters){
   with(as.list(c(state,parameters)),
@@ -320,7 +321,7 @@ parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma
 
 state <- c(S=N-2, Iw=1, Iz=1)
 
-times=seq(0, a, by=1/12)
+times=seq(0, a, by=m)
 
 SIS_unidir=function(times, state, parameters){
   with(as.list(c(state,parameters)),
@@ -383,7 +384,7 @@ parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma
 
 state <- c(S=N-2, Iw=1, Iz=1)
 
-times=seq(0, a, by=1/12)
+times=seq(0, a, by=m)
 
 SIS_bidir=function(times, state, parameters){
   with(as.list(c(state,parameters)),
