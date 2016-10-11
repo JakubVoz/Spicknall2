@@ -13,7 +13,7 @@ options("scipen" = 10)
 N=10000
 a=2
 pbeta_w=0.04
-pbeta_z=0.0015
+pbeta_z=0.015
 pgammaa=0.01
 pgamma_tilt=0.1
 pq=0.5
@@ -62,10 +62,10 @@ times=seq(0, a, by=m)
 
 SIS_single_strain=function(times, state, parameters){
   with(as.list(c(state,parameters)),
-       {dS1 = - beta_w*Iw*S1 + gamma*(1-eps)*Iw + gamma_prim*eps*Iw
-        dS2 = - beta_z*Iz*S2 + gamma*Iz
-        dIw = beta_w*Iw*S1 - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
-        dIz = beta_z*Iz*S2 - gamma*Iz
+       {dS1 <- - beta_w*Iw*S1 + gamma*(1-eps)*Iw + gamma_prim*eps*Iw
+        dS2 <- - beta_z*Iz*S2 + gamma*Iz
+        dIw <- beta_w*Iw*S1 - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        dIz <- beta_z*Iz*S2 - gamma*Iz
         list(c(dS1, dS2, dIw, dIz))
        })
 }
