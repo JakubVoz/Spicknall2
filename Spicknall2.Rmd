@@ -416,7 +416,7 @@ legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resis
 
 
 
-__Plot n°6 Bidirectional conversion model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$`= `r pgamma_tilt`, $\epsilon$ = `r peps`, $\rho$ = `r prho` and $\phi$= `pphi` are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over `r a`.
+__Plot n°6 Bidirectional conversion model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\`= `r pgamma_tilt`, $\epsilon$ = `r peps`, $\rho$ = `r prho` and $\phi$= `r pphi` are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over `r a`.
 
 
 
