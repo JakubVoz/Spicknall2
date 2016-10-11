@@ -32,7 +32,7 @@ The mechanism of resistance has its cost in terms of transmission (for example b
 
 <center> <h2> Single-strain model </h2> </center>
 
-This model is based on an independent evolution of the resistant and sensitive strain and doesn?t therefore incude any competition.
+This model is based on an independent evolution of the resistant and sensitive strain and doesn`t therefore incude any competition.
 
 The model is defined by following equations:
 
@@ -97,7 +97,7 @@ legend("topleft" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "I
 
 
 
-__Plot n°1 Single-strain model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$` = `r pgamma_tilt` and $\epsilon$ = `r peps` are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of population infected with sensitive strain (_dotted line_), with resistant strain (_dashed line_) and with both (_dashed-dotted line_) over `r a` years.
+__Plot n°1 Single-strain model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\` = `r pgamma_tilt` and $\epsilon$ = `r peps` are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of population infected with sensitive strain (_dotted line_), with resistant strain (_dashed line_) and with both (_dashed-dotted line_) over `r a` years.
 
 
 <center> <h2> Superinfection model </h2> </center>
@@ -162,7 +162,7 @@ lines(times, out_super$Iwz/N, lty=4, lwd=2)
 legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resistant strain", "Iwz Double infected" ), lty=c(1,3,2,4), lwd=c(2,2,2,2))
 ```
 
-__Plot n°2 Superinfection model__:$\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$`= `r pgamma_tilt`, $\epsilon$ = `r peps` and $q$=`r pq`  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_), with resistant strain exclusively (_dashed line_) and with both (_dashed-dotted line_) over `r a` years.
+__Plot n°2 Superinfection model__:$\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\`= `r pgamma_tilt`, $\epsilon$ = `r peps` and $q$=`r pq`  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_), with resistant strain exclusively (_dashed line_) and with both (_dashed-dotted line_) over `r a` years.
 
 
 <center> <h2> Exclusive infection model </h2> </center>
@@ -228,7 +228,7 @@ legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resis
 
 
 
-__Plot n°3 Exclusive infection model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$`= `r pgamma_tilt`, $\epsilon$ = `r peps` and $q$=`r pq`  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of  the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over `r a` years.
+__Plot n°3 Exclusive infection model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\`= `r pgamma_tilt`, $\epsilon$ = `r peps` and $q$=`r pq`  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of  the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over `r a` years.
 
 
 
@@ -293,7 +293,7 @@ legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resis
 
 
 
-__Plot n°4 Replacement infection model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$`= `r pgamma_tilt` and $\epsilon$ = `r peps`  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over 30 years.
+__Plot n°4 Replacement infection model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\`= `r pgamma_tilt` and $\epsilon$ = `r peps`  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over 30 years.
 
 <center> <h2> Unidirectional conversion model </h2> </center>
 
@@ -353,7 +353,7 @@ legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resis
 
 
 
-__Plot n°5 Unidirectional conversion model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$`= `r pgamma_tilt`, $\epsilon$ = `r peps` and $\rho$ = `r prho` are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over `r a` years.
+__Plot n°5 Unidirectional conversion model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\`= `r pgamma_tilt`, $\epsilon$ = `r peps` and $\rho$ = `r prho` are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over `r a` years.
 
 
 
