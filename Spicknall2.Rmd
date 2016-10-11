@@ -10,9 +10,9 @@ output: html_document
 ```{r include=FALSE}
 library(deSolve)
 options("scipen" = 10)
-N=10000
-a=2
-pbeta_w=0.04
+N <- 10000
+a <- 2
+pbeta_w <- 0.04
 pbeta_z=0.015
 pgammaa=0.01
 pgamma_tilt=0.1
