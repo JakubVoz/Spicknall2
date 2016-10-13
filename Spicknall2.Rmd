@@ -13,14 +13,14 @@ options("scipen" = 10)
 N <- 10000
 a <- 2
 pbeta_w <- 0.04
-pbeta_z=0.015
-pgammaa=0.01
-pgamma_tilt=0.1
-pq=0.5
-prho=0.5
-pphi=0.05
-peps=0.15
-m=1/12
+pbeta_z <- 0.015
+pgammaa <- 0.01
+pgamma_tilt <- 0.1
+pq <- 0.5
+prho <- 0.5
+pphi <- 0.05
+peps <- 0.15
+m <- 1/12
 
 ```
 
@@ -58,7 +58,7 @@ parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma
 
 state <- c(S1=N-1, S2=N-1, Iw=1, Iz=1)
 
-times=seq(0, a, by=m)
+times <- seq(0, a, by=m)
 
 SIS_single_strain=function(times, state, parameters){
   with(as.list(c(state,parameters)),
