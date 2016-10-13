@@ -1,0 +1,20 @@
+---
+title: "Model_synthesis"
+author: "Jakub"
+date: "13 října 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<center> <h1> Synthesis of models mentionned in Spicknall`s review </h1> </center>
+
+<center> <h2> Single-strain model and Superinfection model </h2> </center>
+
+In fact, the Single-strain model is but a special case of the Superinfection model where q=1. With q=1 there is no dampened infectiousness and each strain in a double-infected host will infect susceptible host at the same rate that single-infected host does. This situation is not too realistic for most pathogens as both strains usually compete for colonizing same sites and using same resources. Therefore this model with q=1 is relevant only in case that the resistant strain infects a different site than the susceptible one and these sites are independent.
+
+The superinfection model is relevant only for pathogens where the resistant train and the sensitive one can coexist in high level. This is the case for _Streptococcus pneumoniae_ and _Mycobacterium tuberculosis_ (Mtb to be verified). Although it has been proven that both strains of _Staphylococcus aureus_ can coexist in one single host, one of them is present only in a very low level and therefore this model is not relevant for this pathogen.
+
+
