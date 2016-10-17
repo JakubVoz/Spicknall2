@@ -38,9 +38,6 @@ parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma
 state <- c(S1=1-prop, S2=1-prop, Iw=prop, Iz=prop)
 times=seq(0, a, by=m)
 
-parameter_change=function(x, parameters) {
-  return(parameters[eps] <- x)
-}
 
 SIS_single_strain=function(times, state, parameters){
   with(as.list(c(state,parameters)),
@@ -61,6 +58,13 @@ root_sis=function(times, state, parameters){
   out <- lsodar(func=SIS_single_strain, y=state, parms=parameters, times=times, rootfunc=root_sis)
   return(tail(out, n=1))
 }
+exploit_param=function(x) {
+  parameters <- parameter_change(x, parameters)
+  parameters[eps] <- x
+  return(root_sis(times, state, parameters))
+}
+
+steady <- lapply(pepsi, exploit_param)
 
 
 ```
