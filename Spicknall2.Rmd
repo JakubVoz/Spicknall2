@@ -10,8 +10,8 @@ output: html_document
 ```{r include=FALSE}
 library(deSolve)
 options("scipen" = 10)
-N <- 10000
-a <- 2
+N <- 1
+a <- 2000
 pbeta_w <- 0.04
 pbeta_z <- 0.015
 pgammaa <- 0.01
@@ -20,13 +20,14 @@ pq <- 0.5
 prho <- 0.5
 pphi <- 0.05
 peps <- 0.15
-m <- 1/12
+m <- 1
+prop <- 0.01
 
 ```
 
 <center> <h1> Models based on Spicknall`s review </h1> </center> 
 
-The models include the susceptible population S, the population infected by sensitive strain I~w~, the population infected by resistant strain I~z~ and eventually the population infected by both I~zw~. Every model starts with S=`r N-2`, I~w~=1 and I~z~=1 at t=0. We then follow the evolution of these population monthly during `r a` years.
+The models include the susceptible population S, the population infected by sensitive strain I~w~, the population infected by resistant strain I~z~ and eventually the population infected by both I~zw~. Every model starts with S=`r N-2*prop`, I~w~=`r prop` and I~z~=`r prop` at t=0. We then follow the evolution of these population during `r a` days.
 
 The mechanism of resistance has its cost in terms of transmission (for example because of lower reproduction rate of bacteria and therefore less bacteria are transmitted during the contact). This phenomenon is taken into account by the choice of  $\beta$~z~ and $\beta$~w~. $\beta$~z~ is lower than $\beta$~w~ and therefore the transmission takes place at a lower rate in resistant strain.
 
@@ -56,7 +57,7 @@ The model is defined by following equations:
 ```{r single_strain_def, include=FALSE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps )
 
-state <- c(S1=N-1, S2=N-1, Iw=1, Iz=1)
+state <- c(S1=1-prop, S2=1-prop, Iw=prop, Iz=prop)
 
 times <- seq(0, a, by=m)
 
@@ -84,7 +85,7 @@ out=as.data.frame(
 
 
 ```{r single_strain_trial, echo=FALSE, fig.align='center'}
-plot(times, out$Iw/N, main="Plot n°1 - Single-strain model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+plot(times, out$Iw/N, main="Plot n°1 - Single-strain model", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
 lines(times, out$Iz/N, lty=2, lwd=2)
 
@@ -97,7 +98,7 @@ legend("topleft" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "I
 
 
 
-__Plot n°1 Single-strain model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\` = `r pgamma_tilt` and $\epsilon$ = `r peps` are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of population infected with sensitive strain (_dotted line_), with resistant strain (_dashed line_) and with both (_dashed-dotted line_) over `r a` years.
+__Plot n°1 Single-strain model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\` = `r pgamma_tilt` and $\epsilon$ = `r peps` are the chosen values of parameters. We follow the evolution of population infected with sensitive strain (_dotted line_), with resistant strain (_dashed line_) and with both (_dashed-dotted line_) over `r a` steps.
 
 
 <center> <h2> Superinfection model </h2> </center>
@@ -128,7 +129,7 @@ The model is defined by following equations:
 ```{r superinfection_def, include=FALSE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, q=pq )
 
-state <- c(S=N-2, Iw=1, Iz=1, Iwz=0)
+state <- c(S=1-2*prop, Iw=prop, Iz=prop, Iwz=0)
 
 times=seq(0, a, by=m)
 
@@ -154,7 +155,7 @@ out_super=as.data.frame(
 
 
 ```{r superinfection_trial, echo=FALSE, fig.align='center'}
-plot(times, out_super$S/N, main="Plot n°2 - Superinfection model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
+plot(times, out_super$S/N, main="Plot n°2 - Superinfection model", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
 lines(times, out_super$Iw/N, lty=3, lwd=2)
 lines(times, out_super$Iz/N, lty=2, lwd=2)
 lines(times, out_super$Iwz/N, lty=4, lwd=2)
@@ -162,7 +163,7 @@ lines(times, out_super$Iwz/N, lty=4, lwd=2)
 legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resistant strain", "Iwz Double infected" ), lty=c(1,3,2,4), lwd=c(2,2,2,2))
 ```
 
-__Plot n°2 Superinfection model__:$\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\`= `r pgamma_tilt`, $\epsilon$ = `r peps` and $q$=`r pq`  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_), with resistant strain exclusively (_dashed line_) and with both (_dashed-dotted line_) over `r a` years.
+__Plot n°2 Superinfection model__:$\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\`= `r pgamma_tilt`, $\epsilon$ = `r peps` and $q$=`r pq`  are the chosen values of parameters. We follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_), with resistant strain exclusively (_dashed line_) and with both (_dashed-dotted line_) over `r a` steps.
 
 
 <center> <h2> Exclusive infection model </h2> </center>
@@ -193,7 +194,7 @@ The model is defined by following equations:
 ```{r exclusive_def, include=FALSE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps)
 
-state <- c(S=N-2, Iw=1, Iz=1)
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
 
 times=seq(0, a, by=m)
 
@@ -218,7 +219,7 @@ out_exc=as.data.frame(
 
 
 ```{r exclusive_trial, echo=FALSE, fig.align='center'}
-plot(times, out_exc$S/N, main="Plot n°3 - Exclusive infection model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
+plot(times, out_exc$S/N, main="Plot n°3 - Exclusive infection model", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
 lines(times, out_exc$Iw/N, lty=3, lwd=2)
 lines(times, out_exc$Iz/N, lty=2, lwd=2)
 
@@ -228,7 +229,7 @@ legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resis
 
 
 
-__Plot n°3 Exclusive infection model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\`= `r pgamma_tilt`, $\epsilon$ = `r peps` and $q$=`r pq`  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of  the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over `r a` years.
+__Plot n°3 Exclusive infection model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\`= `r pgamma_tilt`, $\epsilon$ = `r peps` and $q$=`r pq`  are the chosen values of parameters. We follow the evolution of  the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over `r a` steps.
 
 
 
@@ -259,7 +260,7 @@ The model is defined by following equations:
 ```{r replacement_def, include=FALSE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps)
 
-state <- c(S=N-2, Iw=1, Iz=1)
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
 
 times=seq(0, a, by=m)
 
@@ -284,7 +285,7 @@ out_rep=as.data.frame(
 
 
 ```{r replacement_trial, echo=FALSE, fig.align='center'}
-plot(times, out_rep$S/N, main="Plot n°4 - Replacement infection model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
+plot(times, out_rep$S/N, main="Plot n°4 - Replacement infection model", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
 lines(times, out_rep$Iw/N, lty=3, lwd=2)
 lines(times, out_rep$Iz/N, lty=2, lwd=2)
 
@@ -293,7 +294,7 @@ legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resis
 
 
 
-__Plot n°4 Replacement infection model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\`= `r pgamma_tilt` and $\epsilon$ = `r peps`  are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over 30 years.
+__Plot n°4 Replacement infection model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\`= `r pgamma_tilt` and $\epsilon$ = `r peps`  are the chosen values of parameters. We follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over `r a` steps.
 
 <center> <h2> Unidirectional conversion model </h2> </center>
 
@@ -319,7 +320,7 @@ The model is defined by following equations:
 ```{r unidir_def, include=FALSE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho )
 
-state <- c(S=N-2, Iw=1, Iz=1)
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
 
 times=seq(0, a, by=m)
 
@@ -344,7 +345,7 @@ out_uni=as.data.frame(
 
 
 ```{r unidir_trial, echo=FALSE, fig.align='center'}
-plot(times, out_uni$S/N, main="Plot n°5 - Unidirectional conversion model", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
+plot(times, out_uni$S/N, main="Plot n°5 - Unidirectional conversion model", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
 lines(times, out_uni$Iw/N, lty=3, lwd=2)
 lines(times, out_uni$Iz/N, lty=2, lwd=2)
 
@@ -353,7 +354,7 @@ legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resis
 
 
 
-__Plot n°5 Unidirectional conversion model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\`= `r pgamma_tilt`, $\epsilon$ = `r peps` and $\rho$ = `r prho` are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over `r a` years.
+__Plot n°5 Unidirectional conversion model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\`= `r pgamma_tilt`, $\epsilon$ = `r peps` and $\rho$ = `r prho` are the chosen values of parameters. We follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over `r a` steps.
 
 
 
@@ -382,7 +383,7 @@ The model is defined by following equations:
 ```{r bidir_def, include=FALSE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, phi=pphi )
 
-state <- c(S=N-2, Iw=1, Iz=1)
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
 
 times=seq(0, a, by=m)
 
@@ -407,7 +408,7 @@ out_bi=as.data.frame(
 
 
 ```{r bidir_trial, echo=FALSE, fig.align='center'}
-plot(times, out_bi$S/N, main="Plot n°6", xlab="time (yrs)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
+plot(times, out_bi$S/N, main="Plot n°6", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
 lines(times, out_bi$Iw/N, lty=3, lwd=2)
 lines(times, out_bi$Iz/N, lty=2, lwd=2)
 
@@ -416,7 +417,7 @@ legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resis
 
 
 
-__Plot n°6 Bidirectional conversion model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\`= `r pgamma_tilt`, $\epsilon$ = `r peps`, $\rho$ = `r prho` and $\phi$= `r pphi` are the chosen values of parameters. The $\delta$t = 1/12 year i.e. 1 month and we follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over `r a`.
+__Plot n°6 Bidirectional conversion model__: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\`= `r pgamma_tilt`, $\epsilon$ = `r peps`, $\rho$ = `r prho` and $\phi$= `r pphi` are the chosen values of parameters. We follow the evolution of the sensitive subpopulation (_solid line_), the subpopulation infected with sensitive strain exclusively (_dotted line_) and with resistant strain exclusively (_dashed line_) over `r a` steps.
 
 
 
