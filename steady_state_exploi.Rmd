@@ -60,13 +60,14 @@ exploit_param=function(x) {
   return(tail(out, n=1))
 }
 
-steady2 <- do.call(rbind, lapply(pepsi, exploit_param))
+steady <- do.call(rbind, lapply(pepsi, exploit_param))
+steady <- unlist(steady)
 
-steady_time <- steady[seq(1,455, by=5)]
-steady_S1 <- steady[seq(2,455, by=5)]
-steady_S2 <- steady[seq(3,455, by=5)]
-steady_Iw <- steady[seq(4,455, by=5)]
-steady_Iz <- steady[seq(5,455, by=5)]
+steady_time <- steady[,1]
+steady_S1 <- steady[,2]
+steady_S2 <- steady[,3]
+steady_Iw <- steady[,4]
+steady_Iz <- steady[,5]
 
 ```
 
@@ -79,4 +80,3 @@ plot(pepsi, steady_Iw, main="Plot n°1 - Single-strain model", xlab="proportion 
 ```
 
 
-```
