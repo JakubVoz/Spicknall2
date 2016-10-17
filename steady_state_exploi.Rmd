@@ -1,9 +1,12 @@
 ---
-title: "steady-state exploit"
+title: "Steady-state exploration"
 author: "Jakub"
 date: "10 října 2016"
 output: html_document
 ---
+
+
+
 
 
 ```{r include=FALSE}
@@ -27,9 +30,11 @@ tab <- matrix(data=NA, nrow=length(pepsi), ncol=5)
 
 ```
 
+<center> <h1> Steady-state exploration of Spicknall`s models </h1> </center>
 
+The purpose of this part is to explore the steady states of models mentionned in Spicknall\`s review with $\epsilon$ varying from 0 to 0.9. For each model, the parameters and the initial conditions are the same, where applicable. Every model starts with S=`r N-2*prop`, I~w~=`r prop` and I~z~=`r prop` at t=0. We used th same parameters as in the basic models: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\`= `r pgamma_tilt`, $\rho$ = `r prho` and $\phi$= `r pphi`.
 
-``` {r sis_steady_state_eps, include=FALSE, cache=TRUE}
+``` {r sis_steady_state_eps, include=FALSE}
 
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps)
 state <- c(S1=1-prop, S2=1-prop, Iw=prop, Iz=prop)
@@ -73,7 +78,7 @@ steady_Iz <- steady[,5]
 
 
 
-```{r sis_steady_state_eps_plot, include=FALSE}
+```{r sis_steady_state_eps_plot, echo=FALSE, fig.align='center'}
 plot(pepsi, steady_Iw, main="Single-strain model steady states", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
 lines(pepsi, steady_Iz, lty=2, lwd=2)
