@@ -34,7 +34,9 @@ tab <- matrix(data=NA, nrow=length(pepsi), ncol=5)
 
 The purpose of this part is to explore the steady states of models mentionned in Spicknall\`s review with $\epsilon$ varying from 0 to 0.9. For each model, the parameters and the initial conditions are the same, where applicable. Every model starts with S=`r N-2*prop`, I~w~=`r prop` and I~z~=`r prop` at t=0. We used th same parameters as in the basic models: $\beta$ ~w~ = `r pbeta_w`, $\beta$ ~z~ = `r pbeta_z`, $\gamma$ = `r pgammaa`, $\gamma$\`= `r pgamma_tilt`, $\rho$ = `r prho` and $\phi$= `r pphi`.
 
-``` {r sis_steady_state_eps, include=FALSE}
+<h2> Single-strain model - steady states <h2>
+
+``` {r sis_steady_state_eps, include=FALSE, cache=TRUE}
 
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps)
 state <- c(S1=1-prop, S2=1-prop, Iw=prop, Iz=prop)
@@ -83,6 +85,64 @@ plot(pepsi, steady_Iw, main="Single-strain model steady states", xlab="proportio
 
 lines(pepsi, steady_Iz, lty=2, lwd=2)
 
+legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain" ), lty=c(3,2), lwd=c(2,2))
+
 ```
 
 
+<h2> Superinfection model - steady states <h2>
+
+``` {r sup_steady_state_eps, include=FALSE, cache=TRUE}
+
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, q=pq )
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop, Iwz=0)
+
+times = seq(0, a, by=m)
+
+SIS_sup=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       {dS = - beta_w*(Iw+q*Iwz)*S - beta_z*(Iz+q*Iwz)*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*(Iw+q*Iwz)*S + gamma*Iwz - beta_z*(Iz+q*Iwz)*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw 
+        dIz = beta_z*(Iz+q*Iwz)*S + gamma*(1-eps)*Iwz + gamma_prim*eps*Iwz - beta_w*(Iw+q*Iwz)*Iz - gamma*Iz 
+        dIwz = beta_w*(Iw+q*Iwz)*Iz + beta_z*(Iz+q*Iwz)*Iw - gamma*Iwz - gamma*(1-eps)*Iwz - gamma_prim*eps*Iwz
+        list(c(dS, dIw, dIz, dIwz))
+       })
+  }
+
+root_sup=function(times, state, parameters){
+  dstate <- unlist(SIS_sup(times, state, parameters))
+  sum(abs(dstate)) - conv_crit
+  }
+
+  
+  
+exploit_param_sup=function(x) {
+  parameters[5] <- x
+  out <- lsodar(func=SIS_sup, y=state, parms=parameters, times=times, rootfunc=root_sup)
+  return(tail(out, n=1))
+  }
+
+steady_sup <- do.call(rbind, lapply(pepsi, exploit_param_sup))
+steady_sup <- unlist(steady_sup)
+
+steady_time_sup <- steady_sup[,1]
+steady_S_sup <- steady_sup[,2]
+steady_Iw_sup <- steady_sup[,3]
+steady_Iz_sup <- steady_sup[,4]
+steady_Iwz_sup <- steady_sup[,3]
+
+```
+
+
+
+```{r sup_steady_state_eps_plot, echo=FALSE, fig.align='center'}
+plot(pepsi, steady_Iw_sup, main="Superinfection model steady states", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+
+lines(pepsi, steady_Iz_sup, lty=2, lwd=2)
+lines(pepsi, steady_S_sup, lty=1, lwd=2)
+lines(pepsi, steady_Iwz_sup, lty=4, lwd=2)
+
+legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "Iwz Double Infected" ), lty=c(3,2), lwd=c(2,2))
+
+```
