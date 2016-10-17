@@ -31,7 +31,7 @@ tab <- matrix(data=NA, nrow=length(pepsi), ncol=5)
 
 ``` {r sis_steady_state_eps, include=FALSE, cache=TRUE}
 
-parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=pepsi)
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps)
 state <- c(S1=1-prop, S2=1-prop, Iw=prop, Iz=prop)
 times=seq(0, a, by=m)
 
@@ -46,30 +46,34 @@ SIS_single_strain=function(times, state, parameters){
       return(list(c(dS1, dS2, dIw, dIz)))
     })
 }
-t <-unlist(SIS_single_strain(times, state, parameters))
+
 
 root_sis=function(times, state, parameters){
   dstate <- unlist(SIS_single_strain(times, state, parameters))
   sum(abs(dstate)) - conv_crit}
 
+  
+  
+exploit_param=function(x) {
+  parameters[5] <- x
   out <- lsodar(func=SIS_single_strain, y=state, parms=parameters, times=times, rootfunc=root_sis)
   return(tail(out, n=1))
 }
-exploit_param=function(x) {
-  parameters <- parameter_change(x, parameters)
-  parameters[eps] <- x
-  return(root_sis(times, state, parameters))
-}
 
-steady <- lapply(pepsi, exploit_param)
+steady2 <- do.call(rbind, lapply(pepsi, exploit_param))
 
+steady_time <- steady[seq(1,455, by=5)]
+steady_S1 <- steady[seq(2,455, by=5)]
+steady_S2 <- steady[seq(3,455, by=5)]
+steady_Iw <- steady[seq(4,455, by=5)]
+steady_Iz <- steady[seq(5,455, by=5)]
 
 ```
 
 
 
 ```{r sis_steady_state_eps_plot, include=FALSE}
-plot(pepsi, tab[,5]/N, main="Plot n°1 - Single-strain model", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+plot(pepsi, steady_Iw, main="Plot n°1 - Single-strain model", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
 
 ```
