@@ -12,50 +12,57 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r include=FALSE}
 library(deSolve)
 options("scipen" = 10)
-N=10000
-a=20
-pbeta_w=0.04
-pbeta_z=0.015
-pgammaa=0.01
-pgamma_tilt=0.1
-pq=0.5
-prho=0.5
-pphi=0.05
-peps=0.15
-conv_crit=0.0001
+N <- 1
+a <- 2000
+pbeta_w <- 0.04
+pbeta_z <- 0.015
+pgammaa <- 0.01
+pgamma_tilt <- 0.1
+pq <- 0.5
+prho <- 0.5
+pphi <- 0.05
+peps <- 0.15
+m <- 1
+prop <- 0.01
+conv_crit=0.00001
 pepsi <- seq(0, 0.90, by=0.01)
 tab <- matrix(data=NA, nrow=length(pepsi), ncol=5)
-m=1/355.24
 
 ```
 
 
 
 ``` {r sis_steady_state_eps, include=FALSE, cache=TRUE}
-for (i in 1:length(pepsi)) {
-  parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=pepsi[i])
-  state <- c(S1=N-1, S2=N-1, Iw=1, Iz=1)
-  times=seq(0, a, by=m)
-  
-  SIS_single_strain=function(times, state, parameters){
+
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=pepsi)
+state <- c(S1=1-prop, S2=1-prop, Iw=prop, Iz=prop)
+times=seq(0, a, by=m)
+
+parameter_change=function(x, parameters) {
+  return(parameters[eps=x])
+}
+
+SIS_single_strain=function(times, state, parameters){
   with(as.list(c(state,parameters)),
-       {dS1 = - beta_w*Iw*S1 + gamma*(1-eps)*Iw + gamma_prim*eps*Iw
-        dS2 = - beta_z*Iz*S2 + gamma*Iz
-        dIw = beta_w*Iw*S1 - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
-        dIz = beta_z*Iz*S2 - gamma*Iz
-        list(c(dS1, dS2, dIw, dIz))
-        return(list(c(dS1, dS2, dIw, dIz)))
-       })
+    {dS1 = - beta_w*Iw*S1 + gamma*(1-eps)*Iw + gamma_prim*eps*Iw
+      dS2 = - beta_z*Iz*S2 + gamma*Iz
+      dIw = beta_w*Iw*S1 - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+      dIz = beta_z*Iz*S2 - gamma*Iz
+      list(c(dS1, dS2, dIw, dIz))
+      return(list(c(dS1, dS2, dIw, dIz)))
+    })
 }
 t <-unlist(SIS_single_strain(times, state, parameters))
 
-  root_sis <- function(times, state, parameters){
-    dstate <- unlist(SIS_single_strain(times, state, parameters))
-    sum(abs(dstate)) - conv_crit}
+root_sis=function(times, state, parameters){
+  dstate <- unlist(SIS_single_strain(times, state, parameters))
+  sum(abs(dstate)) - conv_crit}
 
   out <- lsodar(func=SIS_single_strain, y=state, parms=parameters, times=times, rootfunc=root_sis)
-  tab[i,] <- tail(out, n=1)
+  return(tail(out, n=1))
 }
+
+
 ```
 
 
