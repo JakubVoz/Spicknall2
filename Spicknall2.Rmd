@@ -27,7 +27,7 @@ prop <- 0.01
 
 <center> <h1> Models based on Spicknall`s review </h1> </center> 
 
-The models include the susceptible population S, the population infected by sensitive strain I~w~, the population infected by resistant strain I~z~ and eventually the population infected by both I~zw~. Every model starts with S=`r N-2*prop`, I~w~=`r prop` and I~z~=`r prop` at t=0. We then follow the evolution of these population during `r a` days.
+The models include the susceptible population S, the population infected by sensitive strain I~w~, the population infected by resistant strain I~z~ and eventually the population infected by both I~zw~. Every model starts with S=`r N-2*prop`, I~w~=`r prop` and I~z~=`r prop` at t=0. We then follow the evolution of these population during `r a` steps.
 
 The mechanism of resistance has its cost in terms of transmission (for example because of lower reproduction rate of bacteria and therefore less bacteria are transmitted during the contact). This phenomenon is taken into account by the choice of  $\beta$~z~ and $\beta$~w~. $\beta$~z~ is lower than $\beta$~w~ and therefore the transmission takes place at a lower rate in resistant strain.
 
@@ -54,7 +54,7 @@ The model is defined by following equations:
 
 
 
-```{r single_strain_def, include=FALSE}
+```{r single_strain_def, include=FALSE, cache=TRUE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps )
 
 state <- c(S1=1-prop, S2=1-prop, Iw=prop, Iz=prop)
@@ -126,7 +126,7 @@ The model is defined by following equations:
 
 
 
-```{r superinfection_def, include=FALSE}
+```{r superinfection_def, include=FALSE, cache=TRUE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, q=pq )
 
 state <- c(S=1-2*prop, Iw=prop, Iz=prop, Iwz=0)
@@ -191,7 +191,7 @@ The model is defined by following equations:
 
 
 
-```{r exclusive_def, include=FALSE}
+```{r exclusive_def, include=FALSE, cache=TRUE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps)
 
 state <- c(S=1-2*prop, Iw=prop, Iz=prop)
@@ -257,7 +257,7 @@ The model is defined by following equations:
 
 
 
-```{r replacement_def, include=FALSE}
+```{r replacement_def, include=FALSE, cache=TRUE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps)
 
 state <- c(S=1-2*prop, Iw=prop, Iz=prop)
@@ -317,7 +317,7 @@ The model is defined by following equations:
 
 
 
-```{r unidir_def, include=FALSE}
+```{r unidir_def, include=FALSE, cache=TRUE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho )
 
 state <- c(S=1-2*prop, Iw=prop, Iz=prop)
@@ -380,7 +380,7 @@ The model is defined by following equations:
 
 
 
-```{r bidir_def, include=FALSE}
+```{r bidir_def, include=FALSE, cache=TRUE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, phi=pphi )
 
 state <- c(S=1-2*prop, Iw=prop, Iz=prop)
