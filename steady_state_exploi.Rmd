@@ -180,25 +180,182 @@ exploit_param_exc=function(x) {
   return(tail(out, n=1))
   }
 
-steady_sup <- do.call(rbind, lapply(pepsi, exploit_param_exc))
-steady_sup <- unlist(steady_sup)
+steady_exc <- do.call(rbind, lapply(pepsi, exploit_param_exc))
+steady_exc <- unlist(steady_exc)
 
-steady_time_sup <- steady_sup[,1]
-steady_S_sup <- steady_sup[,2]
-steady_Iw_sup <- steady_sup[,3]
-steady_Iz_sup <- steady_sup[,4]
-steady_Iwz_sup <- steady_sup[,3]
+steady_time_exc <- steady_exc[,1]
+steady_S_exc <- steady_exc[,2]
+steady_Iw_exc <- steady_exc[,3]
+steady_Iz_exc <- steady_exc[,4]
 
 ```
 
 
 ```{r exc_steady_state_eps_plot, echo=FALSE, fig.align='center'}
-plot(pepsi, steady_Iw_sup, main="Exclusion model steady states", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+plot(pepsi, steady_Iw_exc, main="Exclusion model steady states", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
-lines(pepsi, steady_Iz_sup, lty=2, lwd=2)
-lines(pepsi, steady_S_sup, lty=1, lwd=2)
+lines(pepsi, steady_Iz_exc, lty=2, lwd=2)
+lines(pepsi, steady_S_exc, lty=1, lwd=2)
 
-legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "S Susceptible population" ), lty=c(3,2,4,1), lwd=c(2,2,2))
+legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "S Susceptible population" ), lty=c(3,2,4), lwd=c(2,2,2))
 
 ```
 
+<h2> Replacement model - steady states <h2>
+
+``` {r rep_steady_state_eps, include=FALSE, cache=TRUE}
+
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps)
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+
+times=seq(0, a, by=m)
+
+SIS_rep=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S - gamma*(1-eps)*Iw - gamma_prim*eps*Iw + (beta_w-beta_z)*Iw*Iz
+        dIz = beta_z*Iz*S - gamma*Iz - (beta_w-beta_z)*Iw*Iz
+        list(c(dS, dIw, dIz))
+       })
+}
+
+
+root_rep=function(times, state, parameters){
+  dstate <- unlist(SIS_rep(times, state, parameters))
+  sum(abs(dstate)) - conv_crit
+  }
+
+  
+  
+exploit_param_rep=function(x) {
+  parameters[5] <- x
+  out <- lsodar(func=SIS_rep, y=state, parms=parameters, times=times, rootfunc=root_rep)
+  return(tail(out, n=1))
+  }
+
+steady_rep <- do.call(rbind, lapply(pepsi, exploit_param_rep))
+steady_rep <- unlist(steady_rep)
+
+steady_time_rep <- steady_rep[,1]
+steady_S_rep <- steady_rep[,2]
+steady_Iw_rep <- steady_rep[,3]
+steady_Iz_rep <- steady_rep[,4]
+
+```
+
+```{r rep_steady_state_eps_plot, echo=FALSE, fig.align='center'}
+plot(pepsi, steady_Iw_rep, main="Replacement model steady states", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+
+lines(pepsi, steady_Iz_rep, lty=2, lwd=2)
+lines(pepsi, steady_S_rep, lty=1, lwd=2)
+
+legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "S Susceptible population" ), lty=c(3,2,4), lwd=c(2,2,2))
+
+```
+
+<h2> Unidirectional transition model - steady states <h2>
+
+``` {r uni_steady_state_eps, include=FALSE, cache=TRUE}
+
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho )
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+
+times=seq(0, a, by=m)
+
+SIS_uni=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S - gamma*(1-eps)*Iw - gamma_prim*eps*Iw - rho*eps*Iw
+        dIz = beta_z*Iz*S - gamma*Iz + rho*eps*Iw
+        list(c(dS, dIw, dIz))
+       })
+}
+
+
+root_uni=function(times, state, parameters){
+  dstate <- unlist(SIS_uni(times, state, parameters))
+  sum(abs(dstate)) - conv_crit
+  }
+
+  
+  
+exploit_param_uni=function(x) {
+  parameters[5] <- x
+  out <- lsodar(func=SIS_uni, y=state, parms=parameters, times=times, rootfunc=root_uni)
+  return(tail(out, n=1))
+  }
+
+steady_uni <- do.call(rbind, lapply(pepsi, exploit_param_uni))
+steady_uni <- unlist(steady_uni)
+
+steady_time_uni <- steady_uni[,1]
+steady_S_uni <- steady_uni[,2]
+steady_Iw_uni <- steady_uni[,3]
+steady_Iz_uni <- steady_uni[,4]
+
+```
+
+```{r uni_steady_state_eps_plot, echo=FALSE, fig.align='center'}
+plot(pepsi, steady_Iw_uni, main="Unidirectional transition model steady states", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+
+lines(pepsi, steady_Iz_uni, lty=2, lwd=2)
+lines(pepsi, steady_S_uni, lty=1, lwd=2)
+
+legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "S Susceptible population" ), lty=c(3,2,4), lwd=c(2,2,2))
+
+```
+
+<h2> Bidirectional transition model - steady states <h2>
+
+``` {r bi_steady_state_eps, include=FALSE, cache=TRUE}
+
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, phi=pphi )
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+
+times=seq(0, a, by=m)
+
+SIS_bidir=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S - gamma*(1-eps)*Iw - gamma_prim*eps*Iw - rho*eps*Iw + phi*(1-eps)*Iz
+        dIz = beta_z*Iz*S - gamma*Iz + rho*eps*Iw - phi*(1-eps)*Iz
+        list(c(dS, dIw, dIz))
+       })
+}
+
+
+root_bi=function(times, state, parameters){
+  dstate <- unlist(SIS_bidir(times, state, parameters))
+  sum(abs(dstate)) - conv_crit
+  }
+
+  
+  
+exploit_param_bi=function(x) {
+  parameters[5] <- x
+  out <- lsodar(func=SIS_bidir, y=state, parms=parameters, times=times, rootfunc=root_bi)
+  return(tail(out, n=1))
+  }
+
+steady_bi <- do.call(rbind, lapply(pepsi, exploit_param_bi))
+steady_bi <- unlist(steady_bi)
+
+steady_time_bi <- steady_bi[,1]
+steady_S_bi <- steady_bi[,2]
+steady_Iw_bi <- steady_bi[,3]
+steady_Iz_bi <- steady_bi[,4]
+
+```
+
+```{r bi_steady_state_eps_plot, echo=FALSE, fig.align='center'}
+plot(pepsi, steady_Iw_bi, main="Bidirectional transition model steady states", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+
+lines(pepsi, steady_Iz_bi, lty=2, lwd=2)
+lines(pepsi, steady_S_bi, lty=1, lwd=2)
+
+legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "S Susceptible population" ), lty=c(3,2,1), lwd=c(2,2,2))
+
+```
