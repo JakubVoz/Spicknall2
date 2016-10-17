@@ -13,7 +13,7 @@ output: html_document
 library(deSolve)
 options("scipen" = 10)
 N <- 1
-a <- 2000
+a <- 20000
 pbeta_w <- 0.04
 pbeta_z <- 0.015
 pgammaa <- 0.01
@@ -25,7 +25,7 @@ peps <- 0.15
 m <- 1
 prop <- 0.01
 conv_crit=0.00001
-pepsi <- seq(0, 0.90, by=0.01)
+pepsi <- seq(0, 0.90, by=0.001)
 tab <- matrix(data=NA, nrow=length(pepsi), ncol=5)
 
 ```
@@ -36,7 +36,7 @@ The purpose of this part is to explore the steady states of models mentionned in
 
 <h2> Single-strain model - steady states <h2>
 
-``` {r sis_steady_state_eps, include=FALSE, cache=TRUE}
+``` {r sis_steady_state_eps, include=FALSE}
 
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps)
 state <- c(S1=1-prop, S2=1-prop, Iw=prop, Iz=prop)
@@ -92,7 +92,7 @@ legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain" ),
 
 <h2> Superinfection model - steady states <h2>
 
-``` {r sup_steady_state_eps, include=FALSE, cache=TRUE}
+``` {r sup_steady_state_eps, include=FALSE}
 
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, q=pq )
 
@@ -149,7 +149,7 @@ legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "
 
 <h2> Exclusion model - steady states <h2>
 
-``` {r exc_steady_state_eps, include=FALSE, cache=TRUE}
+``` {r exc_steady_state_eps, include=FALSE}
 
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps)
 
@@ -203,7 +203,7 @@ legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "
 
 <h2> Replacement model - steady states <h2>
 
-``` {r rep_steady_state_eps, include=FALSE, cache=TRUE}
+``` {r rep_steady_state_eps, include=FALSE}
 
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps)
 
@@ -256,7 +256,7 @@ legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "
 
 <h2> Unidirectional transition model - steady states <h2>
 
-``` {r uni_steady_state_eps, include=FALSE, cache=TRUE}
+``` {r uni_steady_state_eps, include=FALSE}
 
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho )
 
@@ -309,7 +309,7 @@ legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "
 
 <h2> Bidirectional transition model - steady states <h2>
 
-``` {r bi_steady_state_eps, include=FALSE, cache=TRUE}
+``` {r bi_steady_state_eps, include=FALSE}
 
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, phi=pphi )
 
