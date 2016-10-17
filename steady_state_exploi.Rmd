@@ -39,7 +39,7 @@ state <- c(S1=1-prop, S2=1-prop, Iw=prop, Iz=prop)
 times=seq(0, a, by=m)
 
 parameter_change=function(x, parameters) {
-  return(parameters[eps=x])
+  return(parameters[eps] <- x)
 }
 
 SIS_single_strain=function(times, state, parameters){
