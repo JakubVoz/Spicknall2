@@ -85,13 +85,13 @@ out=as.data.frame(
 
 
 ```{r single_strain_trial, echo=FALSE, fig.align='center'}
-plot(times, out$Iw/N, main="Plot n°1 - Single-strain model", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+plot(times, out$Iw, main="Plot n°1 - Single-strain model", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
-lines(times, out$Iz/N, lty=2, lwd=2)
+lines(times, out$Iz, lty=2, lwd=2)
 
 double_inf <- out$Iw*out$Iz
 
-lines(times, double_inf/N^2, lty=4, lwd=2)
+lines(times, double_inf, lty=4, lwd=2)
 
 legend("topleft" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "Iwz Double infected" ), lty=c(3,2,4), lwd=c(2,2,2))
 ```
@@ -155,10 +155,10 @@ out_super=as.data.frame(
 
 
 ```{r superinfection_trial, echo=FALSE, fig.align='center'}
-plot(times, out_super$S/N, main="Plot n°2 - Superinfection model", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
-lines(times, out_super$Iw/N, lty=3, lwd=2)
-lines(times, out_super$Iz/N, lty=2, lwd=2)
-lines(times, out_super$Iwz/N, lty=4, lwd=2)
+plot(times, out_super$S, main="Plot n°2 - Superinfection model", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
+lines(times, out_super$Iw, lty=3, lwd=2)
+lines(times, out_super$Iz, lty=2, lwd=2)
+lines(times, out_super$Iwz, lty=4, lwd=2)
 
 legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resistant strain", "Iwz Double infected" ), lty=c(1,3,2,4), lwd=c(2,2,2,2))
 ```
@@ -219,9 +219,9 @@ out_exc=as.data.frame(
 
 
 ```{r exclusive_trial, echo=FALSE, fig.align='center'}
-plot(times, out_exc$S/N, main="Plot n°3 - Exclusive infection model", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
-lines(times, out_exc$Iw/N, lty=3, lwd=2)
-lines(times, out_exc$Iz/N, lty=2, lwd=2)
+plot(times, out_exc$S, main="Plot n°3 - Exclusive infection model", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
+lines(times, out_exc$Iw, lty=3, lwd=2)
+lines(times, out_exc$Iz, lty=2, lwd=2)
 
 legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resistant strain" ), lty=c(1,3,2), lwd=c(2,2,2))
 
@@ -285,9 +285,9 @@ out_rep=as.data.frame(
 
 
 ```{r replacement_trial, echo=FALSE, fig.align='center'}
-plot(times, out_rep$S/N, main="Plot n°4 - Replacement infection model", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
-lines(times, out_rep$Iw/N, lty=3, lwd=2)
-lines(times, out_rep$Iz/N, lty=2, lwd=2)
+plot(times, out_rep$S, main="Plot n°4 - Replacement infection model", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
+lines(times, out_rep$Iw, lty=3, lwd=2)
+lines(times, out_rep$Iz, lty=2, lwd=2)
 
 legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resistant strain" ), lty=c(1,3,2), lwd=c(2,2,2))
 ```
@@ -345,9 +345,9 @@ out_uni=as.data.frame(
 
 
 ```{r unidir_trial, echo=FALSE, fig.align='center'}
-plot(times, out_uni$S/N, main="Plot n°5 - Unidirectional conversion model", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
-lines(times, out_uni$Iw/N, lty=3, lwd=2)
-lines(times, out_uni$Iz/N, lty=2, lwd=2)
+plot(times, out_uni$S, main="Plot n°5 - Unidirectional conversion model", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
+lines(times, out_uni$Iw, lty=3, lwd=2)
+lines(times, out_uni$Iz, lty=2, lwd=2)
 
 legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resistant strain" ), lty=c(1,3,2), lwd=c(2,2,2))
 ```
@@ -408,9 +408,9 @@ out_bi=as.data.frame(
 
 
 ```{r bidir_trial, echo=FALSE, fig.align='center'}
-plot(times, out_bi$S/N, main="Plot n°6", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
-lines(times, out_bi$Iw/N, lty=3, lwd=2)
-lines(times, out_bi$Iz/N, lty=2, lwd=2)
+plot(times, out_bi$S, main="Plot n°6", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
+lines(times, out_bi$Iw, lty=3, lwd=2)
+lines(times, out_bi$Iz, lty=2, lwd=2)
 
 legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resistant strain" ), lty=c(1,3,2), lwd=c(2,2,2))
 ```
