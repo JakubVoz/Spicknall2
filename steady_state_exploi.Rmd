@@ -130,7 +130,7 @@ steady_time_sup <- steady_sup[,1]
 steady_S_sup <- steady_sup[,2]
 steady_Iw_sup <- steady_sup[,3]
 steady_Iz_sup <- steady_sup[,4]
-steady_Iwz_sup <- steady_sup[,3]
+steady_Iwz_sup <- steady_sup[,5]
 
 ```
 
@@ -143,6 +143,62 @@ lines(pepsi, steady_Iz_sup, lty=2, lwd=2)
 lines(pepsi, steady_S_sup, lty=1, lwd=2)
 lines(pepsi, steady_Iwz_sup, lty=4, lwd=2)
 
-legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "Iwz Double Infected" ), lty=c(3,2), lwd=c(2,2))
+legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "Iwz Double Infected", "S Susceptible population" ), lty=c(3,2,4,1), lwd=c(2,2,2,2))
 
 ```
+
+<h2> Exclusion model - steady states <h2>
+
+``` {r exc_steady_state_eps, include=FALSE, cache=TRUE}
+
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps)
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+
+times=seq(0, a, by=m)
+
+SIS_exc=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        dIz = beta_z*Iz*S - gamma*Iz
+        list(c(dS, dIw, dIz))
+       })
+}
+
+
+root_exc=function(times, state, parameters){
+  dstate <- unlist(SIS_exc(times, state, parameters))
+  sum(abs(dstate)) - conv_crit
+  }
+
+  
+  
+exploit_param_exc=function(x) {
+  parameters[5] <- x
+  out <- lsodar(func=SIS_exc, y=state, parms=parameters, times=times, rootfunc=root_exc)
+  return(tail(out, n=1))
+  }
+
+steady_sup <- do.call(rbind, lapply(pepsi, exploit_param_exc))
+steady_sup <- unlist(steady_sup)
+
+steady_time_sup <- steady_sup[,1]
+steady_S_sup <- steady_sup[,2]
+steady_Iw_sup <- steady_sup[,3]
+steady_Iz_sup <- steady_sup[,4]
+steady_Iwz_sup <- steady_sup[,3]
+
+```
+
+
+```{r exc_steady_state_eps_plot, echo=FALSE, fig.align='center'}
+plot(pepsi, steady_Iw_sup, main="Exclusion model steady states", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+
+lines(pepsi, steady_Iz_sup, lty=2, lwd=2)
+lines(pepsi, steady_S_sup, lty=1, lwd=2)
+
+legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "S Susceptible population" ), lty=c(3,2,4,1), lwd=c(2,2,2))
+
+```
+
