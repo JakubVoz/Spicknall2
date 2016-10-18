@@ -24,8 +24,8 @@ prop <- 0.01
 # choice of model
 pd <- 0   #coexistence in single host
 pr <- 0   #replacement of Iz by Iw via interhost infection
-pu <- 0   #Iw to Iz conversion
-pb <- 0   #Iz to Iw conversion
+pu <- 1   #Iw to Iz conversion
+pb <- 1   #Iz to Iw conversion
 
 
 ```
@@ -49,7 +49,7 @@ pb <- 0   #Iz to Iw conversion
  
  
  
- ```{r supermodel_def, include=FALSE, cache=TRUE}
+```{r supermodel_def, include=FALSE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, q=pq, rho=prho, phi=pphi, d=pd, r=pr, u=pu, b=pb )
 
 state <- c(S=1-2*prop, Iw=prop, Iz=prop, Iwz=0)
@@ -66,10 +66,21 @@ SIS_supermodel=function(times, state, parameters){
        })
 }
 
+
+```
+
+
+```{r super_trial, echo=FALSE, fig.align='center'}
 require(deSolve)
 
 out_super=as.data.frame(
   ode(y=state, times=times, func=SIS_supermodel, parms=parameters)
 )
 
+plot(times, out_super$S, main="Trial : bidirectional", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
+lines(times, out_super$Iw, lty=3, lwd=2)
+lines(times, out_super$Iz, lty=2, lwd=2)
+lines(times, out_super$Iwz, lty=4, lwd=2)
+
+legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resistant strain", "Iwz Double infected" ), lty=c(1,3,2,4), lwd=c(2,2,2,2))
 ```
