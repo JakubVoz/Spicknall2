@@ -34,6 +34,9 @@ pb <- 1   #Iz to Iw conversion
 
 <center> <h1> Synthesis of models mentionned in Spicknall`s review </h1> </center>
 
+
+In this file, a model embracing all models in the Spicknall`s review is presented. This model is defined by following equations, where the parameters q, d, r, u, and b  define one of six model types:
+
 \begin{aligned}
 
 \frac{dS}{dt} &=- {\beta_w} \times({I_w} + {d}\times{q}\times{I_{wz}})\times{S} - {\beta_z} \times({I_z} + {d}\times{q}\times{I_{wz}})\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1 - {\epsilon})\times{I_w} + {\gamma `} \times {\epsilon} \times {I_w} \\
@@ -46,7 +49,31 @@ pb <- 1   #Iz to Iw conversion
 
  \end{aligned}
  
+ We can therefore identify different models from Spicknall review:
  
+ 1. Single strain model
+ 
+ Our model is equivalent to the single strain model when q=1, d=1, r=0, u=0 and b=0.
+ 
+ 2. Superinfection model
+ 
+ Our model is equivalent to the superinfection model when q $\in$[0,1], d=1, r=0, u=0 and b=0.
+ 
+ 3. Exclusive infection model
+ 
+ Our model is equivalent to the exclusive infection model when q=0, d=0, r=0, u=0 and b=0.
+ 
+ 4. Replacement infection model
+ 
+ Our model is equivalent to the replacement infection model when q=0, d=0, r=1, u=0 and b=0.
+ 
+ 5. Unidirectional infection model
+ 
+ Our model is equivalent to the unidirectional infection model when q=0, d=0, r=0, u=1 and b=0.
+ 
+ 6. Bidirectional infection model
+ 
+ Our model is equivalent to the bidirectional infection model when q=0, d=0, r=0, u=0 and b=1.
  
  
 ```{r supermodel_def, include=FALSE}
