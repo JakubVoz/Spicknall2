@@ -1,0 +1,109 @@
+---
+title: "Change in ATB consumption"
+author: "Jakub"
+date: "18 října 2016"
+output: html_document
+---
+
+
+```{r include=FALSE}
+library(deSolve)
+options("scipen" = 10)
+N <- 1
+a <- 2000
+pbeta_w <- 0.04
+pbeta_z <- 0.015
+pgammaa <- 0.01
+pgamma_tilt <- 0.1
+pq <- 0.5
+prho <- 0.5
+pphi <- 0.05
+peps_init <- 0.10
+peps_inc <- 0.15
+peps_dec <- 0.05
+m <- 1
+prop <- 0.01
+
+# choice of model
+pd <- 0   #coexistence in single host
+pr <- 0   #replacement of Iz by Iw via interhost infection
+pu <- 1   #Iw to Iz conversion
+pb <- 1   #Iz to Iw conversion
+
+
+```
+
+
+
+<center> <h2> Change in the proportion of treated patients </h2> </center>
+
+ 
+ 
+ 
+```{r stable, include=FALSE}
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_init, q=pq, rho=prho, phi=pphi, d=pd, r=pr, u=pu, b=pb )
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop, Iwz=0)
+
+times=seq(0, a, by=m)
+
+SIS_inc=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       {dS = - beta_w*(Iw+d*q*Iwz)*S - beta_z*(Iz+d*q*Iwz)*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*(Iw+d*q*Iwz)*S + d*gamma*Iwz - d*beta_z*(Iz+q*Iwz)*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw + r*(beta_w-beta_z)*Iw*Iz - u*rho*eps*Iw + b*phi*(1-eps)*Iz
+        dIz = beta_z*(Iz+d*q*Iwz)*S + d*gamma*(1-eps)*Iwz + gamma_prim*eps*Iwz - d*beta_w*(Iw+q*Iwz)*Iz - gamma*Iz - r*(beta_w-beta_z)*Iw*Iz + u*rho*eps*Iw - b*phi*(1-eps)*Iz
+        dIwz = d*(beta_w*(Iw+q*Iwz)*Iz + beta_z*(Iz+q*Iwz)*Iw - gamma*Iwz - gamma*(1-eps)*Iwz - gamma_prim*eps*Iwz)
+        list(c(dS, dIw, dIz, dIwz))
+       })
+}
+
+out_init=as.data.frame(
+  ode(y=state, times=times, func=SIS_inc, parms=parameters)
+)
+
+```
+
+
+```{r increase, include=FALSE}
+parameters2 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_inc, q=pq, rho=prho, phi=pphi, d=pd, r=pr, u=pu, b=pb )
+
+state2 <- c(S=out_init$S[2001], Iw=out_init$Iw[2001], Iz=out_init$Iz[2001], Iwz=out_init$Iwz[2001])
+
+times2=seq(a, 2*a, by=m)
+
+out_inc=as.data.frame(
+  ode(y=state2, times=times2, func=SIS_inc, parms=parameters2)
+)
+
+```
+
+```{r decrease, include=FALSE}
+
+
+parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_dec, q=pq, rho=prho, phi=pphi, d=pd, r=pr, u=pu, b=pb )
+
+state2 <- c(S=out_init$S[2001], Iw=out_init$Iw[2001], Iz=out_init$Iz[2001], Iwz=out_init$Iwz[2001])
+
+times2=seq(a, 2*a, by=m)
+
+out_dec=as.data.frame(
+  ode(y=state2, times=times2, func=SIS_inc, parms=parameters3)
+)
+
+```
+
+
+```{r plot, echo=FALSE, fig.align='center'}
+
+
+inc <- rbind(out_init[1:2000,], out_inc)
+dec <- rbind(out_init[1:2000,], out_dec)
+t<- seq(0, 2*a, by=m)
+
+plot(t, inc$Iw, main="Change of epsilon", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l", col="RED")
+lines(t, dec$Iw, lty=3, lwd=2, col="BLUE")
+lines(t, inc$Iz, lty=2, lwd=2, col="RED")
+lines(t, dec$Iz, lty=2, lwd=2, col="BLUE")
+
+legend("topleft" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain"), lty=c(3,2), lwd=c(3,2))
+```
