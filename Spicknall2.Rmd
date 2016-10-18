@@ -368,11 +368,12 @@ The model is defined by following equations:
 
 
 \begin{aligned}
+
 \frac{dS}{dt} &=-{\beta_w} \times{I_w}\times{S} - {\beta_z} \times{I_z}\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1-{\epsilon})\times{I_w} + {\gamma `} \times {\epsilon} \times {I_w} \\
 
-\frac{dI_w}{dt} &={\beta_w}\times{I_w}\times{S}-{\gamma}\times(1-{\epsilon})\times{I_w}-{\gamma `}\times{\epsilon}\times{I_w}-{\rho}\times{\epsilon}\times{I_w} \\
+\frac{dI_w}{dt} &={\beta_w}\times{I_w}\times{S}-{\gamma}\times(1 - {\epsilon})\times{I_w} - {\gamma `}\times{\epsilon}\times{I_w} - {\rho}\times{\epsilon}\times{I_w} - {\phi}\times(1 - {\epsilon})\times{I_z} \\
 
-\frac{dI_z}{dt} &={\beta_z} \times{I_z}\times{S} - {\gamma} \times {I_z} +{\rho}\times{\epsilon}\times{I_w} \\
+\frac{dI_z}{dt} &={\beta_z} \times{I_z}\times{S} - {\gamma} \times {I_z} +{\rho}\times{\epsilon}\times{I_w} + {\phi}\times(1-{\epsilon})\times{I_z} \\
 
 
 \end{aligned}
