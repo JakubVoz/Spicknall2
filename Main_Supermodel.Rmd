@@ -1,0 +1,9 @@
+---
+title: "Supermodel"
+author: "Jakub"
+date: "18 října 2016"
+output: html_document
+---
+
+<center> <h1> Synthesis of models mentionned in Spicknall`s review </h1> </center>
+

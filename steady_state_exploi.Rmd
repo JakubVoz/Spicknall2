@@ -9,7 +9,7 @@ output: html_document
 
 
 
-```{r include=FALSE}
+```{r include=FALSE, cache=TRUE}
 library(deSolve)
 options("scipen" = 10)
 N <- 1
@@ -25,7 +25,7 @@ peps <- 0.15
 m <- 1
 prop <- 0.01
 conv_crit=0.00001
-pepsi <- seq(0, 0.90, by=0.001)
+pepsi <- seq(0, 0.90, by=0.01)
 tab <- matrix(data=NA, nrow=length(pepsi), ncol=5)
 
 ```
@@ -36,7 +36,7 @@ The purpose of this part is to explore the steady states of models mentionned in
 
 <h2> Single-strain model - steady states <h2>
 
-``` {r sis_steady_state_eps, include=FALSE}
+``` {r sis_steady_state_eps, include=FALSE, cache=TRUE}
 
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps)
 state <- c(S1=1-prop, S2=1-prop, Iw=prop, Iz=prop)
@@ -80,7 +80,7 @@ steady_Iz <- steady[,5]
 
 
 
-```{r sis_steady_state_eps_plot, echo=FALSE, fig.align='center'}
+```{r sis_steady_state_eps_plot, echo=FALSE, fig.align='center', cache=TRUE}
 
 plot(pepsi, steady_Iw, main="Single-strain model steady states", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
@@ -93,7 +93,7 @@ legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain" ),
 
 <h2> Superinfection model - steady states <h2>
 
-``` {r sup_steady_state_eps, include=FALSE}
+``` {r sup_steady_state_eps, include=FALSE, cache=TRUE}
 
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, q=pq )
 
@@ -137,7 +137,7 @@ steady_Iwz_sup <- steady_sup[,5]
 
 
 
-```{r sup_steady_state_eps_plot, echo=FALSE, fig.align='center'}
+```{r sup_steady_state_eps_plot, echo=FALSE, fig.align='center', cache=TRUE}
 plot(pepsi, steady_Iw_sup, main="Superinfection model steady states", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
 lines(pepsi, steady_Iz_sup, lty=2, lwd=2)
@@ -150,7 +150,7 @@ legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "
 
 <h2> Exclusion model - steady states <h2>
 
-``` {r exc_steady_state_eps, include=FALSE}
+``` {r exc_steady_state_eps, include=FALSE, cache=TRUE}
 
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps)
 
@@ -192,7 +192,7 @@ steady_Iz_exc <- steady_exc[,4]
 ```
 
 
-```{r exc_steady_state_eps_plot, echo=FALSE, fig.align='center'}
+```{r exc_steady_state_eps_plot, echo=FALSE, fig.align='center', cache=TRUE}
 plot(pepsi, steady_Iw_exc, main="Exclusion model steady states", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
 lines(pepsi, steady_Iz_exc, lty=2, lwd=2)
@@ -204,7 +204,7 @@ legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "
 
 <h2> Replacement model - steady states <h2>
 
-``` {r rep_steady_state_eps, include=FALSE}
+``` {r rep_steady_state_eps, include=FALSE, cache=TRUE}
 
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps)
 
@@ -245,7 +245,7 @@ steady_Iz_rep <- steady_rep[,4]
 
 ```
 
-```{r rep_steady_state_eps_plot, echo=FALSE, fig.align='center'}
+```{r rep_steady_state_eps_plot, echo=FALSE, fig.align='center', cache=TRUE}
 plot(pepsi, steady_Iw_rep, main="Replacement model steady states", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
 lines(pepsi, steady_Iz_rep, lty=2, lwd=2)
@@ -257,7 +257,7 @@ legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "
 
 <h2> Unidirectional transition model - steady states <h2>
 
-``` {r uni_steady_state_eps, include=FALSE}
+``` {r uni_steady_state_eps, include=FALSE, cache=TRUE}
 
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho )
 
@@ -298,7 +298,7 @@ steady_Iz_uni <- steady_uni[,4]
 
 ```
 
-```{r uni_steady_state_eps_plot, echo=FALSE, fig.align='center'}
+```{r uni_steady_state_eps_plot, echo=FALSE, fig.align='center', cache=TRUE}
 plot(pepsi, steady_Iw_uni, main="Unidirectional transition model steady states", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
 lines(pepsi, steady_Iz_uni, lty=2, lwd=2)
@@ -310,7 +310,7 @@ legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "
 
 <h2> Bidirectional transition model - steady states <h2>
 
-``` {r bi_steady_state_eps, include=FALSE}
+``` {r bi_steady_state_eps, include=FALSE, cache=TRUE}
 
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, phi=pphi )
 
@@ -351,7 +351,7 @@ steady_Iz_bi <- steady_bi[,4]
 
 ```
 
-```{r bi_steady_state_eps_plot, echo=FALSE, fig.align='center'}
+```{r bi_steady_state_eps_plot, echo=FALSE, fig.align='center', cache=TRUE}
 plot(pepsi, steady_Iw_bi, main="Bidirectional transition model steady states", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
 lines(pepsi, steady_Iz_bi, lty=2, lwd=2)

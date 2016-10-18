@@ -13,8 +13,110 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <center> <h2> Single-strain model and Superinfection model </h2> </center>
 
-In fact, the Single-strain model is but a special case of the Superinfection model where q=1. With q=1 there is no dampened infectiousness and each strain in a double-infected host will infect susceptible host at the same rate that single-infected host does. This situation is not too realistic for most pathogens as both strains usually compete for colonizing same sites and using same resources. Therefore this model with q=1 is relevant only in case that the resistant strain infects a different site than the susceptible one and these sites are independent.
+In fact, the Single-strain model is but a special case of the Superinfection model where q=1. With q=1 there is no dampened infectiousness and each strain in a double-infected host will infect susceptible host at the same rate that single-infected host does. This situation is not too realistic for many as both strains usually compete for colonizing same sites and using same resources. Therefore this model with q=1 is relevant only in case that the resistant strain infects a different site than the susceptible one and these sites are independent.
 
-The superinfection model is relevant only for pathogens where the resistant train and the sensitive one can coexist in high level. This is the case for _Streptococcus pneumoniae_ and _Mycobacterium tuberculosis_ (Mtb to be verified). Although it has been proven that both strains of _Staphylococcus aureus_ can coexist in one single host, one of them is present only in a very low level and therefore this model is not relevant for this pathogen.
+The superinfection model is relevant only for pathogens where the resistant train and the sensitive one can coexist in high level. This is the case for _Streptococcus pneumoniae_, _Staphylococcus Aureus_ and _Mycobacterium tuberculosis_. 
+
+\begin{aligned}
+
+\frac{dS}{dt} &=-{\beta_w} \times{I_w}\times{S} -{\beta_z} \times{I_z}\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1-{\epsilon})\times{I_w} + {\gamma `} \times {\epsilon} \times {I_w} \\
+
+\frac{dI_w}{dt} &={\beta_w} \times{I_w}\times{S} - {\gamma}\times(1-{\epsilon})\times{I_w}- {\gamma `} \times {\epsilon} \times {I_w} \\
+
+\frac{dI_z}{dt} &={\beta_z} \times{I_z}\times{S} - {\gamma} \times {I_z} \\
+
+\end{aligned}
+
+
+
+
+
+
+
+
+```{r sup1_def, include=FALSE, cache=TRUE}
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps)
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+
+times=seq(0, a, by=m)
+
+SIS_sup1=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        dIz = beta_z*Iz*S - gamma*Iz
+        list(c(dS, dIw, dIz))
+       })
+}
+
+require(deSolve)
+
+out_sup1=as.data.frame(
+  ode(y=state, times=times, func=SIS_sup1, parms=parameters)
+)
+
+```
+
+
+
+
+```{r sup1_trial, echo=FALSE, fig.align='center'}
+plot(times, out_sup1$S, main="Plot n°3 - Exclusive infection model", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
+lines(times, out_sup1$Iw, lty=3, lwd=2)
+lines(times, out_sup1$Iz, lty=2, lwd=2)
+
+legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resistant strain" ), lty=c(1,3,2), lwd=c(2,2,2))
+
+```
+
+
+\begin{aligned}
+\frac{dS}{dt} &=-{\beta_w} \times{I_w}\times{S} - {\beta_z} \times{I_z}\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1-{\epsilon})\times{I_w} + {\gamma `} \times {\epsilon} \times {I_w} \\
+
+\frac{dI_w}{dt} &={\beta_w}\times{I_w}\times{S}-{\gamma}\times(1-{\epsilon})\times{I_w}-{\gamma `}\times{\epsilon}\times{I_w}-{\rho}\times{\epsilon}\times{I_w} \\
+
+\frac{dI_z}{dt} &={\beta_z} \times{I_z}\times{S} - {\gamma} \times {I_z} +{\rho}\times{\epsilon}\times{I_w} \\
+
+
+\end{aligned}
+
+
+
+
+```{r sup2_def, include=FALSE, cache=TRUE}
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, phi=pphi )
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+
+times=seq(0, a, by=m)
+
+SIS_sup2=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S - gamma*(1-eps)*Iw - gamma_prim*eps*Iw - rho*eps*Iw + phi*(1-eps)*Iz
+        dIz = beta_z*Iz*S - gamma*Iz + rho*eps*Iw - phi*(1-eps)*Iz
+        list(c(dS, dIw, dIz))
+       })
+}
+
+require(deSolve)
+
+out_sup2=as.data.frame(
+  ode(y=state, times=times, func=SIS_sup2, parms=parameters)
+)
+
+```
+
+
+
+
+```{r sup2_trial, echo=FALSE, fig.align='center'}
+plot(times, out_sup2$S, main="Plot n°6", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
+lines(times, out_sup2$Iw, lty=3, lwd=2)
+lines(times, out_sup2$Iz, lty=2, lwd=2)
+
+legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resistant strain" ), lty=c(1,3,2), lwd=c(2,2,2))
+```
 
 
