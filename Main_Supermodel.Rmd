@@ -5,16 +5,71 @@ date: "18 října 2016"
 output: html_document
 ---
 
+```{r include=FALSE}
+library(deSolve)
+options("scipen" = 10)
+N <- 1
+a <- 2000
+pbeta_w <- 0.04
+pbeta_z <- 0.015
+pgammaa <- 0.01
+pgamma_tilt <- 0.1
+pq <- 0.5
+prho <- 0.5
+pphi <- 0.05
+peps <- 0.15
+m <- 1
+prop <- 0.01
+
+# choice of model
+pd <- 0   #coexistence in single host
+pr <- 0   #replacement of Iz by Iw via interhost infection
+pu <- 0   #Iw to Iz conversion
+pb <- 0   #Iz to Iw conversion
+
+
+```
+
+
+
 <center> <h1> Synthesis of models mentionned in Spicknall`s review </h1> </center>
 
 \begin{aligned}
 
 \frac{dS}{dt} &=- {\beta_w} \times({I_w} + {d}\times{q}\times{I_{wz}})\times{S} - {\beta_z} \times({I_z} + {d}\times{q}\times{I_{wz}})\times{S} + {\gamma} \times {I_z} + {\gamma}\times(1 - {\epsilon})\times{I_w} + {\gamma `} \times {\epsilon} \times {I_w} \\
 
-\frac{dI_w}{dt} &={\beta_w} \times({I_w} + {d}\times{q}\times{I_{wz}})\times{S} + {r}\times({\beta_w} - {u}\times{\rho}\times{\epsilon}\times{I_w} - {\beta_z})\times{I_w}\times{I_z} + {d}\times{\gamma} \times {I_{wz}} - {d}\times{\beta_z} \times({I_z} + {q}\times{I_{wz}})\times{I_w} - {\gamma}\times(1 - {\epsilon})\times{I_w} - {\gamma `}\times {\epsilon} \times {I_w} - {\phi}\times(1-{\epsilon})\times{I_z}\\
+\frac{dI_w}{dt} &={\beta_w} \times({I_w} + {d}\times{q}\times{I_{wz}})\times{S} + {r}\times({\beta_w} - {u}\times{\rho}\times{\epsilon}\times{I_w} - {\beta_z})\times{I_w}\times{I_z} + {d}\times{\gamma} \times {I_{wz}} - {d}\times{\beta_z} \times({I_z} + {q}\times{I_{wz}})\times{I_w} - {\gamma}\times(1 - {\epsilon})\times{I_w} - {\gamma `}\times {\epsilon} \times {I_w} -  {b}\times{\phi}\times(1-{\epsilon})\times{I_z}\\
 
-\frac{dI_z}{dt} &={\beta_z} \times({I_z} + {d}\times{q}\times{I_{wz}})\times{S} + {u}\times{\rho}\times{\epsilon}\times{I_w} - {r}\times({\beta_w} - {\beta_z})\times{I_w}\times{I_z} + {d}\times{\gamma}\times(1 - {\epsilon})\times{I_{wz}} + {d}\times{\gamma `} \times {\epsilon} \times {I_{wz}} - {\beta_w} \times({I_w}+{d}\times{q}\times{I_{wz}})\times{I_z} - {\gamma} \times {I_z} + {\phi}\times(1-{\epsilon})\times{I_z}\\
+\frac{dI_z}{dt} &={\beta_z} \times({I_z} + {d}\times{q}\times{I_{wz}})\times{S} + {u}\times{\rho}\times{\epsilon}\times{I_w} - {r}\times({\beta_w} - {\beta_z})\times{I_w}\times{I_z} + {d}\times{\gamma}\times(1 - {\epsilon})\times{I_{wz}} + {d}\times{\gamma `} \times {\epsilon} \times {I_{wz}} - {\beta_w} \times({I_w}+{d}\times{q}\times{I_{wz}})\times{I_z} - {\gamma} \times {I_z} + {b}\times{\phi}\times(1-{\epsilon})\times{I_z}\\
 
 \frac{dI_{wz}}{dt} &={d}\times({\beta_z} \times({I_z} + {q}\times{I_{wz}})\times{I_w} + {\beta_w} \times({I_w} + {q}\times{I_{wz}})\times{I_z} - {\gamma} \times {I_{wz}} -{\gamma}\times(1 - {\epsilon})\times{I_{wz}} - {\gamma `} \times {\epsilon} \times {I_{wz}}) \\
 
  \end{aligned}
+ 
+ 
+ 
+ 
+ ```{r supermodel_def, include=FALSE, cache=TRUE}
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, q=pq, rho=prho, phi=pphi, d=pd, r=pr, u=pu, b=pb )
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop, Iwz=0)
+
+times=seq(0, a, by=m)
+
+SIS_supermodel=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       {dS = - beta_w*(Iw+d*q*Iwz)*S - beta_z*(Iz+d*q*Iwz)*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*(Iw+d*q*Iwz)*S + d*gamma*Iwz - d*beta_z*(Iz+q*Iwz)*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw + r*(beta_w-beta_z)*Iw*Iz - u*rho*eps*Iw + b*phi*(1-eps)*Iz
+        dIz = beta_z*(Iz+d*q*Iwz)*S + d*gamma*(1-eps)*Iwz + gamma_prim*eps*Iwz - d*beta_w*(Iw+q*Iwz)*Iz - gamma*Iz - r*(beta_w-beta_z)*Iw*Iz + u*rho*eps*Iw - b*phi*(1-eps)*Iz
+        dIwz = d*(beta_w*(Iw+q*Iwz)*Iz + beta_z*(Iz+q*Iwz)*Iw - gamma*Iwz - gamma*(1-eps)*Iwz - gamma_prim*eps*Iwz)
+        list(c(dS, dIw, dIz, dIwz))
+       })
+}
+
+require(deSolve)
+
+out_super=as.data.frame(
+  ode(y=state, times=times, func=SIS_supermodel, parms=parameters)
+)
+
+```
