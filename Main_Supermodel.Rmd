@@ -27,6 +27,7 @@ peps <- 0.10 #initial value of the ratio of treated patients
 
 prhoi <- seq(0,0.10,by=0.001)
 pepsi <- seq(0,1,by=0.01)
+pc_wzi <- seq(0,0.10, by=0.001)
 
 prop <- 0.01 
 
@@ -163,6 +164,47 @@ plot(prhoi, steady_Iw_rho, main="Steady-states : treatment failure variations", 
 
 lines(prhoi, steady_Iz_rho, lty=2, lwd=2)
 lines(prhoi, steady_S_rho, lty=1, lwd=2)
+
+legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "S Susceptible population" ), lty=c(3,2,1), lwd=c(2,2,2))
+
+```
+
+
+``` {r steady_state_w_to_z_inf, include=FALSE, cache=TRUE}
+
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, c_zw=pc_zw, c_wz=pc_wz )
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+
+times <- seq(0, a, by=m)
+
+
+root_main=function(times, state, parameters){
+  dstate <- unlist(SIS(times, state, parameters))
+  sum(abs(dstate)) - conv_crit
+  }
+
+exploit_param_c_wz=function(x) {
+  parameters[7] <- x
+  out <- lsodar(func=SIS, y=state, parms=parameters, times=times, rootfunc=root_main)
+  return(tail(out, n=1))
+  }
+
+steady_c_wz <- do.call(rbind, lapply(pc_wzi, exploit_param_c_wz))
+steady_c_wz <- unlist(steady_c_wz)
+
+steady_time_c_wz <- steady_c_wz[,1]
+steady_S_c_wz <- steady_c_wz[,2]
+steady_Iw_c_wz <- steady_c_wz[,3]
+steady_Iz_c_wz <- steady_c_wz[,4]
+
+```
+
+```{r steady_state_w_to_z_plot, echo=FALSE, fig.align='center'}
+plot(pc_wzi, steady_Iw_c_wz, main="Steady-states : replacement of Iw by Iz rate variations", xlab="rate of successful replacement of Iw by Iz in treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+
+lines(pc_wzi, steady_Iz_c_wz, lty=2, lwd=2)
+lines(pc_wzi, steady_S_c_wz, lty=1, lwd=2)
 
 legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "S Susceptible population" ), lty=c(3,2,1), lwd=c(2,2,2))
 
