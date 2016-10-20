@@ -7,6 +7,7 @@ output: html_document
 
 ```{r parameters, include=FALSE}
 library(deSolve)
+
 options("scipen" = 10)
 N <- 1
 a <- 2000 #time span
@@ -33,12 +34,11 @@ a <- 0.9  # competitivity ratio : probability of replacement of Iz by Iw when re
 
 \begin{aligned}
 
-\frac{dS}{dt} &=- {\beta_w} \times{I_w}\times{S} - {\beta_z} \times{I_z} \times{S} + {\gamma} \times {I_z} + {\gamma}\times(1 - {\epsilon})\times{I_w} + {\gamma `} \times {\epsilon} \times {I_w} \\
+\frac{dS}{dt} &=- {\beta_w} {I_w}{S} - {\beta_z} {I_z} {S} + {\gamma}  {I_z} + {\gamma}(1 - {\epsilon}){I_w} + {\gamma `}  {\epsilon}  {I_w} \\
 
-\frac{dI_w}{dt} &={\beta_w} \times({I_w} + {d}\times{q}\times{I_{wz}})\times{S} + {r}\times({\beta_w} - {u}\times{\rho}\times{\epsilon}\times{I_w} - {\beta_z})\times{I_w}\times{I_z} + {d}\times{\gamma} \times {I_{wz}} - {d}\times{\beta_z} \times({I_z} + {q}\times{I_{wz}})\times{I_w} - {\gamma}\times(1 - {\epsilon})\times{I_w} - {\gamma `}\times {\epsilon} \times {I_w} -  {b}\times{\phi}\times(1-{\epsilon})\times{I_z}\\
+\frac{dI_w}{dt} &={\beta_w} {I_w}{S} + {a}(1-{\epsilon})\beta_w{I_w}{I_z} - {\gamma}(1 - {\epsilon}){I_w} - {\gamma `}  {\epsilon}  {I_w} - (\frac{1}{a} (1-{\epsilon}) + \epsilon) {\beta_z}{I_z}{I_w} - {\rho}{\epsilon}{I_w} \\
 
-\frac{dI_z}{dt} &={\beta_z} \times({I_z} + {d}\times{q}\times{I_{wz}})\times{S} + {u}\times{\rho}\times{\epsilon}\times{I_w} - {r}\times({\beta_w} - {\beta_z})\times{I_w}\times{I_z} + {d}\times{\gamma}\times(1 - {\epsilon})\times{I_{wz}} + {d}\times{\gamma `} \times {\epsilon} \times {I_{wz}} - {\beta_w} \times({I_w}+{d}\times{q}\times{I_{wz}})\times{I_z} - {\gamma} \times {I_z} + {b}\times{\phi}\times(1-{\epsilon})\times{I_z}\\
+\frac{dI_z}{dt} &={\beta_z} {I_z}{S} + (\frac{1}{a} (1-{\epsilon}) + \epsilon) {\beta_z}{I_z}{I_w} + {\rho}{\epsilon}{I_W} - {\gamma}  {I_z} - {a}(1-{\epsilon})\beta_w{I_w}{I_z} \\
 
-\frac{dI_{wz}}{dt} &={d}\times({\beta_z} \times({I_z} + {q}\times{I_{wz}})\times{I_w} + {\beta_w} \times({I_w} + {q}\times{I_{wz}})\times{I_z} - {\gamma} \times {I_{wz}} -{\gamma}\times(1 - {\epsilon})\times{I_{wz}} - {\gamma `} \times {\epsilon} \times {I_{wz}}) \\
 
  \end{aligned}
