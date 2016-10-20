@@ -10,7 +10,7 @@ library(deSolve)
 
 options("scipen" = 10)
 N <- 1
-a <- 5000 #time span
+a <- 10000 #time span
 m <- 1 #time step
 
 pbeta_w <- 0.04 #transmission parameter of Iw
@@ -22,16 +22,18 @@ pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
 
 prho <- 0.05 #probability of clinical failure
 
-peps <- 0.05 #initial value of the ratio of treated patients
+peps <- 0.10 #initial value of the ratio of treated patients
 
-pepsi <- seq(0,1,by=0.001)
+
+prhoi <- seq(0,0.10,by=0.001)
+pepsi <- seq(0,1,by=0.01)
 
 prop <- 0.01 
 
-pc_wz <- 0.3  # competitivity ratio : probability of replacement of Iz by Iw when reinfected and not treated
-pc_zw <- 0.02
+pc_zw <- 0.5  # competitivity ratio : probability of replacement of Iz by Iw when reinfected and not treated
+pc_wz <- 0.02
 
-conv_crit <- 0.001
+conv_crit <- 0.00001
 
 
 ```
@@ -49,7 +51,7 @@ conv_crit <- 0.001
 
  \end{aligned}
  
-```{r main}
+```{r param, include=FALSE, cache=TRUE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, c_zw=pc_zw, c_wz=pc_wz)
 
 state <- c(S=1-2*prop, Iw=prop, Iz=prop)
@@ -74,6 +76,7 @@ out=as.data.frame(
 
 
 ```{r main_trial, echo=FALSE, fig.align='center'}
+
 plot(times, out$S, main="Trial", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
 lines(times, out$Iw, lty=3, lwd=2)
 lines(times, out$Iz, lty=2, lwd=2)
@@ -84,7 +87,8 @@ legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resis
 
 
 
-``` {r steady_state_eps, include=FALSE}
+``` {r steady_state_eps, include=FALSE, cache=TRUE}
+
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, c_zw=pc_zw, c_wz=pc_wz )
 
 state <- c(S=1-2*prop, Iw=prop, Iz=prop)
@@ -114,6 +118,7 @@ steady_Iz_eps <- steady_eps[,4]
 ```
 
 ```{r steady_state_eps_plot, echo=FALSE, fig.align='center'}
+
 plot(pepsi, steady_Iw_eps, main="Steady-states : treatment variations", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
 lines(pepsi, steady_Iz_eps, lty=2, lwd=2)
@@ -123,4 +128,42 @@ legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "
 
 ```
 
+``` {r steady_state_rho, include=FALSE, cache=TRUE}
 
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, c_zw=pc_zw, c_wz=pc_wz )
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+
+times <- seq(0, a, by=m)
+
+
+root_main=function(times, state, parameters){
+  dstate <- unlist(SIS(times, state, parameters))
+  sum(abs(dstate)) - conv_crit
+  }
+
+exploit_param_rho=function(x) {
+  parameters[6] <- x
+  out <- lsodar(func=SIS, y=state, parms=parameters, times=times, rootfunc=root_main)
+  return(tail(out, n=1))
+  }
+
+steady_rho <- do.call(rbind, lapply(prhoi, exploit_param_rho))
+steady_rho <- unlist(steady_rho)
+
+steady_time_rho <- steady_rho[,1]
+steady_S_rho <- steady_rho[,2]
+steady_Iw_rho <- steady_rho[,3]
+steady_Iz_rho <- steady_rho[,4]
+
+```
+
+```{r steady_state_rho_plot, echo=FALSE, fig.align='center'}
+plot(prhoi, steady_Iw_rho, main="Steady-states : treatment failure variations", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+
+lines(prhoi, steady_Iz_rho, lty=2, lwd=2)
+lines(prhoi, steady_S_rho, lty=1, lwd=2)
+
+legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "S Susceptible population" ), lty=c(3,2,1), lwd=c(2,2,2))
+
+```

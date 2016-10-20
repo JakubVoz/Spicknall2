@@ -360,3 +360,5 @@ lines(pepsi, steady_S_bi, lty=1, lwd=2)
 legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "S Susceptible population" ), lty=c(3,2,1), lwd=c(2,2,2))
 
 ```
+
+
