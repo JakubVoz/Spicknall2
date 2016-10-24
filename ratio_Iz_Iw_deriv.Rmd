@@ -7,6 +7,7 @@ output: html_document
 
 The model is defined by following equations:
 
+
 \begin{aligned}
 
 \frac{dS}{dt} &=- {\beta_w} {I_w}{S} - {\beta_z} {I_z} {S} + {\gamma}  {I_z} + {\gamma}(1 - {\epsilon}){I_w} + {\gamma `}  {\epsilon}  {I_w} \\
