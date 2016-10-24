@@ -126,22 +126,21 @@ $(document).ready(function () {
 <p>The model is defined by following equations:</p>
 <span class="math display">\[\begin{aligned}
 
-\frac{dS}{dt} &amp;=- {\beta_w} {I_w}{S} - {\beta_z} {I_z} {S} + {\gamma}  {I_z} + {\gamma}(1 - {\epsilon}){I_w} + {\gamma `}  {\epsilon}  {I_w} \\
+\frac{dS}{dt} &amp;=- \beta_wI_wS - \beta_zI_zS + \gamma  I_z + {\gamma}(1 - \varepsilon)I_w + \gamma `\varepsilon I_w \\
 
-\frac{dI_w}{dt} &amp;={\beta_w} {I_w}{S} + {c_{zw}}(1-{\epsilon})\beta_w{I_w}{I_z} - {\gamma}(1 - {\epsilon}){I_w} - {\gamma `}  {\epsilon}  {I_w} - ({c_{wz}} (1-{\epsilon}) + \epsilon) {\beta_z}{I_z}{I_w} - {\rho}{\epsilon}{I_w} \\
+\frac{dI_w}{dt} &amp;=\beta_wI_wS + c_{zw}(1-\varepsilon)\beta_wI_wI_z - \gamma(1 - \varepsilon)I_w - \gamma `\varepsilon I_w - (c_{wz} (1-\varepsilon) + \varepsilon) \beta_zI_zI_w - \rho\varepsilon I_w \\
 
-\frac{dI_z}{dt} &amp;={\beta_z} {I_z}{S} + ({c_{wz}}(1-{\epsilon}) + \epsilon) {\beta_z}{I_z}{I_w} + {\rho}{\epsilon}{I_W} - {\gamma}  {I_z} - {c_{zw}}(1-{\epsilon})\beta_w{I_w}{I_z} \\
+\frac{dI_z}{dt} &amp;=\beta_zI_zS + \left( c_{wz}(1-\varepsilon) + \varepsilon\right) \beta_zI_zI_w + \rho\varepsilon I_W - \gamma  I_z - c_{zw}(1-\varepsilon)\beta_wI_wI_z \\
 
 
 \end{aligned}\]</span>
 <p>Therefore we have:</p>
-<span class="math display">\[\begin{aligned}
-
-\frac{dp}{dt} = {p}{S}({\beta_z}-{\beta_w})+{p}{\epsilon}({\gamma `}-{\gamma}) + (1+{p})({c_{wz}}(1-\epsilon)+{\epsilon}){\beta_z}{I_z}+{\rho}{\epsilon}({1+{p}})-(1+{p}){c_{zw}}(1-{\epsilon}){\beta_w}{I_z}
-\end{aligned}\]</span>
+<p>\begin{aligned}</p>
+<p>=pS(_z-<em>w)+p(`-)+(1+p)( c</em>{wz}(1-)+{})<em>z}{I_z}+{}{}(1+p)-(1+p)c</em>{zw}(1-)_wI_z</p>
+<p>\end{aligned}</p>
 <p>Where:</p>
 <span class="math display">\[\begin{aligned}
-{p}=\frac{I_z}{I_w}
+p=\frac{I_z}{I_w}
 \end{aligned}\]</span>
 
 

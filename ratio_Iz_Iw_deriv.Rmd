@@ -10,11 +10,11 @@ The model is defined by following equations:
 
 \begin{aligned}
 
-\frac{dS}{dt} &=- {\beta_w} {I_w}{S} - {\beta_z} {I_z} {S} + {\gamma}  {I_z} + {\gamma}(1 - {\epsilon}){I_w} + {\gamma `}  {\epsilon}  {I_w} \\
+\frac{dS}{dt} &=- \beta_wI_wS - \beta_zI_zS + \gamma  I_z + {\gamma}(1 - \varepsilon)I_w + \gamma `\varepsilon I_w \\
 
-\frac{dI_w}{dt} &={\beta_w} {I_w}{S} + {c_{zw}}(1-{\epsilon})\beta_w{I_w}{I_z} - {\gamma}(1 - {\epsilon}){I_w} - {\gamma `}  {\epsilon}  {I_w} - ({c_{wz}} (1-{\epsilon}) + \epsilon) {\beta_z}{I_z}{I_w} - {\rho}{\epsilon}{I_w} \\
+\frac{dI_w}{dt} &=\beta_wI_wS + c_{zw}(1-\varepsilon)\beta_wI_wI_z - \gamma(1 - \varepsilon)I_w - \gamma `\varepsilon I_w - (c_{wz} (1-\varepsilon) + \varepsilon) \beta_zI_zI_w - \rho\varepsilon I_w \\
 
-\frac{dI_z}{dt} &={\beta_z} {I_z}{S} + ({c_{wz}}(1-{\epsilon}) + \epsilon) {\beta_z}{I_z}{I_w} + {\rho}{\epsilon}{I_W} - {\gamma}  {I_z} - {c_{zw}}(1-{\epsilon})\beta_w{I_w}{I_z} \\
+\frac{dI_z}{dt} &=\beta_zI_zS + \left( c_{wz}(1-\varepsilon) + \varepsilon\right) \beta_zI_zI_w + \rho\varepsilon I_W - \gamma  I_z - c_{zw}(1-\varepsilon)\beta_wI_wI_z \\
 
 
 \end{aligned}
@@ -23,13 +23,14 @@ Therefore we have:
 
 \begin{aligned}
 
-\frac{dp}{dt} = {p}{S}({\beta_z}-{\beta_w})+{p}{\epsilon}({\gamma `}-{\gamma}) + (1+{p})({c_{wz}}(1-\epsilon)+{\epsilon}){\beta_z}{I_z}+{\rho}{\epsilon}({1+{p}})-(1+{p}){c_{zw}}(1-{\epsilon}){\beta_w}{I_z}
+\frac{dp}{dt}=pS(\beta_z-\beta_w)+p\varepsilon(\gamma `-\gamma)+(1+p)\left( c_{wz}(1-\varepsilon)+{\varepsilon}\right)\beta_z}{I_z}+{\rho}{\varepsilon}(1+p)-(1+p)c_{zw}(1-\varepsilon)\beta_wI_z
+
 \end{aligned}
 
 Where:
 
 \begin{aligned}
-{p}=\frac{I_z}{I_w}
+p=\frac{I_z}{I_w}
 \end{aligned}
 
 ```{r param, include=FALSE}
