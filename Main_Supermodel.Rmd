@@ -5,7 +5,7 @@ date: "18 října 2016"
 output: html_document
 ---
 
-```{r parameters, include=FALSE}
+```{r param, include=FALSE}
 library(deSolve)
 
 options("scipen" = 10)
@@ -56,7 +56,7 @@ conv_crit <- 0.00001
 
  \end{aligned}
  
-```{r param, include=FALSE, cache=TRUE}
+```{r trial, include=FALSE, cache=TRUE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, c_zw=pc_zw, c_wz=pc_wz)
 
 state <- c(S=1-2*prop, Iw=prop, Iz=prop)
@@ -122,7 +122,7 @@ steady_Iz_eps <- steady_eps[,4]
 
 ```
 
-```{r steady_state_eps_plot, echo=FALSE, fig.align='center'}
+```{r steady_state_eps_plot, echo=FALSE}
 
 plot(pepsi, steady_Iw_eps, main="Steady-states : treatment variations", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
@@ -164,7 +164,7 @@ steady_Iz_rho <- steady_rho[,4]
 ```
 
 ```{r steady_state_rho_plot, echo=FALSE, fig.align='center'}
-plot(prhoi, steady_Iw_rho, main="Steady-states : treatment failure variations", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+plot(prhoi, steady_Iw_rho, main="Steady-states : treatment failure variations", xlab="proportion of treatment failures", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
 lines(prhoi, steady_Iz_rho, lty=2, lwd=2)
 lines(prhoi, steady_S_rho, lty=1, lwd=2)
@@ -189,7 +189,7 @@ root_main=function(times, state, parameters){
   }
 
 exploit_param_c_wz=function(x) {
-  parameters[7] <- x
+  parameters[8] <- x
   out <- lsodar(func=SIS, y=state, parms=parameters, times=times, rootfunc=root_main)
   return(tail(out, n=1))
   }
@@ -230,7 +230,7 @@ root_main=function(times, state, parameters){
   }
 
 exploit_param_c_zw=function(x) {
-  parameters[8] <- x
+  parameters[7] <- x
   out <- lsodar(func=SIS, y=state, parms=parameters, times=times, rootfunc=root_main)
   return(tail(out, n=1))
   }
@@ -246,7 +246,7 @@ steady_Iz_c_zw <- steady_c_zw[,4]
 ```
 
 ```{r steady_state_z_to_w_plot, echo=FALSE, fig.align='center'}
-plot(pc_zwi, steady_Iw_c_zw, main="Steady-states : replacement of Iz by Iw rate variations", xlab="rate of successful replacement of Iw by Iz in untreated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+plot(pc_zwi, steady_Iw_c_zw, main="Steady-states : replacement of Iz by Iw rate variations", xlab="rate of successful replacement of Iz by Iw in untreated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
 lines(pc_zwi, steady_Iz_c_zw, lty=2, lwd=2)
 lines(pc_zwi, steady_S_c_zw, lty=1, lwd=2)
