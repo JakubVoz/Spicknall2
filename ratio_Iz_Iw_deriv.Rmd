@@ -1,5 +1,5 @@
 ---
-title: "Verification d(Iz/Iw)/dt"
+title: "Determination of d(Iz/Iw)/dt"
 author: "Jakub"
 date: "24 října 2016"
 output: html_document
