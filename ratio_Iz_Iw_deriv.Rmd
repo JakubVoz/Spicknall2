@@ -14,7 +14,7 @@ The model is defined by following equations:
 
 \frac{dI_w}{dt} &={\beta_w} {I_w}{S} + {c_{zw}}(1-{\epsilon})\beta_w{I_w}{I_z} - {\gamma}(1 - {\epsilon}){I_w} - {\gamma `}  {\epsilon}  {I_w} - ({c_{wz}} (1-{\epsilon}) + \epsilon) {\beta_z}{I_z}{I_w} - {\rho}{\epsilon}{I_w} \\
 
-\frac{dI_z}{dt} &={\beta_z} {I_z}{S} + ((1-{c_{wz}})(1-{\epsilon}) + \epsilon) {\beta_z}{I_z}{I_w} + {\rho}{\epsilon}{I_W} - {\gamma}  {I_z} - {c_{zw}}(1-{\epsilon})\beta_w{I_w}{I_z} \\
+\frac{dI_z}{dt} &={\beta_z} {I_z}{S} + ({c_{wz}}(1-{\epsilon}) + \epsilon) {\beta_z}{I_z}{I_w} + {\rho}{\epsilon}{I_W} - {\gamma}  {I_z} - {c_{zw}}(1-{\epsilon})\beta_w{I_w}{I_z} \\
 
 
 \end{aligned}
