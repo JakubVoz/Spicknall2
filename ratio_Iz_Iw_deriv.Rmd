@@ -1,0 +1,94 @@
+---
+title: "Verification d(Iz/Iw)/dt"
+author: "Jakub"
+date: "24 října 2016"
+output: html_document
+---
+
+The model is defined by following equations:
+
+\begin{aligned}
+
+\frac{dS}{dt} &=- {\beta_w} {I_w}{S} - {\beta_z} {I_z} {S} + {\gamma}  {I_z} + {\gamma}(1 - {\epsilon}){I_w} + {\gamma `}  {\epsilon}  {I_w} \\
+
+\frac{dI_w}{dt} &={\beta_w} {I_w}{S} + {c_{zw}}(1-{\epsilon})\beta_w{I_w}{I_z} - {\gamma}(1 - {\epsilon}){I_w} - {\gamma `}  {\epsilon}  {I_w} - ({c_{wz}} (1-{\epsilon}) + \epsilon) {\beta_z}{I_z}{I_w} - {\rho}{\epsilon}{I_w} \\
+
+\frac{dI_z}{dt} &={\beta_z} {I_z}{S} + ((1-{c_{wz}})(1-{\epsilon}) + \epsilon) {\beta_z}{I_z}{I_w} + {\rho}{\epsilon}{I_W} - {\gamma}  {I_z} - {c_{zw}}(1-{\epsilon})\beta_w{I_w}{I_z} \\
+
+
+\end{aligned}
+
+Therefore we have:
+
+\begin{aligned}
+
+\frac{p}{dt} = {p}{S}({\beta_z}-{\beta_w})+{p}{\epsilon}({\gamma `}-{\gamma}) + (1+{p})({c_{wz}}(1-\epsilon)+{\epsilon}){\beta_z}{I_z}+{\rho}{\epsilon}{1+{p}}-(1+{p}){c_{zw}}(1-{\epsilon}){\beta_w}{I_z}
+\end{aligned}
+
+Where:
+
+\begin{aligned}
+{p}=\frac{I_z}{I_w}
+\end{aligned}
+
+```{r param, include=FALSE}
+library(deSolve)
+
+options("scipen" = 10)
+N <- 1
+a <- 10000 #time span
+m <- 1 #time step
+
+pbeta_w <- 0.04 #transmission parameter of Iw
+pbeta_z <- 0.015 #transmission parameter of Iz
+
+pgammaa <- 0.01 #innate recovery rate
+pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
+
+
+prho <- 0.05 #probability of clinical failure
+
+peps <- 0.10 #initial value of the ratio of treated patients
+
+pc_zw <- 0.5  # competitivity ratio : probability of replacement of Iz by Iw when reinfected and not treated
+pc_wz <- 0.02 # competitivity ratio : probability of replacement of Iw by Iz when reinfected and not treated
+
+
+
+prhoi <- seq(0,0.10,by=0.001)
+pepsi <- seq(0,1,by=0.01)
+pc_wzi <- seq(0,0.10, by=0.001)
+pc_zwi <- seq(0,0.80, by=0.001)
+
+prop <- 0.01 
+
+
+
+conv_crit <- 0.00001
+
+```
+
+```{r trial, include=FALSE, cache=TRUE}
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, c_zw=pc_zw, c_wz=pc_wz)
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop, Iz_div_Iw=1)
+
+times <- seq(0, a, by=m)
+
+SIS=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S + c_zw*(1-eps)*beta_w*Iw*Iz - (c_wz*(1-eps)+eps)*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        dIz = beta_z*Iz*S + (c_wz*(1-eps)+eps)*beta_z*Iz*Iw + rho*eps*Iw - c_zw*(1-eps)*beta_w*Iw*Iz - gamma*Iz
+        dIz_div_Iw = rho*eps*(1+Iz/Iw)-(1+(Iz/Iw))*c_zw*(1-eps)*beta_w*Iz+(1+(Iz/Iw))*(c_wz*(1-eps)+eps)*beta_z*Iz+(Iz/Iw)*eps*(gamma_prim-gamma)+(Iz/Iw)*(beta_z-beta_w)*S
+        
+        list(c(dS, dIw, dIz, dIz_div_Iw))
+       })
+}
+
+out=as.data.frame(
+  ode(y=state, times=times, func=SIS, parms=parameters)
+)
+
+```
+

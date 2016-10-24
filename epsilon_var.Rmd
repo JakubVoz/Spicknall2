@@ -8,27 +8,41 @@ output: html_document
 
 ```{r include=FALSE}
 library(deSolve)
-options("scipen" = 10)
-N <- 1
-a <- 2000
-pbeta_w <- 0.04
-pbeta_z <- 0.015
-pgammaa <- 0.01
-pgamma_tilt <- 0.1
-pq <- 0.5
-prho <- 0.5
-pphi <- 0.05
-peps_init <- 0.10 #initial value of epsilon
-peps_inc <- 0.15 #increased value of epsilon
-peps_dec <- 0.05 #decreased value of epsilon
-m <- 1
-prop <- 0.01
 
-# choice of model
-pd <- 0   #coexistence in single host
-pr <- 0   #replacement of Iz by Iw via interhost infection
-pu <- 1   #Iw to Iz conversion, intrahost
-pb <- 1   #Iz to Iw conversion, intahost
+
+options("scipen" = 10)
+
+# initial state:
+N <- 1
+prop <- 0.01 #initial value of Iw and Iz
+
+# time:
+a <- 2000 #time span
+m <- 1 #time step
+
+zoom <- 100 #after breakpoint 1/zoom step
+zoom_area <- 2000 #time span after breakpoint
+
+
+# parameters
+pbeta_w <- 0.04 #transmission parameter of Iw
+pbeta_z <- 0.015 #transmission parameter of Iz
+
+pgammaa <- 0.01 #innate recovery rate
+pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
+
+pc_zw <- 0.5  # competitivity : probability of replacement of Iz by Iw when reinfected and not treated
+pc_wz <- 0.02 # competitivity : probability of replacement of Iw by Iz when reinfected and not treated
+
+prho <- 0.05 #probability of clinical failure
+
+#epsilon change over time
+
+peps <- 0.10 #initial value of the ratio of treated patients
+pepsi <- seq(0,0.2,by=0.01) #variation of epsilon
+peps_inc <- 0.15 #increased value of epsilon for trial
+peps_dec <- 0.05 #decreased value of epsilon for trial
+
 
 
 ```
@@ -41,38 +55,38 @@ pb <- 1   #Iz to Iw conversion, intahost
  
  
 ```{r stable, include=FALSE}
-parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_init, q=pq, rho=prho, phi=pphi, d=pd, r=pr, u=pu, b=pb )
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, c_zw=pc_zw, c_wz=pc_wz)
 
-state <- c(S=1-2*prop, Iw=prop, Iz=prop, Iwz=0)
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
 
 times=seq(0, a, by=m)
 
-SIS_inc=function(times, state, parameters){
+SIS=function(times, state, parameters){
   with(as.list(c(state,parameters)),
-       {dS = - beta_w*(Iw+d*q*Iwz)*S - beta_z*(Iz+d*q*Iwz)*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
-        dIw = beta_w*(Iw+d*q*Iwz)*S + d*gamma*Iwz - d*beta_z*(Iz+q*Iwz)*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw + r*(beta_w-beta_z)*Iw*Iz - u*rho*eps*Iw + b*phi*(1-eps)*Iz
-        dIz = beta_z*(Iz+d*q*Iwz)*S + d*gamma*(1-eps)*Iwz + gamma_prim*eps*Iwz - d*beta_w*(Iw+q*Iwz)*Iz - gamma*Iz - r*(beta_w-beta_z)*Iw*Iz + u*rho*eps*Iw - b*phi*(1-eps)*Iz
-        dIwz = d*(beta_w*(Iw+q*Iwz)*Iz + beta_z*(Iz+q*Iwz)*Iw - gamma*Iwz - gamma*(1-eps)*Iwz - gamma_prim*eps*Iwz)
-        list(c(dS, dIw, dIz, dIwz))
+       {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S + c_zw*(1-eps)*beta_w*Iw*Iz - (c_wz*(1-eps)+eps)*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        dIz = beta_z*Iz*S + (c_wz*(1-eps)+eps)*beta_z*Iz*Iw + rho*eps*Iw - c_zw*(1-eps)*beta_w*Iw*Iz - gamma*Iz
+        
+        list(c(dS, dIw, dIz))
        })
 }
 
 out_init=as.data.frame(
-  ode(y=state, times=times, func=SIS_inc, parms=parameters)
+  ode(y=state, times=times, func=SIS, parms=parameters)
 )
 
 ```
 
 
 ```{r increase, include=FALSE, cache=TRUE}
-parameters2 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_inc, q=pq, rho=prho, phi=pphi, d=pd, r=pr, u=pu, b=pb )
+parameters2 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_inc, rho=prho, c_zw=pc_zw, c_wz=pc_wz)
 
-state2 <- c(S=out_init$S[2001], Iw=out_init$Iw[2001], Iz=out_init$Iz[2001], Iwz=out_init$Iwz[2001])
+state2 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Iz=out_init$Iz[a+1])
 
-times2=seq(a, 2*a, by=m)
+times2=seq(a, a+zoom_area, by=m/zoom)
 
 out_inc=as.data.frame(
-  ode(y=state2, times=times2, func=SIS_inc, parms=parameters2)
+  ode(y=state2, times=times2, func=SIS, parms=parameters2)
 )
 
 ```
@@ -80,14 +94,14 @@ out_inc=as.data.frame(
 ```{r decrease, include=FALSE, cache=TRUE}
 
 
-parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_dec, q=pq, rho=prho, phi=pphi, d=pd, r=pr, u=pu, b=pb )
+parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_dec, rho=prho, c_zw=pc_zw, c_wz=pc_wz)
 
-state2 <- c(S=out_init$S[2001], Iw=out_init$Iw[2001], Iz=out_init$Iz[2001], Iwz=out_init$Iwz[2001])
+state2 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Iz=out_init$Iz[a+1], Iwz=out_init$Iwz[a+1])
 
-times2=seq(a, 2*a, by=m)
+times2=seq(a, a+zoom_area, by=m/zoom)
 
 out_dec=as.data.frame(
-  ode(y=state2, times=times2, func=SIS_inc, parms=parameters3)
+  ode(y=state2, times=times2, func=SIS, parms=parameters3)
 )
 
 ```
@@ -96,11 +110,12 @@ out_dec=as.data.frame(
 ```{r plot, echo=FALSE, fig.align='center'}
 
 
-inc <- rbind(out_init[1:2000,], out_inc)
-dec <- rbind(out_init[1:2000,], out_dec)
-t<- seq(0, 2*a, by=m)
+inc <- rbind(out_init[1:a,], out_inc)
+dec <- rbind(out_init[1:a,], out_dec)
+t<- c(seq(0, a, by=m), seq(a+m/zoom, a+zoom_area, by=m/zoom))
 
 plot(t, inc$Iw, main="Change of epsilon", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l", col="RED")
+
 lines(t, dec$Iw, lty=3, lwd=2, col="BLUE")
 lines(t, inc$Iz, lty=2, lwd=2, col="RED")
 lines(t, dec$Iz, lty=2, lwd=2, col="BLUE")
@@ -112,20 +127,17 @@ legend("topleft" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain"), l
 ```{r multiple_var, include=FALSE}
 
 
-parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_dec, q=pq, rho=prho, phi=pphi, d=pd, r=pr, u=pu, b=pb )
+parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_dec, rho=prho, c_zw=pc_zw, c_wz=pc_wz)
 
-times3=seq(a, a+200, by=m/10)
 
-state3 <- c(S=out_init$S[2001], Iw=out_init$Iw[2001], Iz=out_init$Iz[2001], Iwz=out_init$Iwz[2001])
+times3=seq(a, a+zoom_area, by=m/zoom)
+
+state3 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Iz=out_init$Iz[a+1], Iwz=out_init$Iwz[a+1])
 
 break_point=function(x){
   parameters3[5] <-x
   out_multi=as.data.frame(
-  ode(y=state3, times=times3, func=SIS_inc, parms=parameters3))
-  out_multi_S <- out_multi$S
-  out_multi_Iw <- out_multi$Iw
-  out_multi_Iz <- out_multi$Iz
-  out_multi_Iwz <- out_multi$Iwz
+  ode(y=state3, times=times3, func=SIS, parms=parameters3))
   return(out_multi)
 }
 
@@ -138,36 +150,40 @@ out <- do.call(cbind, lapply(pepsi,break_point))
 ```{r plot_multi_var, echo=FALSE, fig.align='center'}
 
 
-t<- seq(a, a+200, by=m/10)
+t<- seq(a, a+2000, by=m/zoom)
 
-colglob <- colorRampPalette(c("red", "blue"))
+colglob <- colorRampPalette(c("blue", "red"))
 
-colforcol <- colglob(ncol(S))
+colforcol <- colglob(length(pepsi))
 
 
 linfun <- function(x){
-  lines(t, unlist(x), lty=3, lwd=2, col=colforcol[])
+  lines(t, unlist(x), lty=3, lwd=2, col=colforcol[as.numeric(parent.frame()$i)])
 }
 
-ns <- seq(2,ncol(out), by=5)
-niw <- seq(3,ncol(out), by=5)
-niz <- seq(4,ncol(out), by=5)
-niwz <- seq(5,ncol(out), by=5)
 
 
 
-S <- out[,seq(2,ncol(out), by=5)]
+ns <- seq(2,ncol(out), by=4)
+niw <- seq(3,ncol(out), by=4)
+niz <- seq(4,ncol(out), by=4)
+
+
+
+
+S <- out[,ns]
 colnames(S) <- seq(0,0.2,by=0.01)
 
-Iw <- out[,seq(3,ncol(out), by=5)]
-Iz <- out[,seq(4,ncol(out), by=5)]
-Iwz <- out[,seq(5,ncol(out), by=5)]
+Iw <- out[,niw]
+Iz <- out[,niz]
 
 
 
-plot(t, unlist(S[11, 1:(length(unlist(S[11]))-1)]), main="Change of epsilon", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+
+plot(t, S[,11], main="Change of epsilon", xlab="time (steps)", ylab="S ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
 apply(S, 2, linfun)
+
 
 legend("topleft" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain"), lty=c(3,2), lwd=c(3,2))
 ```
