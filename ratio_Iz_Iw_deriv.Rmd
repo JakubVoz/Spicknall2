@@ -7,32 +7,23 @@ output: html_document
 
 The model is defined by following equations:
 
-
+$$
 \begin{aligned}
-
-\frac{dS}{dt} &=- \beta_wI_wS - \beta_zI_zS + \gamma  I_z + {\gamma}(1 - \varepsilon)I_w + \gamma `\varepsilon I_w \\
-
-\frac{dI_w}{dt} &=\beta_wI_wS + c_{zw}(1-\varepsilon)\beta_wI_wI_z - \gamma(1 - \varepsilon)I_w - \gamma '\varepsilon I_w - (c_{wz} (1-\varepsilon) + \varepsilon) \beta_zI_zI_w - \rho\varepsilon I_w \\
-
-\frac{dI_z}{dt} &=\beta_zI_zS + \left( c_{wz}(1-\varepsilon) + \varepsilon\right) \beta_zI_zI_w + \rho\varepsilon I_W - \gamma  I_z - c_{zw}(1-\varepsilon)\beta_wI_wI_z \\
-
-
+\frac{dS}{dt} &=- \beta_w I_wS - \beta_z I_z S + \gamma  I_z + \gamma(1 - \varepsilon)I_w + \gamma `  \varepsilon  I_w \\
+\frac{dI_w}{dt} &=\beta_w I_wS + (1-\varepsilon)\beta_wI_wI_z - \gamma(1 - \varepsilon)I_w - \gamma `  \varepsilon  I_w - \varepsilon\beta_zI_zI_w - \rho\varepsilon I_w \\
+\frac{dI_z}{dt} &=\beta_z I_zS + \varepsilon\beta_zI_zI_w + \rho\varepsilon I_w - \gamma  I_z - (1-\varepsilon)\beta_wI_wI_z \\
 \end{aligned}
-
+$$
 Therefore we have:
-
+$$
 \begin{aligned}
-
-\frac{dI_z}{dt} &=\beta_zI_zS + \left( c_{wz}(1-\varepsilon) + \varepsilon\right) \beta_zI_zI_w + \rho\varepsilon I_W - \gamma  I_z - c_{zw}(1-\varepsilon)\beta_wI_wI_z \\
-
-\frac{dp}{dt} &= pS(\beta_z-\beta_w)+p\varepsilon(\gamma '-\gamma)+(1+p) \left( c_{wz}(1-\varepsilon)+\varepsilon \right) \beta_zI_z+\rho\varepsilon(1+p)-(1+p)c_{zw}(1-\varepsilon)\beta_wI_z
-
+\frac{\frac {dI_z}{dM}}{dt} &= -\beta_zI_z(1-\varepsilon) + \varepsilon\beta_wI_z + \frac{1}{M} \left( \beta_z I_z^{2}(1-\varepsilon) + I_z(\beta_z-\beta_w) - I_z^{2}\beta_w\varepsilon + I_z\varepsilon(\gamma` - \gamma) \right) + \frac{1}{M^{2}} \left(I_z^{2}(\beta_w-\beta_z)+I_z^{2}\varepsilon(\gamma-\gamma`) \right)+ \frac{M-I_z}{M}\rho\varepsilon \\
 \end{aligned}
-
+$$
 Where:
 
 \begin{aligned}
-p=\frac{I_z}{I_w}
+M=I_z+I_w
 \end{aligned}
 
 ```{r param, include=FALSE}
@@ -73,26 +64,29 @@ conv_crit <- 0.00001
 ```
 
 ```{r trial, include=FALSE, cache=TRUE}
-parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, c_zw=pc_zw, c_wz=pc_wz)
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
 
-state <- c(S=1-2*prop, Iw=prop, Iz=prop, Iz_div_Iw=1)
+state <- c(S=1-2*prop, Iw=prop, Iz=prop, Iz_div_Inf=0.5)
 
 times <- seq(0, a, by=m)
 
 SIS=function(times, state, parameters){
   with(as.list(c(state,parameters)),
        {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
-        dIw = beta_w*Iw*S + c_zw*(1-eps)*beta_w*Iw*Iz - (c_wz*(1-eps)+eps)*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
-        dIz = beta_z*Iz*S + (c_wz*(1-eps)+eps)*beta_z*Iz*Iw + rho*eps*Iw - c_zw*(1-eps)*beta_w*Iw*Iz - gamma*Iz
-        dIz_div_Iw = rho*eps*(1+Iz/Iw)-(1+(Iz/Iw))*c_zw*(1-eps)*beta_w*Iz+(1+(Iz/Iw))*(c_wz*(1-eps)+eps)*beta_z*Iz+(Iz/Iw)*eps*(gamma_prim-gamma)+(Iz/Iw)*(beta_z-beta_w)*S
-        
-        list(c(dS, dIw, dIz, dIz_div_Iw))
-       })
-}
+        dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
+        dIz_div_Inf = -beta_z*Iz*(1-eps)+eps*beta_w*Iz+(1/(Iz+Iw))*(beta_z*Iz*Iz*(1-eps)+Iz*(beta_z-beta_w)-Iz*Iz*beta_w*eps+Iz*eps*(gamma_prim-gamma)) + (1/((Iz+Iw)*(Iz+Iw)))*(Iz*Iz*(beta_w-beta_z)+Iz*Iz*eps*(gamma-gamma_prim))+rho*eps*Iw/(Iz+Iw)
+        list(c(dS, dIw, dIz, dIz_div_Inf))
+        })
+  }
+#dIz_div_Inf = (1/(Iz+Iw))*(beta_z*Iz*(1-Iz-Iw)+eps*beta_z*Iw*Iz+rho*eps*Iw-gamma*Iz-(1-eps)*beta_w*Iw*Iz)+(1/((Iw+Iz)*(Iw+Iz)))*Iz*(-beta_w*Iw*(1-Iz-Iw)-beta_z*Iz*(1-Iz-Iw)+gamma*Iz+gamma*(1-eps)*Iw+gamma_prim*eps*Iw)
 
 out=as.data.frame(
   ode(y=state, times=times, func=SIS, parms=parameters)
 )
+
+require(plyr)
+out2 <- cbind(out, mutate(out, new=out$Iz/(out$Iw+out$Iz)))
 
 ```
 
