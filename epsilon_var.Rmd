@@ -145,7 +145,7 @@ out <- do.call(cbind, lapply(pepsi,break_point))
 
 ```
 
-```{r plot_multi_var, echo=FALSE, fig.align='center'}
+```{r plot_multi_var, echo=FALSE, fig.align='center', cache=TRUE}
 
 
 t<- seq(a, a+2000, by=m/zoom)
