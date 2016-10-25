@@ -1,0 +1,180 @@
+---
+title: "Final_model"
+author: "Jakub"
+date: "25 října 2016"
+output: html_document
+---
+
+---
+title: "Supermodel"
+author: "Jakub"
+date: "18 října 2016"
+output: html_document
+---
+
+```{r param, include=FALSE}
+library(deSolve)
+
+options("scipen" = 10)
+N <- 1
+a <- 10000 #time span
+m <- 1 #time step
+
+pbeta_w <- 0.04 #transmission parameter of Iw
+pbeta_z <- 0.015 #transmission parameter of Iz
+
+pgammaa <- 0.01 #innate recovery rate
+pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
+
+
+prho <- 0.05 #probability of clinical failure
+
+peps <- 0.10 #initial value of the ratio of treated patients
+
+
+
+
+
+prhoi <- seq(0,0.10,by=0.001)
+pepsi <- seq(0,1,by=0.01)
+
+
+prop <- 0.01 
+
+
+
+conv_crit <- 0.00001
+
+
+```
+
+
+
+\begin{aligned}
+
+\frac{dS}{dt} &=- \beta_w I_wS - \beta_z I_z S + \gamma  I_z + \gamma(1 - \epsilon)I_w + \gamma `  \epsilon  I_w \\
+
+\frac{dI_w}{dt} &=\beta_w I_wS + (1-\epsilon)\beta_wI_wI_z - \gamma(1 - \epsilon)I_w - \gamma `  \epsilon  I_w - \epsilon\beta_zI_zI_w - \rho\epsilon I_w \\
+
+\frac{dI_z}{dt} &=\beta_z I_zS + \epsilon\beta_zI_zI_w + \rho\epsilon I_W - \gamma  I_z - (1-\epsilon)\beta_wI_wI_z \\
+
+
+ \end{aligned}
+ 
+```{r trial, include=FALSE, cache=TRUE}
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+
+times <- seq(0, a, by=m)
+
+SIS=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
+        
+        list(c(dS, dIw, dIz))
+       })
+}
+
+out=as.data.frame(
+  ode(y=state, times=times, func=SIS, parms=parameters)
+)
+
+```
+
+
+```{r main_trial, echo=FALSE, fig.align='center'}
+
+plot(times, out$S, main="Trial", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
+lines(times, out$Iw, lty=3, lwd=2)
+lines(times, out$Iz, lty=2, lwd=2)
+
+legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resistant strain"), lty=c(1,3,2), lwd=c(2,2,2))
+```
+
+
+
+
+``` {r steady_state_eps, include=FALSE, cache=TRUE}
+
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+
+times <- seq(0, a, by=m)
+
+
+root_main=function(times, state, parameters){
+  dstate <- unlist(SIS(times, state, parameters))
+  sum(abs(dstate)) - conv_crit
+  }
+
+exploit_param_eps=function(x) {
+  parameters[5] <- x
+  out <- lsodar(func=SIS, y=state, parms=parameters, times=times, rootfunc=root_main)
+  return(tail(out, n=1))
+  }
+
+steady_eps <- do.call(rbind, lapply(pepsi, exploit_param_eps))
+steady_eps <- unlist(steady_eps)
+
+steady_time_eps <- steady_eps[,1]
+steady_S_eps <- steady_eps[,2]
+steady_Iw_eps <- steady_eps[,3]
+steady_Iz_eps <- steady_eps[,4]
+
+```
+
+```{r steady_state_eps_plot, echo=FALSE}
+
+plot(pepsi, steady_Iw_eps, main="Steady-states : treatment variations", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+
+lines(pepsi, steady_Iz_eps, lty=2, lwd=2)
+lines(pepsi, steady_S_eps, lty=1, lwd=2)
+
+legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "S Susceptible population" ), lty=c(3,2,1), lwd=c(2,2,2))
+
+```
+
+``` {r steady_state_rho, include=FALSE, cache=TRUE}
+
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+
+times <- seq(0, a, by=m)
+
+
+root_main=function(times, state, parameters){
+  dstate <- unlist(SIS(times, state, parameters))
+  sum(abs(dstate)) - conv_crit
+  }
+
+exploit_param_rho=function(x) {
+  parameters[6] <- x
+  out <- lsodar(func=SIS, y=state, parms=parameters, times=times, rootfunc=root_main)
+  return(tail(out, n=1))
+  }
+
+steady_rho <- do.call(rbind, lapply(prhoi, exploit_param_rho))
+steady_rho <- unlist(steady_rho)
+
+steady_time_rho <- steady_rho[,1]
+steady_S_rho <- steady_rho[,2]
+steady_Iw_rho <- steady_rho[,3]
+steady_Iz_rho <- steady_rho[,4]
+
+```
+
+```{r steady_state_rho_plot, echo=FALSE, fig.align='center'}
+plot(prhoi, steady_Iw_rho, main="Steady-states : treatment failure variations", xlab="proportion of treatment failures", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+
+lines(prhoi, steady_Iz_rho, lty=2, lwd=2)
+lines(prhoi, steady_S_rho, lty=1, lwd=2)
+
+legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "S Susceptible population" ), lty=c(3,2,1), lwd=c(2,2,2))
+
+```
+

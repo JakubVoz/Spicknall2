@@ -1,5 +1,5 @@
 ---
-title: "Determination of d(Iz/Iw)/dt"
+title: "Determination of d(Iz/(Iw+Iz))/dt"
 author: "Jakub"
 date: "24 října 2016"
 output: html_document
@@ -12,7 +12,7 @@ The model is defined by following equations:
 
 \frac{dS}{dt} &=- \beta_wI_wS - \beta_zI_zS + \gamma  I_z + {\gamma}(1 - \varepsilon)I_w + \gamma `\varepsilon I_w \\
 
-\frac{dI_w}{dt} &=\beta_wI_wS + c_{zw}(1-\varepsilon)\beta_wI_wI_z - \gamma(1 - \varepsilon)I_w - \gamma `\varepsilon I_w - (c_{wz} (1-\varepsilon) + \varepsilon) \beta_zI_zI_w - \rho\varepsilon I_w \\
+\frac{dI_w}{dt} &=\beta_wI_wS + c_{zw}(1-\varepsilon)\beta_wI_wI_z - \gamma(1 - \varepsilon)I_w - \gamma '\varepsilon I_w - (c_{wz} (1-\varepsilon) + \varepsilon) \beta_zI_zI_w - \rho\varepsilon I_w \\
 
 \frac{dI_z}{dt} &=\beta_zI_zS + \left( c_{wz}(1-\varepsilon) + \varepsilon\right) \beta_zI_zI_w + \rho\varepsilon I_W - \gamma  I_z - c_{zw}(1-\varepsilon)\beta_wI_wI_z \\
 
@@ -23,7 +23,9 @@ Therefore we have:
 
 \begin{aligned}
 
-\frac{dp}{dt}=pS(\beta_z-\beta_w)+p\varepsilon(\gamma `-\gamma)+(1+p)\left( c_{wz}(1-\varepsilon)+{\varepsilon}\right)\beta_z}{I_z}+{\rho}{\varepsilon}(1+p)-(1+p)c_{zw}(1-\varepsilon)\beta_wI_z
+\frac{dI_z}{dt} &=\beta_zI_zS + \left( c_{wz}(1-\varepsilon) + \varepsilon\right) \beta_zI_zI_w + \rho\varepsilon I_W - \gamma  I_z - c_{zw}(1-\varepsilon)\beta_wI_wI_z \\
+
+\frac{dp}{dt} &= pS(\beta_z-\beta_w)+p\varepsilon(\gamma '-\gamma)+(1+p) \left( c_{wz}(1-\varepsilon)+\varepsilon \right) \beta_zI_z+\rho\varepsilon(1+p)-(1+p)c_{zw}(1-\varepsilon)\beta_wI_z
 
 \end{aligned}
 

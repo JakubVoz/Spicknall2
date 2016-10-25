@@ -47,12 +47,11 @@ conv_crit <- 0.00001
 
 \begin{aligned}
 
-\frac{dS}{dt} &=- {\beta_w} {I_w}{S} - {\beta_z} {I_z} {S} + {\gamma}  {I_z} + {\gamma}(1 - {\epsilon}){I_w} + {\gamma `}  {\epsilon}  {I_w} \\
+\frac{dS}{dt} &=- \beta_w I_wS - \beta_z I_z S + \gamma  I_z + \gamma(1 - \epsilon)I_w + \gamma `  \epsilon  I_w \\
 
-\frac{dI_w}{dt} &={\beta_w} {I_w}{S} + {c}(1-{\epsilon})\beta_w{I_w}{I_z} - {\gamma}(1 - {\epsilon}){I_w} - {\gamma `}  {\epsilon}  {I_w} - ((1-{c}) (1-{\epsilon}) + \epsilon) {\beta_z}{I_z}{I_w} - {\rho}{\epsilon}{I_w} \\
+\frac{dI_w}{dt} &=\beta_w I_wS + (1-\epsilon)\beta_wI_wI_z - \gamma(1 - \epsilon)I_w - \gamma `  \epsilon  I_w - ((1-c) (1-\epsilon) + \epsilon) \beta_zI_zI_w - \rho \epsilon I_w \\
 
-\frac{dI_z}{dt} &={\beta_z} {I_z}{S} + ((1-{c})(1-{\epsilon}) + \epsilon) {\beta_z}{I_z}{I_w} + {\rho}{\epsilon}{I_W} - {\gamma}  {I_z} - {c}(1-{\epsilon})\beta_w{I_w}{I_z} \\
-
+\frac{dI_z}{dt} &=\beta_z I_zS + ((1-c)(1-\epsilon) + \epsilon) \beta_zI_zI_w + \rho \epsilon I_W - \gamma  I_z - c(1-\epsilon)\beta_wI_wI_z \\
 
  \end{aligned}
  

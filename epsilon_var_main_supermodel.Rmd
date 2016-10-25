@@ -1,0 +1,189 @@
+---
+title: "Change in ATB consumption"
+author: "Jakub"
+date: "18 října 2016"
+output: html_document
+---
+
+
+```{r include=FALSE}
+library(deSolve)
+
+
+options("scipen" = 10)
+
+# initial state:
+N <- 1
+prop <- 0.01 #initial value of Iw and Iz
+
+# time:
+a <- 2000 #time span
+m <- 1 #time step
+
+zoom <- 100 #after breakpoint 1/zoom step
+zoom_area <- 2000 #time span after breakpoint
+
+
+# parameters
+pbeta_w <- 0.04 #transmission parameter of Iw
+pbeta_z <- 0.015 #transmission parameter of Iz
+
+pgammaa <- 0.01 #innate recovery rate
+pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
+
+pc_zw <- 0.5  # competitivity : probability of replacement of Iz by Iw when reinfected and not treated
+pc_wz <- 0.02 # competitivity : probability of replacement of Iw by Iz when reinfected and not treated
+
+prho <- 0.05 #probability of clinical failure
+
+#epsilon change over time
+
+peps <- 0.10 #initial value of the ratio of treated patients
+pepsi <- seq(0,0.2,by=0.01) #variation of epsilon
+peps_inc <- 0.15 #increased value of epsilon for trial
+peps_dec <- 0.05 #decreased value of epsilon for trial
+
+
+
+```
+
+
+
+<center> <h2> Change in the proportion of treated patients </h2> </center>
+
+ 
+ 
+ 
+```{r stable, include=FALSE}
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, c_zw=pc_zw, c_wz=pc_wz)
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+
+times=seq(0, a, by=m)
+
+SIS=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S + c_zw*(1-eps)*beta_w*Iw*Iz - (c_wz*(1-eps)+eps)*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        dIz = beta_z*Iz*S + (c_wz*(1-eps)+eps)*beta_z*Iz*Iw + rho*eps*Iw - c_zw*(1-eps)*beta_w*Iw*Iz - gamma*Iz
+        
+        list(c(dS, dIw, dIz))
+       })
+}
+
+out_init=as.data.frame(
+  ode(y=state, times=times, func=SIS, parms=parameters)
+)
+
+```
+
+
+```{r increase, include=FALSE, cache=TRUE}
+parameters2 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_inc, rho=prho, c_zw=pc_zw, c_wz=pc_wz)
+
+state2 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Iz=out_init$Iz[a+1])
+
+times2=seq(a, a+zoom_area, by=m/zoom)
+
+out_inc=as.data.frame(
+  ode(y=state2, times=times2, func=SIS, parms=parameters2)
+)
+
+```
+
+```{r decrease, include=FALSE, cache=TRUE}
+
+
+parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_dec, rho=prho, c_zw=pc_zw, c_wz=pc_wz)
+
+state2 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Iz=out_init$Iz[a+1], Iwz=out_init$Iwz[a+1])
+
+times2=seq(a, a+zoom_area, by=m/zoom)
+
+out_dec=as.data.frame(
+  ode(y=state2, times=times2, func=SIS, parms=parameters3)
+)
+
+```
+
+
+```{r plot, echo=FALSE, fig.align='center'}
+
+
+inc <- rbind(out_init[1:a,], out_inc)
+dec <- rbind(out_init[1:a,], out_dec)
+t<- c(seq(0, a, by=m), seq(a+m/zoom, a+zoom_area, by=m/zoom))
+
+plot(t, inc$Iw, main="Change of epsilon", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l", col="RED")
+
+lines(t, dec$Iw, lty=3, lwd=2, col="BLUE")
+lines(t, inc$Iz, lty=2, lwd=2, col="RED")
+lines(t, dec$Iz, lty=2, lwd=2, col="BLUE")
+
+legend("topleft" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain"), lty=c(3,2), lwd=c(3,2))
+```
+
+
+```{r multiple_var, include=FALSE}
+
+
+parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_dec, rho=prho, c_zw=pc_zw, c_wz=pc_wz)
+
+
+times3=seq(a, a+zoom_area, by=m/zoom)
+
+state3 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Iz=out_init$Iz[a+1], Iwz=out_init$Iwz[a+1])
+
+break_point=function(x){
+  parameters3[5] <-x
+  out_multi=as.data.frame(
+  ode(y=state3, times=times3, func=SIS, parms=parameters3))
+  return(out_multi)
+}
+
+pepsi <- seq(0, 0.2, by=0.01)
+
+out <- do.call(cbind, lapply(pepsi,break_point))
+
+```
+
+```{r plot_multi_var, echo=FALSE, fig.align='center'}
+
+
+t<- seq(a, a+2000, by=m/zoom)
+
+colglob <- colorRampPalette(c("blue", "red"))
+
+colforcol <- colglob(length(pepsi))
+
+
+linfun <- function(x){
+  lines(t, unlist(x), lty=3, lwd=2, col=colforcol[as.numeric(parent.frame()$i)])
+}
+
+
+
+
+ns <- seq(2,ncol(out), by=4)
+niw <- seq(3,ncol(out), by=4)
+niz <- seq(4,ncol(out), by=4)
+
+
+
+
+S <- out[,ns]
+colnames(S) <- seq(0,0.2,by=0.01)
+
+Iw <- out[,niw]
+Iz <- out[,niz]
+
+
+
+
+plot(t, S[,11], main="Change of epsilon", xlab="time (steps)", ylab="S ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+
+apply(S, 2, linfun)
+
+
+legend("topleft" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain"), lty=c(3,2), lwd=c(3,2))
+```
