@@ -21,10 +21,11 @@ $$
 \end{aligned}
 $$
 Where:
-
+$$
 \begin{aligned}
 M=I_z+I_w
 \end{aligned}
+$$
 
 ```{r param, include=FALSE}
 library(deSolve)

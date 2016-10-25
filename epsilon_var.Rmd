@@ -202,4 +202,16 @@ apply(Iz, 2, linfun)
 
 
 legend("topleft" , inset=.05, c("epsilon=0.20", "epsilon=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+Ratio <- as.matrix(Iz)/(as.matrix(Iz)+as.matrix(Iw))
+
+plot(t, Ratio[,11], main="Evolution of Iz/(Iz+Iw)", xlab="time (steps)", ylab="S ratio", ylim=c(0,2), lty=1, lwd=2, type="l")
+
+apply(Ratio, 2, linfun)
+
+
+legend("topleft" , inset=.05, c("epsilon=0.20", "epsilon=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
 ```
