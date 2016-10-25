@@ -56,7 +56,7 @@ conv_crit <- 0.00001
 
 \frac{dI_w}{dt} &=\beta_w I_wS + (1-\epsilon)\beta_wI_wI_z - \gamma(1 - \epsilon)I_w - \gamma `  \epsilon  I_w - \epsilon\beta_zI_zI_w - \rho\epsilon I_w \\
 
-\frac{dI_z}{dt} &=\beta_z I_zS + \epsilon\beta_zI_zI_w + \rho\epsilon I_W - \gamma  I_z - (1-\epsilon)\beta_wI_wI_z \\
+\frac{dI_z}{dt} &=\beta_z I_zS + \epsilon\beta_zI_zI_w + \rho\epsilon I_w - \gamma  I_z - (1-\epsilon)\beta_wI_wI_z \\
 
 
  \end{aligned}
