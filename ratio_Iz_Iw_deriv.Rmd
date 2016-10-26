@@ -17,13 +17,14 @@ $$
 Therefore we have:
 $$
 \begin{aligned}
-\frac{\frac {dI_z}{dM}}{dt} &= -\beta_zI_z(1-\varepsilon) + \varepsilon\beta_wI_z + \frac{1}{M} \left( I_z\varepsilon(\gamma` - \gamma) +  I_z(\beta_z-\beta_w) - \beta_wI_z^{2}\varepsilon + \beta_z I_z^{2}(1-\varepsilon) \right) + \frac{I_z^{2}}{M^{2}} \left(\beta_w-\beta_z+\varepsilon(\gamma-\gamma`) \right)+ \frac{M-I_z}{M}\rho\varepsilon \\
+\frac{dp}{dt} &= p \left( \varepsilon(\gamma` - \gamma) + (\beta_z-\beta_w)\right) + pq \left(-\beta_z(1-\varepsilon) + \beta_w\varepsilon \right) + p^{2} \left((\beta_w-\beta_z)+\varepsilon(\gamma-\gamma`) \right) + p^{2}q\left(\beta_z (1-\varepsilon) - \beta_w\varepsilon \right) +  (1-p)\rho\varepsilon \\
 \end{aligned}
 $$
 Where:
 $$
 \begin{aligned}
-M=I_z+I_w
+q=I_z+I_w \\
+p=\frac{I_z}{I_z+I_w}
 \end{aligned}
 $$
 
