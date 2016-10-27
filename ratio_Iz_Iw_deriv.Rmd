@@ -17,9 +17,18 @@ $$
 Therefore we have:
 $$
 \begin{aligned}
-\frac{dp}{dt} &= p \left( \varepsilon(\gamma` - \gamma) + (\beta_z-\beta_w)\right) + pq \left(-\beta_z(1-\varepsilon) + \beta_w\varepsilon \right) + p^{2} \left((\beta_w-\beta_z)+\varepsilon(\gamma-\gamma`) \right) + p^{2}q\left(\beta_z (1-\varepsilon) - \beta_w\varepsilon \right) +  (1-p)\rho\varepsilon \\
+\frac{dp}{dt} &= p(1-q)\beta_z - p(1-q)[(1-p)\beta_w + p\beta_z] - p(1-p)[\gamma-\left( \gamma(1-\varepsilon)+\gamma'\varepsilon\right)]+(1-p)[-pq\left((1-\varepsilon)\beta_w-\varepsilon\beta_z\right)+\rho\varepsilon]  \\
+&= -p(1-q)(1-p)(\beta_w-\beta_z) - p(1-p)[\gamma-\left( \gamma(1-\varepsilon)+\gamma'\varepsilon\right)]+(1-p)[-pq\left((1-\varepsilon)\beta_w-\varepsilon\beta_z\right)+\rho\varepsilon]  \\
+
+\\
+\frac{dq}{dt} &= q[(1-q)\left((1-p)\beta_w+p\beta_z)\right) - \gamma + \varepsilon (1-p)(\gamma-\gamma') ]
 \end{aligned}
 $$
+``` {r expr, include=FALSE}
+#dp/dt &= p \left( \varepsilon(\gamma` - \gamma) + (\beta_z-\beta_w)\right) + pq \left(-\beta_z(1-\varepsilon) + \beta_w\varepsilon \right) + p^{2} \left((\beta_w-\beta_z)+\varepsilon(\gamma-\gamma`) \right) + p^{2}q\left(\beta_z (1-\varepsilon) - \beta_w\varepsilon \right) +  (1-p)\rho\varepsilon \\
+#&=p(1-p)\left (\varepsilon(\gamma` - \gamma) +(\beta_z-\beta_w) \right) + pq(1-p) \left( -\beta_z(1-\varepsilon) + \beta_w \varepsilon \right) + (1-p)(\rho\varepsilon) \\
+#&= (1-p) [\rho\varepsilon + pq\left( -\beta_z(1-\varepsilon) + \beta_w \varepsilon \right) + p\left(\varepsilon(\gamma` - \gamma) +(\beta_z-\beta_w)\right) ]
+```
 Where:
 $$
 \begin{aligned}
@@ -29,6 +38,8 @@ p=\frac{I_z}{I_z+I_w}
 $$
 
 ```{r param, include=FALSE}
+
+
 library(deSolve)
 
 options("scipen" = 10)
@@ -68,7 +79,7 @@ conv_crit <- 0.00001
 ```{r trial, include=FALSE, cache=TRUE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
 
-state <- c(S=1-2*prop, Iw=prop, Iz=prop, Iz_div_Inf=0.5)
+state <- c(S=1-2*prop, Iw=prop, Iz=prop, Iz_div_Inf=0.5, Iz_plus_Iw=2*prop)
 
 times <- seq(0, a, by=m)
 
@@ -77,10 +88,12 @@ SIS=function(times, state, parameters){
        {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
         dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
         dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
-        dIz_div_Inf = -beta_z*Iz*(1-eps)+eps*beta_w*Iz+(1/(Iz+Iw))*(beta_z*Iz*Iz*(1-eps)+Iz*(beta_z-beta_w)-Iz*Iz*beta_w*eps+Iz*eps*(gamma_prim-gamma)) + (1/((Iz+Iw)*(Iz+Iw)))*(Iz*Iz*(beta_w-beta_z)+Iz*Iz*eps*(gamma-gamma_prim))+rho*eps*Iw/(Iz+Iw)
-        list(c(dS, dIw, dIz, dIz_div_Inf))
+        dIz_div_Inf = (Iz/(Iw+Iz))*(1-Iw-Iz)*((1-(Iz/(Iw+Iz)))*beta_z-(1-(Iz/(Iw+Iz)))*beta_w)-(Iz/(Iw+Iz))*(gamma*(1-(Iz/(Iw+Iz)))-(gamma*(1-eps)+gamma_prim*eps)*(1-(Iz/(Iw+Iz)))) - (1-(Iz/(Iw+Iz)))*(Iz*((1-eps)*beta_w-eps*beta_z)-rho*eps)
+        dIz_plus_Iw = (Iw+Iz)*((1-Iw-Iz)*((1-(Iz/(Iw+Iz)))*beta_w + (Iz/(Iw+Iz))*beta_z) - gamma*(Iz/(Iw+Iz)) - gamma*(1-eps)*(1-(Iz/(Iw+Iz))) - gamma_prim*eps*(1-(Iz/(Iw+Iz))) )
+        list(c(dS, dIw, dIz, dIz_div_Inf, dIz_plus_Iw))
         })
-  }
+}
+#dIz_div_Inf = -beta_z*Iz*(1-eps)+eps*beta_w*Iz+(1/(Iz+Iw))*(beta_z*Iz*Iz*(1-eps)+Iz*(beta_z-beta_w)-Iz*Iz*beta_w*eps+Iz*eps*(gamma_prim-gamma)) + (1/((Iz+Iw)*(Iz+Iw)))*(Iz*Iz*(beta_w-beta_z)+Iz*Iz*eps*(gamma-gamma_prim))+rho*eps*Iw/(Iz+Iw)
 #dIz_div_Inf = (1/(Iz+Iw))*(beta_z*Iz*(1-Iz-Iw)+eps*beta_z*Iw*Iz+rho*eps*Iw-gamma*Iz-(1-eps)*beta_w*Iw*Iz)+(1/((Iw+Iz)*(Iw+Iz)))*Iz*(-beta_w*Iw*(1-Iz-Iw)-beta_z*Iz*(1-Iz-Iw)+gamma*Iz+gamma*(1-eps)*Iw+gamma_prim*eps*Iw)
 
 out=as.data.frame(
@@ -88,7 +101,7 @@ out=as.data.frame(
 )
 
 require(plyr)
-out2 <- cbind(out, mutate(out, new=out$Iz/(out$Iw+out$Iz)))
+out2 <- cbind(out, mutate(out, p=out$Iz/(out$Iw+out$Iz), q=out$Iw+out$Iz))
 
 ```
 
