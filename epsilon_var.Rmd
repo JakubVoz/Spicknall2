@@ -55,17 +55,21 @@ peps_dec <- 0.05 #decreased value of epsilon for trial
 ```{r stable, include=FALSE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
 
-state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+state <- c(S=1-2*prop, Iw=prop, Iz=prop, dnewcasesIz=0, dnewcasesIw=0, dsecondaryres=0, dprimaryres=0)
 
 times=seq(0, a, by=m)
 
 SIS=function(times, state, parameters){
   with(as.list(c(state,parameters)),
-       {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+       { dnewcasesIz=beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw
+         dnewcasesIw=beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz
+         dsecondaryres=rho*eps*Iw
+         dprimaryres=beta_z*Iz*S + eps*beta_z*Iz*Iw
+         dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
         dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
         dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
         
-        list(c(dS, dIw, dIz))
+        list(c(dS, dIw, dIz, dnewcasesIz, dnewcasesIw, dsecondaryres, dprimaryres))
        })
 }
 
@@ -79,7 +83,7 @@ out_init=as.data.frame(
 ```{r increase, include=FALSE, cache=TRUE}
 parameters2 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_inc, rho=prho)
 
-state2 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Iz=out_init$Iz[a+1])
+state2 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Iz=out_init$Iz[a+1], dnewcasesIz=0, dnewcasesIw=0, dsecondaryres=0, dprimaryres=0 )
 
 times2=seq(a, a+zoom_area, by=m/zoom)
 
@@ -94,7 +98,7 @@ out_inc=as.data.frame(
 
 parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_dec, rho=prho)
 
-state2 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Iz=out_init$Iz[a+1], Iwz=out_init$Iwz[a+1])
+state2 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Iz=out_init$Iz[a+1], Iwz=out_init$Iwz[a+1], dnewcasesIz=0, dnewcasesIw=0, dsecondaryres=0, dprimaryres=0)
 
 times2=seq(a, a+zoom_area, by=m/zoom)
 
@@ -130,7 +134,7 @@ parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamm
 
 times3=seq(a, a+zoom_area, by=m/zoom)
 
-state3 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Iz=out_init$Iz[a+1], Iwz=out_init$Iwz[a+1])
+state3 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Iz=out_init$Iz[a+1], Iwz=out_init$Iwz[a+1], dnewcasesIz=0, dnewcasesIw=0, dsecondaryres=0, dprimaryres=0)
 
 break_point=function(x){
   parameters3[5] <-x
@@ -162,9 +166,10 @@ linfun <- function(x){
 
 
 
-ns <- seq(2,ncol(out), by=4)
-niw <- seq(3,ncol(out), by=4)
-niz <- seq(4,ncol(out), by=4)
+ns <- seq(2,ncol(out), by=8)
+niw <- seq(3,ncol(out), by=8)
+niz <- seq(4,ncol(out), by=8)
+
 
 
 
@@ -212,6 +217,76 @@ apply(Ratio, 2, linfun)
 
 
 legend("topleft" , inset=.05, c("epsilon=0.20", "epsilon=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+```
+
+
+
+```{r incidence, include=FALSE, cache=TRUE}
+#incid function allows to calculate daily incidence by substracting a value of a varible from its value after following step and by summing these differences over a time corresponding to one day (id over zoom days) 
+incid = function(x, zoom) {
+  der <- rep(0, length(x))
+  for (i in 2:length(x)) {
+    der[i] <- x[i]-x[i-1]
+  }
+  der_day <- rep(0, round(length(der)/zoom))
+  for (i in 1:round(length(der)/zoom)) {
+    der_day[i] <- sum(der[((i-1)*zoom):(i*zoom)])
+  }
+  return(der_day)
+}
+
+
+```
+
+```{r incid_plot, include=FALSE}
+nnewiz <- seq(5,ncol(out), by=8)
+nnewiw <- seq(6,ncol(out), by=8)
+nnewsec <- seq(7,ncol(out), by=8)
+nnewprim <- seq(8,ncol(out), by=8)
+
+
+
+NewIz <- out[,nnewiz]
+NewIw <- out[,nnewiw]
+Newsec <- out[,nnewsec]
+Newprim <- out[,nnewprim]
+
+NewIz <- apply(NewIz, 2, incid, zoom)
+NewIw <- apply(NewIw, 2, incid, zoom)
+Newsec <- apply(Newsec, 2, incid, zoom)
+Newprim <- apply(Newprim, 2, incid, zoom)
+
+t2 <- seq(1, 2000)
+
+linfun2 <- function(x){
+  lines(t2, unlist(x), lty=1, lwd=2, col=colforcol[as.numeric(parent.frame()$i)])
+}
+
+
+
+plot(t2, NewIz[,11], main="New cases of resitant infections after a change in ATB usage", xlab="time (steps)", ylab="new Iz", ylim=c(0,0.011), lty=1, lwd=2, type="l")
+
+apply(NewIz, 2, linfun2)
+
+plot(t2, NewIw[,11], main="New cases of susceptible infections after a change in ATB usage", xlab="time (steps)", ylab="new Iw", ylim=c(0,0.011), lty=1, lwd=2, type="l")
+
+apply(NewIw, 2, linfun2)
+
+plot(t2, Newsec[,11], main="New cases of secondary resistance after a change in ATB usage", xlab="time (steps)", ylab="new secondary Iz", ylim=c(0,0.004), lty=1, lwd=2, type="l")
+
+apply(Newsec, 2, linfun2)
+
+plot(t2, Newprim[,11], main="New cases of primary resistance after a change in ATB usage", xlab="time (steps)", ylab="new primary Iz", ylim=c(0,0.004), lty=1, lwd=2, type="l")
+
+apply(Newprim, 2, linfun2)
+
+Newp <- NewIz/(NewIz+NewIw)
+
+plot(t2, Newp[,11], main="Estimated p after a change in ATB usage", xlab="time (steps)", ylab="p", ylim=c(0,1), lty=1, lwd=2, type="l")
+
+apply(Newp, 2, linfun2)
 
 
 ```
