@@ -109,27 +109,3 @@ out2 <- cbind(out, mutate(out, p=out$Iz/(out$Iw+out$Iz), q=out$Iw+out$Iz))
 ```
 
 
-
-```{r incidence, include=FALSE, cache=TRUE}
-
-incid = function(x) {
-  der <- rep(0, length(x))
-  for (i in 2:length(x)) {
-    der[i] <- x[i]-x[i-1]
-  }
-  return(der)
-}
-
-dp <- incid(out$Iz_div_Inf)
-
-dq <- incid(out$Iz_plus_Iw)
-
-```
-
-```{r incid_plot, include=FALSE}
-
-plot(times, dp, xlab = "time (steps)", ylab = "dp", main = "Evolution dp over time")
-
-plot(times, dq, xlab = "time (steps)", ylab = "dq", main = "Incidence")
-
-```
