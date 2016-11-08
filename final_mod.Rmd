@@ -127,7 +127,7 @@ steady_Iz_eps <- steady_eps[,4]
 
 ```
 
-```{r steady_state_eps_plot, echo=FALSE}
+```{r steady_state_eps_plot, echo=FALSE, fig.align='center'}
 
 plot(pepsi, steady_Iw_eps, main="Steady-states : treatment variations", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 

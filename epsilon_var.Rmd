@@ -145,7 +145,7 @@ out <- do.call(cbind, lapply(pepsi,break_point))
 
 ```
 
-```{r plot_multi_var, echo=FALSE, fig.align='center', cache=TRUE}
+```{r plot_multi_var, echo=FALSE, fig.align='center'}
 
 
 t<- seq(a, a+2000, by=m/zoom)
@@ -188,7 +188,7 @@ legend("topleft" , inset=.05, c("epsilon=0.20", "epsilon=0"), lty=c(1,1), lwd=c(
 
 
 
-plot(t, Iw[,11], main="Evolution of population infected with sensitive strain after a variation of  ATB usage", xlab="time (steps)", ylab="S ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
+plot(t, Iw[,11], main="Evolution of population infected with sensitive strain after a variation of  ATB usage", xlab="time (steps)", ylab="Iw ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
 
 apply(Iw, 2, linfun)
 
@@ -196,7 +196,7 @@ apply(Iw, 2, linfun)
 legend("topleft" , inset=.05, c("epsilon=0.20", "epsilon=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
-plot(t, Iz[,11], main="Evolution of population infected with resistant strain after a variation of  ATB usage", xlab="time (steps)", ylab="S ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
+plot(t, Iz[,11], main="Evolution of population infected with resistant strain after a variation of  ATB usage", xlab="time (steps)", ylab="Iz ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
 
 apply(Iz, 2, linfun)
 
@@ -206,7 +206,7 @@ legend("topleft" , inset=.05, c("epsilon=0.20", "epsilon=0"), lty=c(1,1), lwd=c(
 
 Ratio <- as.matrix(Iz)/(as.matrix(Iz)+as.matrix(Iw))
 
-plot(t, Ratio[,11], main="Evolution of Iz/(Iz+Iw)", xlab="time (steps)", ylab="S ratio", ylim=c(0,2), lty=1, lwd=2, type="l")
+plot(t, Ratio[,11], main="Evolution of p after a change in ATB usage", xlab="time (steps)", ylab="p", ylim=c(0,1.5), lty=1, lwd=2, type="l")
 
 apply(Ratio, 2, linfun)
 

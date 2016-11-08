@@ -19,11 +19,12 @@ $$
 \begin{aligned}
 \frac{dp}{dt} &= p(1-q)\beta_z - p(1-q)[(1-p)\beta_w + p\beta_z] - p(1-p)[\gamma-\left( \gamma(1-\varepsilon)+\gamma'\varepsilon\right)]+(1-p)[-pq\left((1-\varepsilon)\beta_w-\varepsilon\beta_z\right)+\rho\varepsilon]  \\
 &= -p(1-q)(1-p)(\beta_w-\beta_z) - p(1-p)[\gamma-\left( \gamma(1-\varepsilon)+\gamma'\varepsilon\right)]+(1-p)[-pq\left((1-\varepsilon)\beta_w-\varepsilon\beta_z\right)+\rho\varepsilon]  \\
-
 \\
-\frac{dq}{dt} &= q[(1-q)\left((1-p)\beta_w+p\beta_z)\right) - \gamma + \varepsilon (1-p)(\gamma-\gamma') ]
+\frac{dq}{dt} &= q[(1-q)\left((1-p)\beta_w+p\beta_z)\right) - \gamma - \varepsilon (1-p)(\gamma'-\gamma) ]
 \end{aligned}
 $$
+
+
 ``` {r expr, include=FALSE}
 #dp/dt &= p \left( \varepsilon(\gamma` - \gamma) + (\beta_z-\beta_w)\right) + pq \left(-\beta_z(1-\varepsilon) + \beta_w\varepsilon \right) + p^{2} \left((\beta_w-\beta_z)+\varepsilon(\gamma-\gamma`) \right) + p^{2}q\left(\beta_z (1-\varepsilon) - \beta_w\varepsilon \right) +  (1-p)\rho\varepsilon \\
 #&=p(1-p)\left (\varepsilon(\gamma` - \gamma) +(\beta_z-\beta_w) \right) + pq(1-p) \left( -\beta_z(1-\varepsilon) + \beta_w \varepsilon \right) + (1-p)(\rho\varepsilon) \\
@@ -103,5 +104,32 @@ out=as.data.frame(
 require(plyr)
 out2 <- cbind(out, mutate(out, p=out$Iz/(out$Iw+out$Iz), q=out$Iw+out$Iz))
 
+
+
 ```
 
+
+
+```{r incidence, include=FALSE, cache=TRUE}
+
+incid = function(x) {
+  der <- rep(0, length(x))
+  for (i in 2:length(x)) {
+    der[i] <- x[i]-x[i-1]
+  }
+  return(der)
+}
+
+dp <- incid(out$Iz_div_Inf)
+
+dq <- incid(out$Iz_plus_Iw)
+
+```
+
+```{r incid_plot, include=FALSE}
+
+plot(times, dp, xlab = "time (steps)", ylab = "dp", main = "Evolution dp over time")
+
+plot(times, dq, xlab = "time (steps)", ylab = "dq", main = "Incidence")
+
+```
