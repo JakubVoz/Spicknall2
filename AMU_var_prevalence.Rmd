@@ -1,10 +1,9 @@
 ---
-title: "Change in AMU"
+title: "Impact of AMU variation on prevalence"
 author: "Jakub"
-date: "18 října 2016"
+date: "15 listopadu 2016"
 output: html_document
 ---
-
 
 ```{r include=FALSE}
 library(deSolve)
@@ -52,7 +51,7 @@ peps_dec <- 0.05 #decreased value of epsilon for trial
  
  
  
-```{r stable, include=FALSE}
+```{r stable, include=FALSE, warning = FALSE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
 
 state <- c(S=1-2*prop, Iw=prop, Iz=prop, dnewcasesIz=0, dnewcasesIw=0, dsecondaryres=0, dprimaryres=0)
@@ -79,54 +78,7 @@ out_init=as.data.frame(
 
 ```
 
-
-```{r increase, include=FALSE, cache=TRUE}
-parameters2 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_inc, rho=prho)
-
-state2 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Iz=out_init$Iz[a+1], dnewcasesIz=0, dnewcasesIw=0, dsecondaryres=0, dprimaryres=0 )
-
-times2=seq(a, a+zoom_area, by=m/zoom)
-
-out_inc=as.data.frame(
-  ode(y=state2, times=times2, func=SIS, parms=parameters2)
-)
-
-```
-
-```{r decrease, include=FALSE, cache=TRUE}
-
-
-parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_dec, rho=prho)
-
-state2 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Iz=out_init$Iz[a+1], Iwz=out_init$Iwz[a+1], dnewcasesIz=0, dnewcasesIw=0, dsecondaryres=0, dprimaryres=0)
-
-times2=seq(a, a+zoom_area, by=m/zoom)
-
-out_dec=as.data.frame(
-  ode(y=state2, times=times2, func=SIS, parms=parameters3)
-)
-
-```
-
-
-```{r plot, echo=FALSE, fig.align='center'}
-
-
-inc <- rbind(out_init[1:a,], out_inc)
-dec <- rbind(out_init[1:a,], out_dec)
-t<- c(seq(0, a, by=m), seq(a+m/zoom, a+zoom_area, by=m/zoom))
-
-plot(t, inc$Iw, main="AMU change", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l", col="RED")
-
-lines(t, dec$Iw, lty=3, lwd=2, col="BLUE")
-lines(t, inc$Iz, lty=2, lwd=2, col="RED")
-lines(t, dec$Iz, lty=2, lwd=2, col="BLUE")
-
-legend("topleft" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain"), lty=c(3,2), lwd=c(3,2))
-```
-
-
-```{r multiple_var, include=FALSE, cache=TRUE}
+```{r multiple_var, include=FALSE, cache=TRUE, warning = FALSE}
 
 
 parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_dec, rho=prho)
@@ -148,6 +100,8 @@ pepsi <- seq(0, 0.2, by=0.01)
 out <- do.call(cbind, lapply(pepsi,break_point))
 
 ```
+
+
 ```{r assist_func, echo=FALSE, fig.align='center', cache=TRUE, warning = FALSE}
 
 colglob <- colorRampPalette(c("blue", "red"))
