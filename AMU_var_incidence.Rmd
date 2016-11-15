@@ -5,7 +5,7 @@ date: "15 listopadu 2016"
 output: html_document
 ---
 
-```{r include=FALSE}
+```{r include=FALSE, cache=TRUE}
 library(deSolve)
 
 
@@ -20,7 +20,7 @@ a <- 2000 #time span
 m <- 1 #time step
 
 zoom <- 100 #after breakpoint 1/zoom step
-zoom_area <- 2000 #time span after breakpoint - actually detailed zone rather that zoom
+zoom_area <- 4000 #time span after breakpoint - actually detailed zone rather that zoom
 
 zooming <- 200 #zooming after break point
 
@@ -46,7 +46,7 @@ peps_dec <- 0.05 #decreased value of epsilon for trial
 ```
 
 
-```{r stable, include=FALSE}
+```{r stable, include=FALSE, cache=TRUE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
 
 state <- c(S=1-2*prop, Iw=prop, Iz=prop, dnewcasesIz=0, dnewcasesIw=0, dsecondaryres=0, dprimaryres=0)
@@ -77,8 +77,6 @@ out_init=as.data.frame(
 
 ```{r plot_functions, echo=FALSE, fig.align='center', cache=TRUE}
 
-
-t<- seq(a, a+2000, by=m/zoom)
 
 colglob <- colorRampPalette(c("blue", "red"))
 
@@ -181,23 +179,16 @@ time_zoom <- seq(0,zooming,by=m)
 ```
 
 
-```{r incid_plot_Iz, echo=FALSE, fig.align='center', cache=TRUE}
+```{r incid_prep_steady_state, echo=FALSE, fig.align='center', cache=TRUE}
 
-par(mfrow=c(1,2))
+Iz_ss <- NewIz[nrow(NewIz),]
+Iw_ss <- NewIw[nrow(NewIw),]
+sec_ss <- Newsec[nrow(Newsec),]
+prim_ss <- Newprim[nrow(Newprim),]
+p_ss <- Newp[nrow(Newp),]
 
-plot(t2, NewIz[,11], main="Incidence of resitant infections after a change in AMU", xlab="time (steps)", ylab="Incidence Iz", ylim=c(0,0.011), lty=1, lwd=2, type="l")
 
-capture.output(apply(NewIz, 2, linfun, t2), file='NUL')
-
-legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
-
-#zoom
-
-plot(time_zoom, Iz_zoom[,11], main="Incidence of resitant infections after a change in AMU : dynamics", xlab="time (steps)", ylab="Incidence Iz", ylim=c(0,0.011), lty=1, lwd=2, type="l")
-
-capture.output(apply(Iz_zoom, 2, linfun, time_zoom), file='NUL')
-
-legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+epsvar <- pepsi
 
 
 ```
@@ -206,27 +197,60 @@ legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), co
 
 par(mfrow=c(1,2))
 
-
-plot(t2, NewIw[,11], main="Incidence of susceptible infections after a change in AMU", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0,0.011), lty=1, lwd=2, type="l")
+ 
+plot(t2, NewIw[,11], main="Incidence of susceptible infections \n after a change in AMU", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0,0.011), lty=1, lwd=2, type="l")
 
 capture.output(apply(NewIw, 2, linfun, t2),file='NUL') 
+
+legend("bottomleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+#zoom
+
+plot(time_zoom, Iw_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0,0.011), lty=1, lwd=2, type="l")
+
+capture.output(apply(Iw_zoom, 2, linfun, time_zoom), file='NUL')
+
+legend("bottomleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+#steady-state Iw incidence
+
+par(mfrow=c(1,1))
+plot(epsvar, Iw_ss, xlab="AMU", ylab="Iw incidence", main = "Impact of AMU on steady state Iw incidence", type="l")
+```
+
+```{r incid_plot_Iz, echo=FALSE, fig.align='center', cache=TRUE}
+
+par(mfrow=c(1,2))
+
+plot(t2, NewIz[,11], main="Incidence of resitant infections \n after a change in AMU", xlab="time (steps)", ylab="Incidence Iz", ylim=c(0,0.011), lty=1, lwd=2, type="l")
+
+capture.output(apply(NewIz, 2, linfun, t2), file='NUL')
 
 legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 #zoom
 
-plot(time_zoom, Iw_zoom[,11], main="Incidence of sensitive infections after a change in AMU : dynamics", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0,0.011), lty=1, lwd=2, type="l")
+plot(time_zoom, Iz_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Incidence Iz", ylim=c(0,0.011), lty=1, lwd=2, type="l")
 
-capture.output(apply(Iw_zoom, 2, linfun, time_zoom), file='NUL')
+capture.output(apply(Iz_zoom, 2, linfun, time_zoom), file='NUL')
 
 legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+#steady-state Iz incidence
+
+par(mfrow=c(1,1))
+plot(epsvar, Iz_ss, xlab="AMU", ylab="Iz incidence", main = "Impact of AMU on steady state Iz incidence", type="l")
+
 ```
+
+
 
 ```{r incid_plot_prim, echo=FALSE, fig.align='center', cache=TRUE}
 
 par(mfrow=c(1,2))
 
-plot(t2, Newprim[,11], main="Incidence of primary resistance after a change in AMU", xlab="time (steps)", ylab="new primary Iz", ylim=c(0,0.004), lty=1, lwd=2, type="l")
+plot(t2, Newprim[,11], main="Incidence of primary resistance \n after a change in AMU", xlab="time (steps)", ylab="new primary Iz", ylim=c(0,0.004), lty=1, lwd=2, type="l")
 
 capture.output(apply(Newprim, 2, linfun, t2), file='NUL')
 
@@ -235,30 +259,42 @@ legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), co
 
 #zoom
 
-plot(time_zoom, prim_zoom[,11], main="Incidence of primary resistence after a change in AMU : dynamics", xlab="time (steps)", ylab="Incidence primary resistace", ylim=c(0,0.004), lty=1, lwd=2, type="l")
+plot(time_zoom, prim_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Incidence primary resistace", ylim=c(0,0.004), lty=1, lwd=2, type="l")
 
 capture.output(apply(prim_zoom, 2, linfun, time_zoom), file='NUL')
 
 legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+#steady-state primary resistance incidence
+
+par(mfrow=c(1,1))
+plot(epsvar, prim_ss, xlab="AMU", ylab="Primary resistance incidence", main = "Impact of AMU on steady state primary resistance incidence", type="l")
 ```
 
 ```{r incid_plot_sec, echo=FALSE, fig.align='center', cache=TRUE}
 par(mfrow=c(1,2))
 
 
-plot(t2, Newsec[,11], main="Incidence of secondary resistance after a change in AMU", xlab="time (steps)", ylab="new secondary Iz", ylim=c(0,0.004), lty=1, lwd=2, type="l")
+plot(t2, Newsec[,11], main="Incidence of secondary resistance \n after a change in AMU", xlab="time (steps)", ylab="new secondary Iz", ylim=c(0,0.004), lty=1, lwd=2, type="l")
 
 capture.output(apply(Newsec, 2, linfun, t2), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topright" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 #zoom
 
-plot(time_zoom, sec_zoom[,11], main="Incidence of secondary resistence after a change in AMU : dynamics", xlab="time (steps)", ylab="Incidence secondary resistace", ylim=c(0,0.004), lty=1, lwd=2, type="l")
+plot(time_zoom, sec_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Incidence secondary resistace", ylim=c(0,0.004), lty=1, lwd=2, type="l")
 
 capture.output(apply(sec_zoom, 2, linfun, time_zoom), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topright" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+#steady-state sec resistance incidence
+
+par(mfrow=c(1,1))
+plot(epsvar, sec_ss, xlab="AMU", ylab="Secondary resistance incidence", main = "Impact of AMU on steady state secondary resistance incidence", type="l")
 ```
 
 ```{r incid_plot_p, echo=FALSE, fig.align='center', cache=TRUE}
@@ -273,9 +309,31 @@ legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), co
 
 #zoom
 
-plot(time_zoom, p_zoom[,11], main="Estimated p after a change in AMU : dynamics", xlab="time (steps)", ylab="p", ylim=c(0,1), lty=1, lwd=2, type="l")
+plot(time_zoom, p_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="p", ylim=c(0,1), lty=1, lwd=2, type="l")
 
 capture.output(apply(p_zoom, 2, linfun, time_zoom), file='NUL')
 
 legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+
+#steady-state p incidence
+
+par(mfrow=c(1,1))
+plot(epsvar, p_ss, xlab="AMU", ylab="p", main = "Impact of AMU on steady state p", type="l")
+```
+
+```{r comp_steady_st, echo=FALSE, fig.align='center', cache=TRUE}
+
+plot(epsvar, Iz_ss, xlab="AMU", ylab="Incidence", main = "Incidence of resistant cases", type="l", lwd=2)
+lines(epsvar, sec_ss, lty=3, lwd=2)
+lines(epsvar, prim_ss, lty=2, lwd=2)
+
+legend("topleft", inset=.05, c("Iz", "Primary Iz", "Secondary Iz"), lty=c(1,2,3), lwd=rep(2,3))
+
+plot(epsvar, Iw_ss, xlab="AMU", ylab="Incidence", main = "Resistant vs sensitive incidence", type="l", col="green", lwd=2)
+lines(epsvar, Iz_ss, col="purple", lwd=2)
+legend("topright", inset=.05, c("Resistant", "Sensitive"), col=c("purple", "green"), lwd=c(2,2))
+
+
 ```
