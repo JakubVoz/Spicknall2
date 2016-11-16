@@ -38,8 +38,7 @@ prho <- 0.05 #probability of clinical failure
 
 peps <- 0.10 #initial value of the ratio of treated patients
 pepsi <- seq(0,0.2,by=0.01) #variation of epsilon
-peps_inc <- 0.15 #increased value of epsilon for trial
-peps_dec <- 0.05 #decreased value of epsilon for trial
+
 
 
 
@@ -92,7 +91,7 @@ linfun <- function(x, t){
 ```{r multiple_var, include=FALSE, cache=TRUE}
 
 
-parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_dec, rho=prho)
+parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
 
 
 times3=seq(a, a+zoom_area, by=m/zoom)
