@@ -18,12 +18,13 @@ prop <- 0.01 #initial value of Iw and Iz
 
 # time:
 a <- 2000 #time span for initial value
+a_init <- 2000
 
 m <- 1 #time step
 
 zoom <- 100 #after breakpoint 1/zoom step
-time_to_change <- 10 #time interval separating two sequential changes of AMU
-a_end <- 2300  #end of study = 300 steps after beginning of intervention
+time_to_change <- 5 #time interval separating two sequential changes of AMU
+a_end <- 2800  #end of study = 300 steps after beginning of intervention
 
 
 
@@ -93,20 +94,19 @@ incid = function(x, zoom) {
 ```
 
 ```{r additiv_pheno, echo=FALSE, fig.align='center', cache=TRUE}
-a_intervention <- a
 
 out_fast_var <- out_init
+
+
 
 states_at_breaks <- out_init[nrow(out_init),]
 for (i in 1:length(pepsi)) {
   state3 <- c(S=out_fast_var$S[nrow(out_fast_var)], Iw=out_fast_var$Iw[nrow(out_fast_var)], Iz=out_fast_var$Iz[nrow(out_fast_var)], Iwz=out_fast_var$Iwz[nrow(out_fast_var)], dnewcasesIz=out_fast_var$dnewcasesIz[nrow(out_fast_var)], dnewcasesIw=out_fast_var$dnewcasesIw[nrow(out_fast_var)], dsecondaryres=out_fast_var$dsecondaryres[nrow(out_fast_var)], dprimaryres=out_fast_var$dprimaryres[nrow(out_fast_var)])
-  parameters3[5] <-pepsi[i]
-  times3=seq(a + m/zoom, a+time_to_change, by=m/zoom)
-  a <- a + time_to_change
+  parameters[5] <-pepsi[i]
+  times3=seq(out_fast_var[nrow(out_fast_var),1] + m/zoom, out_fast_var[nrow(out_fast_var),1] + time_to_change, by = m/zoom)
   out<- as.data.frame(
-    ode(y=state3, times=times3, func=SIS, parms=parameters3)
+    ode(y=state3, times=times3, func=SIS, parms=parameters)
     )
-  
   out_fast_var <- rbind(out_fast_var, out)
   states_at_breaks <- rbind(states_at_breaks, out[nrow(out),])
   }
@@ -114,10 +114,10 @@ for (i in 1:length(pepsi)) {
 
 #evolution after all interventions
 state3 <- c(S=out_fast_var$S[nrow(out_fast_var)], Iw=out_fast_var$Iw[nrow(out_fast_var)], Iz=out_fast_var$Iz[nrow(out_fast_var)], Iwz=out_fast_var$Iwz[nrow(out_fast_var)], dnewcasesIz=out_fast_var$dnewcasesIz[nrow(out_fast_var)], dnewcasesIw=out_fast_var$dnewcasesIw[nrow(out_fast_var)], dsecondaryres=out_fast_var$dsecondaryres[nrow(out_fast_var)], dprimaryres=out_fast_var$dprimaryres[nrow(out_fast_var)])
-parameters3[5] <-pepsi[length(pepsi)]
+parameters[5] <-pepsi[length(pepsi)]
 times3=seq(states_at_breaks[nrow(states_at_breaks),1] + m/zoom, a_end, by=(m/zoom))
 out<- as.data.frame(
-  ode(y=state3, times=times3, func=SIS, parms=parameters3)
+  ode(y=state3, times=times3, func=SIS, parms=parameters)
 )
 out_fast_var <- rbind(out_fast_var, out)
 
@@ -132,12 +132,12 @@ states_at_breaks <- cbind(states_at_breaks, cbind(pepsi))
 
 ```{r control, include=FALSE, cache=TRUE}
 
-controlfunc <- function(states_at_breaks, a_end) {
-  state3 <- c(S=states_at_breaks[2], Iw=states_at_breaks[3], Iz=states_at_breaks[4], dnewcasesIz=states_at_breaks[5], dnewcasesIw=states_at_breaks[6], dsecondaryres=states_at_breaks[7], dprimaryres=states_at_breaks[8])
-  parameters3[5] <-pepsi[length(pepsi)]
-  times3=seq(states_at_breaks[1] + m/zoom, a_end, by=(m/zoom))
-  out<- as.data.frame(
-  ode(y=state3, times=times3, func=SIS, parms=parameters3)
+controlfunc <- function(states, a_end) {
+  state3 <- c(S=states[2], Iw=states[3], Iz=states[4], dnewcasesIz=states[5], dnewcasesIw=states[6], dsecondaryres=states[7], dprimaryres=states[8])
+  parameters[5] <- states[9]
+  times3=seq(states[1] + m/zoom, a_end, by=m/zoom)
+  out <- as.data.frame(
+  ode(y=state3, times=times3, func=SIS, parms=parameters)
   )
 }
 
@@ -150,21 +150,44 @@ cbind.fill <- function(...){
         rbind(x, matrix(, n-nrow(x), ncol(x))))) 
 }
 
+states_at_breaks <- as.data.frame(t(states_at_breaks))
+
+
 
 out_control <- do.call(cbind.fill, lapply(states_at_breaks, controlfunc, a_end))
 
+#replacing NA in control with data from the main model
+repl_NA <- function(controldata, expdata) {
+  print(as.numeric(parent.frame()$i))
+}
 
-  
+out_control <- as.data.frame(out_control)
+
 
 
 ```
 
+```{r control_without_additph, include=FALSE, cache=TRUE}
 
+states4 <- c(S=out_init[nrow(out_init), 2], Iw=out_init[nrow(out_init), 3], Iz=out_init[nrow(out_init), 4], dnewcasesIz=out_init[nrow(out_init), 5], dnewcasesIw=out_init[nrow(out_init), 6], dsecondaryres=out_init[nrow(out_init), 7], dprimaryres=out_init[nrow(out_init), 8])
+parameters[5] <- pepsi[length(pepsi)]
+times4 <- seq(out_init[nrow(out_init), 1], a_end, by=m/zoom)
+
+
+out_control2 <- as.data.frame(
+  ode(y=states4, times=times4, func=SIS, parms=parameters)
+  )
+
+
+
+```
 
 ```{r incid_prep_plot, echo=FALSE, fig.align='center', cache=TRUE}
 #plotting incidence
 
-out <- cbind(out_additive_phen, out_control)
+out_fast_var <- out_fast_var[2001:nrow(out_fast_var),]
+
+out <- cbind.fill(out_fast_var, out_control, out_control2)
 
 #selecting numbers of columns in the out for twenty values of eps after intervention : first=experiment + control
 nnewiz <- seq(5,ncol(out), by=8)
@@ -188,16 +211,29 @@ Newprim <- apply(Newprim, 2, incid, zoom)
 
 Newp <- NewIz/(NewIz+NewIw)
 
+#putting NA at the beginning of the column for the controls
+
+for (i in 1:10) {
+  NewIz[,i+1] <- c(NewIz[(nrow(NewIz)-i*time_to_change+1):nrow(NewIz),i+1], NewIz[1:(nrow(NewIz)-i*time_to_change),i+1])
+  
+  NewIw[,i+1] <- c(NewIw[(nrow(NewIw)-i*time_to_change+1):nrow(NewIw),i+1], NewIw[1:(nrow(NewIw)-i*time_to_change),i+1])
+  Newsec[,i+1] <- c(Newsec[(nrow(Newsec)-i*time_to_change+1):nrow(Newsec),i+1], Newsec[1:(nrow(Newsec)-i*time_to_change),i+1])
+  
+  Newprim[,i+1] <- c(Newprim[(nrow(Newprim)-i*time_to_change+1):nrow(Newprim),i+1], Newprim[1:(nrow(Newprim)-i*time_to_change),i+1])
+  
+  Newp[,i+1] <- c(Newp[(nrow(Newp)-i*time_to_change+1):nrow(Newp),i+1], Newp[1:(nrow(Newp)-i*time_to_change),i+1])
+                      }
+
 #timespan of testing
-t2 <- seq(1, zoom_area)
+t2 <- seq(1, a_end-a_init)
 
 colglob <- colorRampPalette(c("blue", "red"))
 
-colforcol <- colglob(length(time_to_change)/everyx)
+colforcol <- colglob(ncol((NewIw)-1))
 
 #timespan of testing : control
 linfun <- function(x, t){
-  lines(t, unlist(x), lty=1, lwd=2, col=colforcol[as.numeric(parent.frame()$i)])
+  lines(t, unlist(x), lty=2, lwd=2, col=colforcol[as.numeric(parent.frame()$i)])
 }
 
 ```
@@ -207,26 +243,31 @@ linfun <- function(x, t){
 #Iw
 plot(t2, NewIw[,1], main="Incidence of susceptible infections \n after a change in AMU", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0,0.011), lty=1, lwd=2, type="l")
 
-capture.output(apply(NewIw[,2:ncol(NewIw)], 2, linfun, t2),file='NUL') 
+capture.output(apply(NewIw[,2:(ncol(NewIw)-1)], 2, linfun, t2),file='NUL')
+lines(t2, NewIw[,ncol(NewIw)], lty=1, lwd=2, col="red")
 
-legend("topright" , inset=.05, title="Time between changes" ,c("150 steps", "10 steps"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topright" , inset=.05, title="AMU" ,c("20%", "11%"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 ```
 
 ```{r incid_plot_Iz, echo=FALSE, fig.align='center', cache=TRUE}
 
 plot(t2, NewIz[,1], main="Incidence of resitant infections \n after a change in AMU", xlab="time (steps)", ylab="Incidence Iz", ylim=c(0,0.011), lty=1, lwd=2, type="l")
 
-capture.output(apply(NewIz[,2:ncol(NewIz)], 2, linfun, t2), file='NUL')
+capture.output(apply(NewIz[,2:(ncol(NewIz)-1)], 2, linfun, t2), file='NUL')
 
-legend("topleft" , inset=.05, title="Time between changes" ,c("150 steps", "10 steps"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+lines(t2, NewIz[,ncol(NewIz)], lty=1, lwd=2, col="red")
+
+legend("topright" , inset=.05, title="AMU" ,c("20%", "11%"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 ```
 
 ```{r incid_plot_prim, echo=FALSE, fig.align='center', cache=TRUE}
 plot(t2, Newprim[,1], main="Incidence of primary resistance \n after a change in AMU", xlab="time (steps)", ylab="new primary Iz", ylim=c(0,0.004), lty=1, lwd=2, type="l")
 
-capture.output(apply(Newprim[,2:ncol(Newprim)], 2, linfun, t2), file='NUL')
+capture.output(apply(Newprim[,2:(ncol(Newprim)-1)], 2, linfun, t2), file='NUL')
 
-legend("topleft" , inset=.05, title="Time between changes" ,c("150 steps", "10 steps"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+lines(t2, Newprim[,ncol(Newprim)], lty=1, lwd=2, col="red")
+
+legend("topright" , inset=.05, title="AMU" ,c("20%", "11%"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 ```
 
@@ -234,9 +275,11 @@ legend("topleft" , inset=.05, title="Time between changes" ,c("150 steps", "10 s
 #Sec
 plot(t2, Newsec[,1], main="Incidence of secondary resistance \n after a change in AMU", xlab="time (steps)", ylab="new secondary Iz", ylim=c(0,0.004), lty=1, lwd=2, type="l")
 
-capture.output(apply(Newsec[,2:ncol(Newsec)], 2, linfun, t2), file='NUL')
+capture.output(apply(Newsec[,2:(ncol(Newsec)-1)], 2, linfun, t2), file='NUL')
 
-legend("topleft" , inset=.05, title="Time between changes" ,c("150 steps", "10 steps"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+lines(t2, Newsec[,ncol(Newsec)], lty=1, lwd=2, col="red")
+
+legend("topright" , inset=.05, title="AMU" ,c("20%", "11%"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 ```
@@ -246,10 +289,11 @@ legend("topleft" , inset=.05, title="Time between changes" ,c("150 steps", "10 s
 #p
 plot(t2, Newp[,1], main="Estimated p after a change in AMU", xlab="time (steps)", ylab="p", ylim=c(0,1), lty=1, lwd=2, type="l")
 
-capture.output(apply(Newp[,2:ncol(Newp)], 2, linfun, t2), file='NUL')
+capture.output(apply(Newp[,2:(ncol(Newp)-1)], 2, linfun, t2), file='NUL')
 
-legend("topleft" , inset=.05, title="Time between changes" ,c("150 steps", "10 steps"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+lines(t2, Newp[,ncol(Newp)], lty=1, lwd=2, col="red")
 
+legend("topright" , inset=.05, title="AMU" ,c("20%", "11%"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 ```
 
