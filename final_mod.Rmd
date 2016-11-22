@@ -59,7 +59,7 @@ conv_crit <- 0.00001
 \frac{dI_z}{dt} &=\beta_z I_zS + \epsilon\beta_zI_zI_w + \rho\epsilon I_w - \gamma  I_z - (1-\epsilon)\beta_wI_wI_z \\
 
 
- \end{aligned}
+\end{aligned}
  
 ```{r trial, include=FALSE, cache=TRUE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
