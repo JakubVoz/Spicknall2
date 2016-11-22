@@ -1,0 +1,185 @@
+---
+title: "Simple_models"
+author: "Jakub"
+date: "22 listopadu 2016"
+output: html_document
+---
+
+```{r include=FALSE}
+library(deSolve)
+
+
+options("scipen" = 10)
+
+# initial state:
+N <- 1
+prop <- 0.1 #initial value of Iw and Iz
+
+# time:
+a <- 2000 #time span
+m <- 1 #time step
+
+zoom <- 100 #after breakpoint 1/zoom step
+zoom_area <- 4000 #time span after breakpoint - actually detailed zone rather that zoom
+
+zooming <- 200 #zooming after break point
+
+# parameters
+pbeta_w <- 0.04 #transmission parameter of Iw
+pbeta_z <- 0.015 #transmission parameter of Iz
+
+pgammaa <- 0.01 #innate recovery rate
+pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
+
+
+prho <- 0.05 #probability of clinical failure
+
+#epsilon change over time
+
+peps <- 0.10 #initial value of the ratio of treated patients
+pepsi <- seq(0,0.2,by=0.01) #variation of epsilon
+
+
+
+
+```
+
+```{r model_Iw_S, echo=FALSE, cache=TRUE}
+#initial equilibrium
+
+parameters <- c(beta_w=pbeta_w, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps)
+
+state <- c(S=1-2*prop, Iw=2*prop, Inc=0)
+
+times=seq(0, a, by=m)
+
+SIS=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       {dS = - beta_w*Iw*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw
+        dIw = beta_w*Iw*S - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        
+        dInc = beta_w*Iw*S
+        
+        list(c(dS, dIw, dInc))
+       })
+}
+
+out_init=as.data.frame(
+  ode(y=state, times=times, func=SIS, parms=parameters)
+)
+
+
+#function adding lines and coloring them
+colglob <- colorRampPalette(c("blue", "red"))
+
+colforcol <- colglob(length(pepsi))
+
+
+linfun <- function(x, t){
+  lines(t, unlist(x), lty=1, lwd=2, col=colforcol[as.numeric(parent.frame()$i)])
+}
+
+
+
+#varying AMU
+
+parameters3 <- c(beta_w=pbeta_w, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps)
+
+
+times3=seq(a, a+zoom_area, by=m/zoom)
+
+state3 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Inc=out_init$Inc[a+1])
+
+break_point=function(x){
+  parameters3[4] <-x
+  out_multi=as.data.frame(
+  ode(y=state3, times=times3, func=SIS, parms=parameters3))
+  return(out_multi)
+}
+
+pepsi <- seq(0, 0.2, by=0.01)
+
+out <- do.call(cbind, lapply(pepsi,break_point))
+
+
+#allows to calculate daily incidence
+incid = function(x, zoom) {
+  der <- rep(0, length(x))
+  for (i in 2:length(x)) {
+    der[i] <- x[i]-x[i-1]
+  }
+  der_day <- rep(0, round(length(der)/zoom))
+  for (i in 1:round(length(der)/zoom)) {
+    der_day[i] <- sum(der[((i-1)*zoom):(i*zoom)])
+  }
+  return(der_day)
+}
+
+
+#plotting incidence
+
+#selecting numbers of columns in the out for twenty values of eps after intervention
+
+nnewiw <- seq(3,ncol(out), by=4)
+
+
+
+#selecting columns for each incidence type
+
+NewIw <- out[,nnewiw]
+
+
+#calculating incidence
+
+NewIw <- apply(NewIw, 2, incid, zoom)
+
+
+
+
+#timespan of testing
+t2 <- seq(1, zoom_area)
+
+#timespan of testing
+linfun <- function(x, t){
+  lines(t, unlist(x), lty=1, lwd=2, col=colforcol[as.numeric(parent.frame()$i)])
+}
+
+
+
+Iw_zoom <- NewIw[1:(zooming+1),]
+
+
+time_zoom <- seq(0,zooming,by=m)
+
+
+Iw_ss <- NewIw[nrow(NewIw),]
+
+
+
+epsvar <- pepsi
+
+par(mfrow=c(1,2))
+
+ 
+plot(t2, NewIw[,11], main="Incidence of susceptible infections \n after a change in AMU", xlab="time (steps)", ylab="Incidence Iw", ylim=c(-0.005,0.005), lty=1, lwd=2, type="l")
+
+capture.output(apply(NewIw, 2, linfun, t2),file='NUL') 
+
+legend("bottomleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+#zoom
+
+plot(time_zoom, Iw_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Incidence Iw", ylim=c(-0.005,0.005), lty=1, lwd=2, type="l")
+
+capture.output(apply(Iw_zoom, 2, linfun, time_zoom), file='NUL')
+
+legend("bottomleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+#steady-state Iw incidence
+
+par(mfrow=c(1,1))
+plot(epsvar, Iw_ss, xlab="AMU", ylab="Iw incidence", main = "Impact of AMU on steady state Iw incidence", type="l")
+
+```
+
+
