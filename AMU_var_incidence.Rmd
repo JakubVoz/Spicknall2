@@ -335,4 +335,9 @@ lines(epsvar, Iz_ss, col="purple", lwd=2)
 legend("topright", inset=.05, c("Resistant", "Sensitive"), col=c("purple", "green"), lwd=c(2,2))
 
 
+Iwz_ss <- Iw_ss + Iz_ss
+
+plot(epsvar, Iwz_ss, xlab="AMU", ylab="Incidence", main = "Burden of infection", type="l", col="brown", lwd=2, ylim=c(0,0.013))
+
+
 ```
