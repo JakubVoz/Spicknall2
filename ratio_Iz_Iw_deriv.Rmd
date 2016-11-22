@@ -14,6 +14,24 @@ $$
 \frac{dI_z}{dt} &=\beta_z I_zS + \varepsilon\beta_zI_zI_w + \rho\varepsilon I_w - \gamma  I_z - (1-\varepsilon)\beta_wI_wI_z \\
 \end{aligned}
 $$
+
+The state variables of this model are :
+
+$S$ proportion of population that is susceptible
+$I_w$ proportion of population that is infected with sensitive strain
+$I_z$ proportion of population that is infected with resistant strain
+
+
+The parameters of this model are :
+
+$\beta_w$ transmission rate of sensitive strain
+$\beta_z$ transmission rate of resistant strain
+$\varepsilon$ proportion of infected people treated with antibiotics, supposedly strongly correlated to AMU
+$\gamma$ innate recovery rate (relative to $I_z$ generally and to $I_w$ not treated with antibiotics)
+$\gamma '$ recovery rate of $I_w$ when treated with antibiotics
+$\rho$ rate of AMR acquisition in $I_w$ when treated with antibiotics (comprehensing _de novo_ mutations, outcompetition of major sensitive strain by minor resistant one)
+
+
 Therefore we have:
 $$
 \begin{aligned}
