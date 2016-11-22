@@ -466,6 +466,19 @@ plot(epsvar, Iw_to_Iz_ss, xlab="AMU", ylab="Iw to Iz flow", main = "Impact of AM
 
 ```
 
+```{r comp_flows, echo=FALSE, fig.align='center'}
+
+plot(epsvar, Iw_to_Iz_ss, xlab="AMU", ylab="Iw to Iz flow", main = "Comparing strength and evolution \n of different flows related to Iw", type="l", lty=2, col="red", lwd=2)
+
+lines(epsvar, Iw_to_S_ss, lty=1, col="red", lwd=2)
+lines(epsvar, Iz_to_Iw_ss, lty=2, col="green", lwd=2)
+lines(epsvar, S_to_Iw_ss, lty=1, col="green", lwd=2)
+
+legend("topright", inset=.05, c("Inflow S to Iw", "Inflow Iz to Iw", "Outflow Iw to S", "Outflow Iw to Iz"), lty=c(1,2,1,2), lwd=rep(2,4), col=c("green", "green", "red", "red"))
+
+
+```
+
 ```{r comp_steady_st, echo=FALSE, fig.align='center'}
 
 plot(epsvar, Iz_ss, xlab="AMU", ylab="Incidence", main = "Incidence of resistant cases", type="l", lwd=2)
