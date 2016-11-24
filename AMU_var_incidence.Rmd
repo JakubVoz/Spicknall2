@@ -62,7 +62,7 @@ SIS=function(times, state, parameters){
         dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
         dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
         dnewS_to_Iw = beta_w*Iw*S
-        dIz_to_Iw = eps*beta_z*Iz*Iw
+        dIz_to_Iw = (1-eps)*beta_w*Iw*Iz
         dIw_to_S = gamma*(1-eps)*Iw + gamma_prim*eps*Iw
         dIz_to_S = gamma*Iz
         dIw_to_Iz = eps*beta_z*Iz*Iw + rho*eps*Iw
@@ -218,6 +218,24 @@ incidence_zoom <- Incidence[1:(zooming+1),]
 
 
 time_zoom <- seq(0,zooming,by=m)
+
+
+```
+
+```{r steady_state_var, echo=FALSE, fig.align='center', cache=TRUE}
+nS <- seq(2,ncol(out), by=14)
+nIw <- seq(3,ncol(out), by=14)
+nIz <- seq(4,ncol(out), by=14)
+
+
+S <- out[,nS]
+Iw <- out[,nIw]
+Iz <- out[,nIz]
+
+
+S_var_ss <- S[nrow(S),]
+Iw_var_ss <- Iw[nrow(Iw),]
+Iz_var_ss <- Iz[nrow(Iz),]
 
 
 ```
@@ -468,7 +486,7 @@ plot(epsvar, S_to_Iz_ss, xlab="AMU", ylab="S to Iz flow", main = "Impact of AMU 
 
 par(mfrow=c(1,2))
 
-plot(t2, NewIz_to_Iw[,11], main="Flow : infection and conversion of \n resistant cases after a change in AMU", xlab="time (steps)", ylab="Iz to Iw flow", ylim=c(0,0.0001), lty=1, lwd=2, type="l")
+plot(t2, NewIz_to_Iw[,11], main="Flow : infection and conversion of \n resistant cases after a change in AMU", xlab="time (steps)", ylab="Iz to Iw flow", ylim=c(0,0.003), lty=1, lwd=2, type="l")
 
 capture.output(apply(NewIz_to_Iw, 2, linfun, t2), file='NUL')
 
@@ -476,7 +494,7 @@ legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), co
 
 #zoom
 
-plot(time_zoom, Iz_to_Iw_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Iz to Iw flow", ylim=c(0,0.0001), lty=1, lwd=2, type="l")
+plot(time_zoom, Iz_to_Iw_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Iz to Iw flow", ylim=c(0,0.003), lty=1, lwd=2, type="l")
 
 capture.output(apply(Iz_to_Iw_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -487,7 +505,7 @@ legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), co
 #steady-state flow
 
 par(mfrow=c(1,1))
-plot(epsvar, Iz_to_Iw_ss, xlab="AMU", ylab="Iz to Iw flow", main = "Impact of AMU on steady state Iz to Iw flow", ylim=c(0,0.0001), type="l")
+plot(epsvar, Iz_to_Iw_ss, xlab="AMU", ylab="Iz to Iw flow", main = "Impact of AMU on steady state Iz to Iw flow", ylim=c(0,0.003), type="l")
 
 
 ```
@@ -585,6 +603,7 @@ plot(epsvar, Iwz_ss, xlab="AMU", ylab="Incidence", main = "Burden of infection",
 
 ```{r comp_inc_flows, echo=FALSE, fig.align='center'}
 
+
 plot(epsvar, recov_ss, xlab="AMU", ylab="Recovery and incidence at steady state", main = "Comparing strength and evolution \n of different flows related to Infection", type="l", lty=1, col="green", lwd=2, ylim=c(0, 0.01))
 
 lines(epsvar, incidence_ss, lty=1, col="red", lwd=2)
@@ -592,9 +611,28 @@ lines(epsvar, S_to_Iz_ss, lty=2, col="red", lwd=2)
 lines(epsvar, S_to_Iw_ss, lty=3, col="red", lwd=2)
 lines(epsvar, Iw_to_S_ss, lty=3, col="green", lwd=2)
 lines(epsvar, Iz_to_S_ss, lty=2, col="green", lwd=2)
+lines(epsvar, Iw_to_Iz_ss, lty=2, col="orange", lwd=2)
+lines(epsvar, Iz_to_Iw_ss, lty=3, col="orange", lwd=2)
 
-legend("topright", inset=.05, c("Incidence", "S to Iz", "S to Iw", "Recovery", "Iz to S", "Iw to S" ), lty=c(1,2,3,1,2,3), lwd=rep(2,6), col=c(rep("red",3), rep("green",3)))
+legend("topright", inset=.05, c("Incidence", "S to Iz", "S to Iw", "Recovery", "Iz to S", "Iw to S", "Iw to Iz", "Iz to Iw"), lty=c(1,2,3,1,2,3,2,3), lwd=rep(2,8), col=c(rep("red",3), rep("green",3), rep("orange",2)))
 
+plot(epsvar, S_var_ss, xlab="AMU", ylab="Steady state var", main = "Evolution of state variables \n at steady-state", type="l", lty=1, lwd=2, ylim=c(0, 1))
+
+lines(epsvar, Iw_var_ss, lty=3, lwd=2)
+lines(epsvar, Iz_var_ss, lty=2, lwd=2)
+
+legend("topright", inset=.05, c("S", "Iz", "Iw"), lty=c(1,2,3), lwd=rep(2,3))
+```
+```{r mass_product, echo=FALSE, fig.align='center'}
+
+prodSIz_ss <- S_var_ss*Iz_var_ss
+prodSIw_ss <- S_var_ss*Iw_var_ss
+
+plot(epsvar, prodSIw_ss, xlab="AMU", ylab="Mass product", main = "Evolution of mass product at steady state", type="l", lty=3, lwd=2, ylim=c(0, 0.25))
+
+lines(epsvar, prodSIz_ss, lty=2, lwd=2)
+
+
+legend("topright", inset=.05, c("S*Iz", "S*Iw"), lty=c(2,3), lwd=rep(2,8))
 
 ```
-
