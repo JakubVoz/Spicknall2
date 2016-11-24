@@ -43,7 +43,7 @@ prho <- 0.05 #probability of clinical failure
 #epsilon change over time
 
 peps <- 0.10 #initial value of the ratio of treated patients
-pepsi <- seq(0.11,0.2,by=0.01) #variation of epsilon
+pepsi <- seq(0.09,0,by=-0.01) #variation of epsilon
 
 
 
@@ -227,7 +227,7 @@ for (i in 1:10) {
 #timespan of testing
 t2 <- seq(1, a_end-a_init)
 
-colglob <- colorRampPalette(c("blue", "red"))
+colglob <- colorRampPalette(c("red", "blue"))
 
 colforcol <- colglob(ncol((NewIw)-1))
 
@@ -244,9 +244,9 @@ linfun <- function(x, t){
 plot(t2, NewIw[,1], main="Incidence of susceptible infections \n after a change in AMU", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0,0.011), lty=1, lwd=2, type="l")
 
 capture.output(apply(NewIw[,2:(ncol(NewIw)-1)], 2, linfun, t2),file='NUL')
-lines(t2, NewIw[,ncol(NewIw)], lty=1, lwd=2, col="red")
+lines(t2, NewIw[,ncol(NewIw)], lty=1, lwd=2, col="blue")
 
-legend("topright" , inset=.05, title="AMU" ,c("20%", "11%"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topright" , inset=.05, title="AMU" ,c("10%", "0%"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 ```
 
 ```{r incid_plot_Iz, echo=FALSE, fig.align='center', cache=TRUE}
@@ -255,9 +255,9 @@ plot(t2, NewIz[,1], main="Incidence of resitant infections \n after a change in 
 
 capture.output(apply(NewIz[,2:(ncol(NewIz)-1)], 2, linfun, t2), file='NUL')
 
-lines(t2, NewIz[,ncol(NewIz)], lty=1, lwd=2, col="red")
+lines(t2, NewIz[,ncol(NewIz)], lty=1, lwd=2, col="blue")
 
-legend("topright" , inset=.05, title="AMU" ,c("20%", "11%"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topright" , inset=.05, title="AMU" ,c("10%", "0%"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 ```
 
 ```{r incid_plot_prim, echo=FALSE, fig.align='center', cache=TRUE}
@@ -265,9 +265,9 @@ plot(t2, Newprim[,1], main="Incidence of primary resistance \n after a change in
 
 capture.output(apply(Newprim[,2:(ncol(Newprim)-1)], 2, linfun, t2), file='NUL')
 
-lines(t2, Newprim[,ncol(Newprim)], lty=1, lwd=2, col="red")
+lines(t2, Newprim[,ncol(Newprim)], lty=1, lwd=2, col="blue")
 
-legend("topright" , inset=.05, title="AMU" ,c("20%", "11%"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topright" , inset=.05, title="AMU" ,c("10%", "0%"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 ```
 
@@ -277,9 +277,9 @@ plot(t2, Newsec[,1], main="Incidence of secondary resistance \n after a change i
 
 capture.output(apply(Newsec[,2:(ncol(Newsec)-1)], 2, linfun, t2), file='NUL')
 
-lines(t2, Newsec[,ncol(Newsec)], lty=1, lwd=2, col="red")
+lines(t2, Newsec[,ncol(Newsec)], lty=1, lwd=2, col="blue")
 
-legend("topright" , inset=.05, title="AMU" ,c("20%", "11%"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topright" , inset=.05, title="AMU" ,c("10%", "0%"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 ```
@@ -291,9 +291,9 @@ plot(t2, Newp[,1], main="Estimated p after a change in AMU", xlab="time (steps)"
 
 capture.output(apply(Newp[,2:(ncol(Newp)-1)], 2, linfun, t2), file='NUL')
 
-lines(t2, Newp[,ncol(Newp)], lty=1, lwd=2, col="red")
+lines(t2, Newp[,ncol(Newp)], lty=1, lwd=2, col="blue")
 
-legend("topright" , inset=.05, title="AMU" ,c("20%", "11%"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topright" , inset=.05, title="AMU" ,c("10%", "0%"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 ```
 
