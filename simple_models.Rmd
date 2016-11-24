@@ -120,7 +120,7 @@ incid = function(x, zoom) {
 
 #selecting numbers of columns in the out for twenty values of eps after intervention
 
-nnewiw <- seq(3,ncol(out), by=4)
+nnewiw <- seq(4,ncol(out), by=4)
 
 
 
@@ -161,7 +161,7 @@ epsvar <- pepsi
 par(mfrow=c(1,2))
 
  
-plot(t2, NewIw[,11], main="Incidence of susceptible infections \n after a change in AMU", xlab="time (steps)", ylab="Incidence Iw", ylim=c(-0.005,0.005), lty=1, lwd=2, type="l")
+plot(t2, NewIw[,11], main="Incidence of susceptible infections \n after a change in AMU", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0,0.01), lty=1, lwd=2, type="l")
 
 capture.output(apply(NewIw, 2, linfun, t2),file='NUL') 
 
@@ -169,7 +169,7 @@ legend("bottomleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2),
 
 #zoom
 
-plot(time_zoom, Iw_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Incidence Iw", ylim=c(-0.005,0.005), lty=1, lwd=2, type="l")
+plot(time_zoom, Iw_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0,0.01), lty=1, lwd=2, type="l")
 
 capture.output(apply(Iw_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -183,3 +183,40 @@ plot(epsvar, Iw_ss, xlab="AMU", ylab="Iw incidence", main = "Impact of AMU on st
 ```
 
 
+```{r model_Iw_S_state_var, echo=FALSE, cache=TRUE}
+
+
+niw <- seq(3,ncol(out), by=4)
+ns <- seq(2,ncol(out), by=4)
+
+Iw <- out[,niw]
+S <- out[, ns]
+
+t3 <- seq(0, zoom_area, by=1/m)
+
+
+#state var
+plot(out[,1], Iw[,11], main="Sensitive infections \n after a change in AMU", xlab="time (steps)", ylab="Iw", ylim=c(0,1), lty=1, lwd=2, type="l")
+
+capture.output(apply(Iw, 2, linfun, out[,1]),file='NUL')
+
+
+legend("bottomleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+plot(out[,1], S[,11], main="Susceptible population \n after a change in AMU", xlab="time (steps)", ylab="S", ylim=c(0,1), lty=1, lwd=2, type="l")
+
+capture.output(apply(S, 2, linfun, out[,1]),file='NUL')
+
+
+legend("bottomleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+Iw_ss <- Iw[nrow(Iw),]
+S_ss <- S[nrow(S),]
+ProdIw_S_ss <- S_ss*Iw_ss
+
+plot(epsvar, S_ss, xlab="AMU", ylab="Iw incidence", main = "Impact of AMU \n on steady state state var", type="l", lwd=2, col='blue', ylim=c(0,1))
+lines(epsvar, Iw_ss, lwd=2, lty=1, col='red')
+lines(epsvar, ProdIw_S_ss, lwd=2, lty=2)
+
+legend('topleft', inset=.05, c("S", "Iw", "Iw*S"), lty=c(1,1,2), lwd=c(2,2,2), col=c("blue", "red", "black"))
+```
