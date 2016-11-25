@@ -136,26 +136,28 @@ out2 <- cbind(out, mutate(out, p=out$Iz/(out$Iw+out$Iz), q=out$Iw+out$Iz))
 
 ```
 
+<center> <h2> Steady state exploitation </h2> </center>
+
 <center> <h3> Steady states when varying AMU or rate of acquisition of AMR </h3> </center>
 
-```{r ss_eps_var, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r ss_eps_var, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("./final_mod_files/figure-html/steady_state_eps_plot-1.png")
 ```
 
-According to our model, the proportions of different populations change for the range of AMU between 0 and 20%. Iw decreases linearly with the increase of AMU. For now on, the behavior of our model will be analyzed for this span of AMU (!! relevance??).
+According to our model, the proportions of different populations change for the range of AMU between 0 and 20%. $I_w$ decreases linearly with the increase of AMU. For now on, the behavior of our model will be analyzed for this span of AMU (!! relevance??).
 
 
-```{r ss_rho_var, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r ss_rho_var, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("./final_mod_files/figure-html/steady_state_rho_plot-1.png")
 ```
 
-Based on literature, the proportion of treatment failures is between 4 and 8% (add a quote) for tuberculosis. It has a significant impact on the proportion of Iw and Iz. When it increases the prevalence of Iz increases at the expense of Iw, while the global burden of the disease decreases.
+Based on literature, the proportion of treatment failures is between 4 and 8% (add a quote) for tuberculosis. It has a significant impact on the proportion of $I_w$ and $I_z$. When it increases the prevalence of $I_z$ increases at the expense of $I_w$, while the global burden of the disease decreases.
 
 <center> <h3> Steady state net flow in the model </h3> </center>
 
 The steady state flows from one population to another are followed for AMU varying between 0 and 20%.
 
-```{r ss_flow_eps_var, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r ss_flow_eps_var, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_inc_flows-1.png")
 ```
 
@@ -164,7 +166,7 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_inc_flows-1.
 |:---------------:|:----------:|:--------------:|
 | $S$ to $I_w$    |      >     |$I_w$ to $S$    |
 | $I_w$ to $I_z$  |      >     |$I_z$ to $I_w$  |
-| $S$ to $I_z$    |      <     | $I_z$ to $S$   |
+| $S$ to $I_z$    |      <     |$I_z$ to $S$    |
 </center>
 
 Therefore the net flow in our model is the following:
@@ -172,6 +174,31 @@ Therefore the net flow in our model is the following:
 ```{r, out.width = "200px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/NetFlow.png")
 ```
+
+<center> <h3> Steady state resistance ratio p and burden of resistance</h3> </center>
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/ss_p_prevalence-1.png")
+```
+
+Here, the p corresponds to the ratio of prevalence at steady-states. Usually, it is used in the studies of tuberculosis (WHO 2002). Its exponential growth is due to the interplay of increasing $I_z$ and decreasing $I_w$.
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/ss_burden_of_inf-1.png")
+```
+
+Here, the burden of infection corresponds to the total proportion of infected people. It decreases linearly as the AMU increases, due to the decrease of $I_w$ that is faster than the increase of $I_z$.
+
+<center> <h3> Steady state incidence </h3> </center>
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_steady_st-3.png")
+```
+
+Though the burden of infection decreases linearly with the use of antibiotics, the global incidence evolves in a more complex way. There is a peak for incidence when app. 7% of the patients are treated. 
+
+The increase of global incidence for lower values of AMU, cannot be solely explained by the emergence of resistance and its spread : the incidence of sensitive infections increases until 5% AMU. In fact, though the proportion of sensitive cases decreases very fast with AMU in comparison to the speed of increase of susceptible population, their product increases until app. 9% AMU and remains at equal or higher values of the situation without AMU until app. 11% of AMU. The increasing spread of resistant infections explains then the delayed peak of global incidence in comparison with the sensitive one.
+
 
 
 
