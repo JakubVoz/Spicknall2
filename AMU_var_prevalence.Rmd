@@ -22,6 +22,7 @@ m <- 1 #time step
 zoom <- 100 #after breakpoint 1/zoom step
 zoom_area <- 2000 #time span after breakpoint
 
+zooming <- 200 #zooming after break point
 
 # parameters
 pbeta_w <- 0.04 #transmission parameter of Iw
@@ -117,7 +118,7 @@ linfun <- function(x, t){
 
 ```{r plot_prep_multi_var, echo=FALSE, fig.align='center', cache=TRUE, warning = FALSE}
 
-t<- seq(a, a+2000, by=m/zoom)
+t<- seq(0, zoom_area, by=m/zoom)
 
 #sorting columns into distinct subpopulations
 
@@ -136,12 +137,45 @@ Iz <- out[,niz]
 
 ```
 
+```{r deriv_func, echo=FALSE, fig.align='center', cache=TRUE, warning = FALSE}
+incid = function(x, zoom) {
+  der <- rep(0, length(x))
+  for (i in 2:length(x)) {
+    der[i] <- x[i]-x[i-1]
+  }
+  der_day <- rep(0, round(length(der)/zoom))
+  for (i in 1:round(length(der)/zoom)) {
+    der_day[i] <- sum(der[((i-1)*zoom):(i*zoom)])
+  }
+  return(der_day)
+}
+
+
+```
+
+```{r deriv, echo=FALSE, fig.align='center', cache=TRUE, warning = FALSE}
+
+S_der <- apply(S, 2, incid, zoom)
+Iw_der <- apply(Iw, 2, incid, zoom)
+Iz_der <- apply(Iz, 2, incid, zoom)
+
+
+```
 
 ```{r plot_prev_S, echo=FALSE, fig.align='center', cache=TRUE, warning = FALSE}
 #plotting S
 plot(t, S[,11], main="Evolution of Susceptible population after a variation of  AMU", xlab="time (steps)", ylab="S ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
 
 capture.output(apply(S, 2, linfun, t), file='NUL')
+
+
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+t2 <- seq(1, zoom_area, by=m)
+#plotting S derivative with respect to time
+plot(t2, S_der[,11], main="Derivative of Susceptible population after a variation of  AMU", xlab="time (steps)", ylab="S ratio derivative", ylim=c(-0.005,0.005), lty=1, lwd=2, type="l")
+
+capture.output(apply(S_der, 2, linfun, t2), file='NUL')
 
 
 legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
@@ -153,6 +187,13 @@ legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), co
 plot(t, Iw[,11], main="Evolution of population infected with sensitive strain after a variation of  AMU", xlab="time (steps)", ylab="Iw ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
 
 capture.output(apply(Iw, 2, linfun, t), file='NUL')
+
+
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+plot(t2, Iw_der[,11], main="Derivative of population infected with sensitive strain after a variation of  AMU", xlab="time (steps)", ylab="Iw ratio derivative", ylim=c(-0.005,0.005), lty=1, lwd=2, type="l")
+
+capture.output(apply(Iw_der, 2, linfun, t2), file='NUL')
 
 
 legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
@@ -168,6 +209,13 @@ capture.output(apply(Iz, 2, linfun, t), file='NUL')
 
 
 legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+plot(t2, Iz_der[,11], main="Derivative of population infected with resistant strain after a variation of  AMU", xlab="time (steps)", ylab="Iz ratio derivative", ylim=c(-0.005,0.005), lty=1, lwd=2, type="l")
+
+capture.output(apply(Iz_der, 2, linfun, t2), file='NUL')
+
+
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 ```
 
 
@@ -179,6 +227,52 @@ Ratio <- as.matrix(Iz)/(as.matrix(Iz)+as.matrix(Iw))
 plot(t, Ratio[,11], main="Evolution of p after a change in AMU", xlab="time (steps)", ylab="p", ylim=c(0,1.5), lty=1, lwd=2, type="l")
 
 capture.output(apply(Ratio, 2, linfun, t), file='NUL')
+
+
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+```
+
+
+```{r plot_prod_S_Iw, echo=FALSE, fig.align='center', cache=TRUE, warning = FALSE}
+
+#plotting p
+prod_S_Iw <- S*Iw
+
+plot(t, prod_S_Iw[,11], main="Evolution of S*Iw after a change in AMU", xlab="time (steps)", ylab="S*Iw", ylim=c(0,0.3), lty=1, lwd=2, type="l")
+
+capture.output(apply(prod_S_Iw, 2, linfun, t), file='NUL')
+
+
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+```
+
+```{r plot_prod_S_Iz, echo=FALSE, fig.align='center', cache=TRUE, warning = FALSE}
+
+#plotting p
+prod_S_Iz <- S*Iz
+
+plot(t, prod_S_Iz[,11], main="Evolution of S*Iz after a change in AMU", xlab="time (steps)", ylab="S*Iz", ylim=c(0,0.3), lty=1, lwd=2, type="l")
+
+capture.output(apply(prod_S_Iz, 2, linfun, t), file='NUL')
+
+
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+```
+
+```{r plot_prod_Iw_Iz, echo=FALSE, fig.align='center', cache=TRUE, warning = FALSE}
+
+#plotting p
+prod_Iw_Iz <- Iw*Iz
+
+plot(t, prod_Iw_Iz[,11], main="Evolution of Iw*Iz after a change in AMU", xlab="time (steps)", ylab="Iw*Iz", ylim=c(0,0.3), lty=1, lwd=2, type="l")
+
+capture.output(apply(prod_Iw_Iz, 2, linfun, t), file='NUL')
 
 
 legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
