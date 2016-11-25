@@ -178,7 +178,7 @@ legend("bottomleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2),
 #steady-state Iw incidence
 
 par(mfrow=c(1,1))
-plot(epsvar, Iw_ss, xlab="AMU", ylab="Iw incidence", main = "Impact of AMU on steady state Iw incidence", type="l")
+plot(epsvar, Iw_ss, xlab="AMU", ylab="Iw incidence", main = "Impact of AMU on steady state Iw incidence", type="l", ylim=c(0,0.01))
 
 ```
 
