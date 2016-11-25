@@ -7,6 +7,10 @@ output: html_document
 
 <center> <h3> Definition of the model </h3> </center>
 
+```{r, out.width = "200px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/Mechanistic model of AMR spread.png")
+```
+
 $$
 \begin{aligned}
 \frac{dS}{dt} &=- \beta_w I_wS - \beta_z I_z S + \gamma  I_z + \gamma(1 - \varepsilon)I_w + \gamma `  \varepsilon  I_w \\
@@ -33,7 +37,7 @@ $\beta_z$ | transmission rate of resistant strain
 $\varepsilon$ | proportion of infected people treated with antibiotics, supposedly strongly correlated to AMU
 $\gamma$ | innate recovery rate (relative to $I_z$ generally and to $I_w$ | not treated with antibiotics)
 $\gamma '$ | recovery rate of $I_w$ when treated with antibiotics
-$\rho$ | rate of AMR acquisition in $I_w$ when treated with antibiotics (comprehensing _de novo_ mutations and outcompetition of major sensitive strain by minor resistant one)
+$\rho$ | proportion of treatment failures in $I_w$ (comprehensing _de novo_ mutations, outcompetition of major sensitive strain by minor resistant one and horizontal transfer)
 
 
 
@@ -132,4 +136,4 @@ out2 <- cbind(out, mutate(out, p=out$Iz/(out$Iw+out$Iz), q=out$Iw+out$Iz))
 
 ```
 
-
+<center> <h3> Steady states when varying AMU or rate of acquisition of AMR </h3> </center>
