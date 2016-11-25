@@ -137,3 +137,41 @@ out2 <- cbind(out, mutate(out, p=out$Iz/(out$Iw+out$Iz), q=out$Iw+out$Iz))
 ```
 
 <center> <h3> Steady states when varying AMU or rate of acquisition of AMR </h3> </center>
+
+```{r ss_eps_var, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./final_mod_files/figure-html/steady_state_eps_plot-1.png")
+```
+
+According to our model, the proportions of different populations change for the range of AMU between 0 and 20%. Iw decreases linearly with the increase of AMU. For now on, the behavior of our model will be analyzed for this span of AMU (!! relevance??).
+
+
+```{r ss_rho_var, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./final_mod_files/figure-html/steady_state_rho_plot-1.png")
+```
+
+Based on literature, the proportion of treatment failures is between 4 and 8% (add a quote) for tuberculosis. It has a significant impact on the proportion of Iw and Iz. When it increases the prevalence of Iz increases at the expense of Iw, while the global burden of the disease decreases.
+
+<center> <h3> Steady state net flow in the model </h3> </center>
+
+The steady state flows from one population to another are followed for AMU varying between 0 and 20%.
+
+```{r ss_flow_eps_var, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_inc_flows-1.png")
+```
+
+<center>
+| Flow            | Comparison | Flow           |
+|:---------------:|:----------:|:--------------:|
+| $S$ to $I_w$    |      >     |$I_w$ to $S$    |
+| $I_w$ to $I_z$  |      >     |$I_z$ to $I_w$  |
+| $S$ to $I_z$    |      <     | $I_z$ to $S$   |
+</center>
+
+Therefore the net flow in our model is the following:
+
+```{r, out.width = "200px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/NetFlow.png")
+```
+
+
+
