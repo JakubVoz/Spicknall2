@@ -543,7 +543,7 @@ plot(epsvar, Iw_to_S_ss, xlab="AMU", ylab="Iw to S flow", main = "Impact of AMU 
 
 par(mfrow=c(1,2))
 
-plot(t2, NewIw_to_Iz[,11], main="Flow : gaining resistance in sensitive \n cases after a change in AMU", xlab="time (steps)", ylab="Iw to S flow", ylim=c(0,0.005), lty=1, lwd=2, type="l")
+plot(t2, NewIw_to_Iz[,11], main="Flow : gaining resistance in sensitive \n cases after a change in AMU", xlab="time (steps)", ylab="Iw to Iz flow", ylim=c(0,0.005), lty=1, lwd=2, type="l")
 
 capture.output(apply(NewIw_to_Iz, 2, linfun, t2), file='NUL')
 
