@@ -161,7 +161,7 @@ epsvar <- pepsi
 par(mfrow=c(1,2))
 
  
-plot(t2, NewIw[,11], main="Incidence of susceptible infections \n after a change in AMU", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0,0.01), lty=1, lwd=2, type="l")
+plot(t2, NewIw[,11], main="Incidence of susceptible infections \n after a change in AMU", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0.007,0.01), lty=1, lwd=2, type="l")
 
 capture.output(apply(NewIw, 2, linfun, t2),file='NUL') 
 
@@ -169,7 +169,7 @@ legend("bottomleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2),
 
 #zoom
 
-plot(time_zoom, Iw_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0,0.01), lty=1, lwd=2, type="l")
+plot(time_zoom, Iw_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0.007,0.01), lty=1, lwd=2, type="l")
 
 capture.output(apply(Iw_zoom, 2, linfun, time_zoom), file='NUL')
 
