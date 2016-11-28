@@ -6,7 +6,7 @@ output: html_document
 ---
 
 
-```{r include=FALSE, cache=TRUE}
+```{r include=FALSE}
 library(deSolve)
 library(plyr)
 
@@ -23,7 +23,7 @@ a_init <- 2000
 m <- 1 #time step
 
 zoom <- 100 #after breakpoint 1/zoom step
-time_to_change <- 5 #time interval separating two sequential changes of AMU
+time_to_change <- 1 #time interval separating two sequential changes of AMU
 a_end <- 2800  #end of study = 300 steps after beginning of intervention
 
 
@@ -51,7 +51,7 @@ pepsi <- seq(0.09,0,by=-0.01) #variation of epsilon
 ```
 
 
-```{r stable, include=FALSE, cache=TRUE}
+```{r stable, include=FALSE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
 
 state <- c(S=1-2*prop, Iw=prop, Iz=prop, dnewcasesIz=0, dnewcasesIw=0, dsecondaryres=0, dprimaryres=0)
@@ -78,7 +78,7 @@ out_init=as.data.frame(
 
 ```
 
-```{r incidence, include=FALSE, cache=TRUE}
+```{r incidence, include=FALSE}
 #allows to calculate daily incidence
 incid = function(x, zoom) {
   der <- rep(0, length(x))
@@ -93,7 +93,7 @@ incid = function(x, zoom) {
 }
 ```
 
-```{r additiv_pheno, echo=FALSE, fig.align='center', cache=TRUE}
+```{r additiv_pheno, echo=FALSE, fig.align='center'}
 
 out_fast_var <- out_init
 
@@ -130,7 +130,7 @@ states_at_breaks <- cbind(states_at_breaks, cbind(pepsi))
 
 
 
-```{r control, include=FALSE, cache=TRUE}
+```{r control, include=FALSE}
 
 controlfunc <- function(states, a_end) {
   state3 <- c(S=states[2], Iw=states[3], Iz=states[4], dnewcasesIz=states[5], dnewcasesIw=states[6], dsecondaryres=states[7], dprimaryres=states[8])
@@ -167,7 +167,7 @@ out_control <- as.data.frame(out_control)
 
 ```
 
-```{r control_without_additph, include=FALSE, cache=TRUE}
+```{r control_without_additph, include=FALSE}
 
 states4 <- c(S=out_init[nrow(out_init), 2], Iw=out_init[nrow(out_init), 3], Iz=out_init[nrow(out_init), 4], dnewcasesIz=out_init[nrow(out_init), 5], dnewcasesIw=out_init[nrow(out_init), 6], dsecondaryres=out_init[nrow(out_init), 7], dprimaryres=out_init[nrow(out_init), 8])
 parameters[5] <- pepsi[length(pepsi)]
@@ -182,7 +182,7 @@ out_control2 <- as.data.frame(
 
 ```
 
-```{r incid_prep_plot, echo=FALSE, fig.align='center', cache=TRUE}
+```{r incid_prep_plot, echo=FALSE, fig.align='center'}
 #plotting incidence
 
 out_fast_var <- out_fast_var[2001:nrow(out_fast_var),]
@@ -239,7 +239,7 @@ linfun <- function(x, t){
 ```
 
 
-```{r incid_plot_Iw, echo=FALSE, fig.align='center', cache=TRUE}
+```{r incid_plot_Iw, echo=FALSE, fig.align='center'}
 #Iw
 plot(t2, NewIw[,1], main="Incidence of susceptible infections \n after a change in AMU", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0,0.011), lty=1, lwd=2, type="l")
 
@@ -249,7 +249,7 @@ lines(t2, NewIw[,ncol(NewIw)], lty=1, lwd=2, col="blue")
 legend("topright" , inset=.05, title="AMU" ,c("10%", "0%"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 ```
 
-```{r incid_plot_Iz, echo=FALSE, fig.align='center', cache=TRUE}
+```{r incid_plot_Iz, echo=FALSE, fig.align='center'}
 
 plot(t2, NewIz[,1], main="Incidence of resitant infections \n after a change in AMU", xlab="time (steps)", ylab="Incidence Iz", ylim=c(0,0.011), lty=1, lwd=2, type="l")
 
@@ -260,7 +260,7 @@ lines(t2, NewIz[,ncol(NewIz)], lty=1, lwd=2, col="blue")
 legend("topright" , inset=.05, title="AMU" ,c("10%", "0%"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 ```
 
-```{r incid_plot_prim, echo=FALSE, fig.align='center', cache=TRUE}
+```{r incid_plot_prim, echo=FALSE, fig.align='center'}
 plot(t2, Newprim[,1], main="Incidence of primary resistance \n after a change in AMU", xlab="time (steps)", ylab="new primary Iz", ylim=c(0,0.004), lty=1, lwd=2, type="l")
 
 capture.output(apply(Newprim[,2:(ncol(Newprim)-1)], 2, linfun, t2), file='NUL')
@@ -271,7 +271,7 @@ legend("topright" , inset=.05, title="AMU" ,c("10%", "0%"), lty=c(1,1), lwd=c(2,
 
 ```
 
-```{r incid_plot_sec, echo=FALSE, fig.align='center', cache=TRUE}
+```{r incid_plot_sec, echo=FALSE, fig.align='center'}
 #Sec
 plot(t2, Newsec[,1], main="Incidence of secondary resistance \n after a change in AMU", xlab="time (steps)", ylab="new secondary Iz", ylim=c(0,0.004), lty=1, lwd=2, type="l")
 
@@ -285,7 +285,7 @@ legend("topright" , inset=.05, title="AMU" ,c("10%", "0%"), lty=c(1,1), lwd=c(2,
 ```
 
 
-```{r incid_plot_p, echo=FALSE, fig.align='center', cache=TRUE}
+```{r incid_plot_p, echo=FALSE, fig.align='center'}
 #p
 plot(t2, Newp[,1], main="Estimated p after a change in AMU", xlab="time (steps)", ylab="p", ylim=c(0,1), lty=1, lwd=2, type="l")
 
