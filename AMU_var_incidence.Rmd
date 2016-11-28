@@ -593,7 +593,7 @@ lines(epsvar, Iz_ss, col="purple", lwd=2)
 legend("topright", inset=.05, c("Resistant", "Sensitive"), col=c("purple", "green"), lwd=c(2,2))
 
 
-Iwz_ss <- Iw_ss + Iz_ss
+Iwz_ss <- S_to_Iz_ss + S_to_Iw_ss
 
 plot(epsvar, Iwz_ss, xlab="AMU", ylab="Proportion flow", main = "Incidence", type="l", col="red", lwd=2, ylim=c(0,0.012))
 lines(epsvar, S_to_Iz_ss, lty=2, col="red", lwd=2)
@@ -601,11 +601,19 @@ lines(epsvar, S_to_Iw_ss, lty=3, col="red", lwd=2)
 
 legend("bottomleft", inset=.05, c("Global", "Resistant", "Sensitive"), col=c("red","red", "red"), lwd=c(2,2,2), lty=c(1,2,3))
 
+
+Clear <- Iw_to_S_ss + Iz_to_S_ss
+
+plot(epsvar, Clear, xlab="AMU", ylab="Proportion flow", main = "Clearance", type="l", col="green", lwd=2, ylim=c(0,0.012))
+lines(epsvar, Iz_to_S_ss, lty=2, col="green", lwd=2)
+lines(epsvar, Iw_to_S_ss, lty=3, col="green", lwd=2)
+
+legend("bottomleft", inset=.05, c("Global", "Resistant", "Sensitive"), col=rep('green',3), lwd=c(2,2,2), lty=c(1,2,3))
 ```
 
 
 ```{r comp_inc_flows, echo=FALSE, fig.align='center'}
-
+recov_ss <- Iw_to_S_ss+Iz_to_S_ss
 
 plot(epsvar, recov_ss, xlab="AMU", ylab="proportion change", main = "Comparing strength and evolution \n of different flows related to Infection", type="l", lty=1, col="green", lwd=2, ylim=c(0, 0.01))
 
@@ -660,5 +668,26 @@ burden <- (Iw_var_ss+Iz_var_ss)
 
 plot(epsvar, burden, xlab="AMU", ylab="Iw+Iz", main = "Steady-state burden of infection", type="l", lty=1, lwd=2, ylim=c(0, 1))
 
+
+```
+
+```{r new_cases_dynamics, echo=FALSE, fig.align='center'}
+
+new_cases <- NewS_to_Iz + NewS_to_Iw
+
+new_cases_zoom <- new_cases[1:(zooming+1),]
+
+plot(t2, new_cases[,11], main="Global incidence : dynamics", xlab="time (steps)", ylab="Iw+Iz incidence", ylim=c(0,0.01), lty=1, lwd=2, type="l")
+
+capture.output(apply(new_cases, 2, linfun, t2), file='NUL')
+
+legend("bottomleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+plot(time_zoom, new_cases_zoom[,11], main="Global incidence : zoom", xlab="time (steps)", ylab="Iw+Iz incidence", ylim=c(0.004,0.01), lty=1, lwd=2, type="l")
+
+capture.output(apply(new_cases_zoom, 2, linfun, time_zoom), file='NUL')
+
+legend("bottomleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 ```
