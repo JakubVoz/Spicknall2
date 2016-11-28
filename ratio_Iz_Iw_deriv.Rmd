@@ -151,7 +151,7 @@ According to our model, the proportions of different populations change for the 
 knitr::include_graphics("./final_mod_files/figure-html/steady_state_rho_plot-1.png")
 ```
 
-Based on literature, the proportion of treatment failures is between 4 and 8% (add a quote) for tuberculosis. It has a significant impact on the proportion of $I_w$ and $I_z$. When it increases the prevalence of $I_z$ increases at the expense of $I_w$, while the global burden of the disease decreases.
+Based on literature, the proportion of treatment failures is between 4 and 8% (add a quote) for tuberculosis. It has a significant impact on the proportion of $I_w$ and $I_z$. When it increases the prevalence of $I_z$ increases at the expense of $I_w$, while the global burden of the disease decreases. Interestingly, when there is no treatment failure, there is no stable coexistence of sensitive and resistant strains in our model.
 
 <center> <h3> Steady state net flow in the model </h3> </center>
 
@@ -192,6 +192,7 @@ Here, the burden of infection corresponds to the total proportion of infected pe
 <center> <h3> Steady state incidence </h3> </center>
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_steady_st-3.png")
 ```
 
@@ -199,6 +200,40 @@ Though the burden of infection decreases linearly with the use of antibiotics, t
 
 The increase of global incidence for lower values of AMU, cannot be solely explained by the emergence of resistance and its spread : the incidence of sensitive infections increases until 5% AMU. In fact, though the proportion of sensitive cases decreases very fast with AMU in comparison to the speed of increase of susceptible population, their product increases until app. 9% AMU and remains at equal or higher values of the situation without AMU until app. 11% of AMU. The increasing spread of resistant infections explains then the delayed peak of global incidence in comparison with the sensitive one.
 
+The global incidence then decreases to its value without AMU at 14% AMU.
 
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/incid_plot_sec-2.png")
+
+```
+
+The situation where resistance emerges in a treated patient, comprehending a horizontal tranfer of AMR, $de$ $novo$ mutations and minor resistant population outcompeting its sensitive fellows, is called secondary resistance.
+
+This resistance is represented in our model as a flow from $I_w$ to $I_z$ depending on the AMU and probability of acquiring resistance when treated.
+
+<center> <h2> Dynamics exploitation </h2> </center>
+
+In this part, we analyse the dynamics in our model. At time $t=0$, the steady state for $AMU=10%$ was reached. Afterwards, the AMU changes to values between 0% and 20%.
+
+<center> <h3> Dynamics of p after a change in AMU</h3> </center>
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+
+knitr::include_graphics("./AMU_var_prevalence_files/figure-html/plot_prev_p-1.png")
+
+```
+
+<center> <h3> Dynamics of S to Iw flow after a change in AMU</h3> </center>
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/new_cases_dynamics-2.png")
+
+```
+
+We have seen that at steady state the global incidence increases in the interval of 0% to 7% AMU. This means that paradoxically, there are more new infections with higher level of AMU.
+
+Here, we see that in short term dynamics, the incidence depends strongly on AMU : when AMU increases the global incidence decreases for each value of AMU.
 
 
