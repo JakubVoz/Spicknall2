@@ -178,7 +178,7 @@ knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/NetFlow.png")
 <center> <h3> Steady state resistance ratio p and burden of resistance</h3> </center>
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
-knitr::include_graphics("./AMU_var_incidence_files/figure-html/ss_p_prevalence-1.png")
+knitr::include_graphics("./AMU_var_prevalence_files/figure-html/plot_prev_p-2.png")
 ```
 
 Here, the p corresponds to the ratio of prevalence at steady-states. Usually, it is used in the studies of tuberculosis (WHO 2002). Its exponential growth is due to the interplay of increasing $I_z$ and decreasing $I_w$.
@@ -210,7 +210,13 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/incid_plot_sec-2.
 
 The situation where resistance emerges in a treated patient, comprehending a horizontal tranfer of AMR, $de$ $novo$ mutations and minor resistant population outcompeting its sensitive fellows, is called secondary resistance.
 
-This resistance is represented in our model as a flow from $I_w$ to $I_z$ depending on the AMU and probability of acquiring resistance when treated.
+This resistance is represented in our model as a flow from $I_w$ to $I_z$ depending on the AMU and probability of acquiring resistance when treated. As we can see, it reaches a peak for 10% AMU. For higher values of AMU, the deterioration of $I_w$ population makes the secondary resistance plummet.
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/incid_plot_real_p-2.png")
+
+```
 
 <center> <h2> Dynamics exploitation </h2> </center>
 
@@ -224,7 +230,7 @@ knitr::include_graphics("./AMU_var_prevalence_files/figure-html/plot_prev_p-1.pn
 
 ```
 
-<center> <h3> Dynamics of S to Iw flow after a change in AMU</h3> </center>
+<center> <h3> Dynamics of Incidence</h3> </center>
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
@@ -234,6 +240,53 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/new_cases_dynamic
 
 We have seen that at steady state the global incidence increases in the interval of 0% to 7% AMU. This means that paradoxically, there are more new infections with higher level of AMU.
 
-Here, we see that in short term dynamics, the incidence depends strongly on AMU : when AMU increases the global incidence decreases for each value of AMU.
+Here, we see that in short-term dynamics, the incidence depends strongly on AMU : when AMU increases the global incidence decreases for each value of AMU.
+
+For lower values of AMU, we can see a 
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/S_to_Iw_flow-1.png")
+
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/S_to_Iz_flow-1.png")
+
+```
+
+It is indeed the incidence of sensitive cases that is responsible for the short-term peaks of global incidence when AMU decreases. 
+
+The susceptible incidence depends on mass product of $I_w$ and $S$.
+
+We consider now a simpler model with only $I_w$ and $S$ populations, related with the same relationships as in our model. Do these short-term peaks in $I_w$ incidence appear as well?
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+
+knitr::include_graphics("./simple_models_files/figure-html/model_Iw_S-1.png")
 
 
+```
+
+The short-term peaks do not appear in a simpler model and thus this phenomenon is emerging due to the presence of $I_z$.
+
+As the sensitive incidence, and thus the short-term peaks, are directly dependent on the mass-product of $I_w$ and $S$, a change in flow between $I_z$ and $I_w$ may have a direct impact on the this mass product. In particular, the secondary resistance may be the cause of the short-term peaks as the variation of AMU has a huge and immediate impact on its strength : the decrease of AMU would decrease this flow and we would see a fast accumulation in $I_w$ population at the cost of $I_z$.
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/Iw_Iz_dynamics-1.png")
+
+```
+
+Concurrently to the presence of short-term peaks, the $I_w$ to $I_z$ flow, corresponding to the spread of resistance in infected cases, plummets. In fact, the decrease of AMU has an immediate effect on this flow. Meanwhile the impact on the loss of resistance ($I_z$ to $I_w$ flow) is slower : it reaches reaches the minimum value by the 150th step.
+
+This shows that a decrease in AMU is followed by fast redistribution of infected cases from resistant ones to sensitive ones. Due to the accumulation of sensitive cases, the mass product of $I_w$ and $S$ will increase sharply for short time, though $S$ decreases at the same time.
+
+During short-time period, the net flows in our model are as follows:
+
+```{r, out.width = "200px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/Sharp decrease in AMU.png")
+```
+
+At sharp increase of AMU the net flows in our model change as well:
+
+```{r, out.width = "200px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/Sharp increase in AMU.png")
+```
