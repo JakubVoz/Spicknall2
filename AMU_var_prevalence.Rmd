@@ -120,6 +120,7 @@ linfun <- function(x, t){
 
 t<- seq(0, zoom_area, by=m/zoom)
 
+
 #sorting columns into distinct subpopulations
 
 ns <- seq(2,ncol(out), by=8)
@@ -177,6 +178,16 @@ plot(t2, S_der[,11], main="Derivative of Susceptible population after a variatio
 
 capture.output(apply(S_der, 2, linfun, t2), file='NUL')
 
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+S_der_zoom <- S_der[1:(zooming*m+1),]
+t3 <- seq(0, zooming)
+
+#plotting zoomed S derivative with respect to time
+plot(t3, S_der_zoom[,11], main="Derivative of Susceptible population after a variation of  AMU", xlab="time (steps)", ylab="S ratio derivative", ylim=c(-0.005,0.005), lty=1, lwd=2, type="l")
+
+capture.output(apply(S_der_zoom, 2, linfun, t3), file='NUL')
 
 legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 ```
@@ -195,6 +206,17 @@ plot(t2, Iw_der[,11], main="Derivative of population infected with sensitive str
 
 capture.output(apply(Iw_der, 2, linfun, t2), file='NUL')
 
+
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+Iw_der_zoom <- Iw_der[1:(zooming*m+1),]
+
+
+#plotting zoomed Iw derivative with respect to time
+plot(t3, Iw_der_zoom[,11], main="Derivative of population infected with sensitive strain after a variation of  AMU", xlab="time (steps)", ylab="Iw ratio derivative", ylim=c(-0.005,0.005), lty=1, lwd=2, type="l")
+
+capture.output(apply(Iw_der_zoom, 2, linfun, t3), file='NUL')
 
 legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 ```
@@ -216,6 +238,17 @@ capture.output(apply(Iz_der, 2, linfun, t2), file='NUL')
 
 
 legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+Iz_der_zoom <- Iz_der[1:(zooming*m+1),]
+
+
+#plotting zoomed Iw derivative with respect to time
+plot(t3, Iz_der_zoom[,11], main="Derivative of population infected with resistant strain after a variation of  AMU", xlab="time (steps)", ylab="Iz ratio derivative", ylim=c(-0.005,0.005), lty=1, lwd=2, type="l")
+
+capture.output(apply(Iz_der_zoom, 2, linfun, t3), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
 ```
 
 
@@ -224,12 +257,18 @@ legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), co
 #plotting p
 Ratio <- as.matrix(Iz)/(as.matrix(Iz)+as.matrix(Iw))
 
-plot(t, Ratio[,11], main="Evolution of p after a change in AMU", xlab="time (steps)", ylab="p", ylim=c(0,1.5), lty=1, lwd=2, type="l")
+plot(t, Ratio[,11], main="Evolution of p ratio - prevalence", xlab="time (steps)", ylab="p", ylim=c(0,1), lty=1, lwd=2, type="l")
 
 capture.output(apply(Ratio, 2, linfun, t), file='NUL')
 
 
 legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+epsvar <- seq(0, 0.2, by=0.01)
+
+p_steady <- Ratio[nrow(Ratio),]
+
+plot(epsvar, p_steady, main="Evolution of p ratio - prevalence", xlab="AMU", ylab="p", ylim=c(0,1), lty=1, lwd=2, type="l")
 
 
 ```
@@ -237,7 +276,7 @@ legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), co
 
 ```{r plot_prod_S_Iw, echo=FALSE, fig.align='center', cache=TRUE, warning = FALSE}
 
-#plotting p
+#plotting S Iw mass product
 prod_S_Iw <- S*Iw
 
 plot(t, prod_S_Iw[,11], main="Evolution of S*Iw after a change in AMU", xlab="time (steps)", ylab="S*Iw", ylim=c(0,0.3), lty=1, lwd=2, type="l")
@@ -252,7 +291,7 @@ legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), co
 
 ```{r plot_prod_S_Iz, echo=FALSE, fig.align='center', cache=TRUE, warning = FALSE}
 
-#plotting p
+#plotting S Iz mass product
 prod_S_Iz <- S*Iz
 
 plot(t, prod_S_Iz[,11], main="Evolution of S*Iz after a change in AMU", xlab="time (steps)", ylab="S*Iz", ylim=c(0,0.3), lty=1, lwd=2, type="l")
@@ -267,7 +306,7 @@ legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), co
 
 ```{r plot_prod_Iw_Iz, echo=FALSE, fig.align='center', cache=TRUE, warning = FALSE}
 
-#plotting p
+#plotting Iw Iz mass product
 prod_Iw_Iz <- Iw*Iz
 
 plot(t, prod_Iw_Iz[,11], main="Evolution of Iw*Iz after a change in AMU", xlab="time (steps)", ylab="Iw*Iz", ylim=c(0,0.3), lty=1, lwd=2, type="l")
