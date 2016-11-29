@@ -224,7 +224,7 @@ legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col
 ```{r plot_prev_Iz, echo=FALSE, fig.align='center', cache=TRUE, warning = FALSE}
 
 #plotting Iz
-plot(t, Iz[,11], main="Evolution of population infected with resistant strain after a variation of  AMU", xlab="time (steps)", ylab="Iz ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
+plot(t, Iz[,11], main="Evolution of population infected with resistant strain after a variation of  AMU", xlab="time (steps)", ylab="Iz ratio", ylim=c(0,0.2), lty=1, lwd=2, type="l")
 
 capture.output(apply(Iz, 2, linfun, t), file='NUL')
 
@@ -279,7 +279,7 @@ plot(epsvar, p_steady, main="Evolution of p ratio - prevalence", xlab="AMU", yla
 #plotting S Iw mass product
 prod_S_Iw <- S*Iw
 
-plot(t, prod_S_Iw[,11], main="Evolution of S*Iw after a change in AMU", xlab="time (steps)", ylab="S*Iw", ylim=c(0,0.3), lty=1, lwd=2, type="l")
+plot(t, prod_S_Iw[,11], main="Evolution of S*Iw after a change in AMU", xlab="time (steps)", ylab="S*Iw", ylim=c(0,0.25), lty=1, lwd=2, type="l")
 
 capture.output(apply(prod_S_Iw, 2, linfun, t), file='NUL')
 
@@ -294,7 +294,7 @@ legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col
 #plotting S Iz mass product
 prod_S_Iz <- S*Iz
 
-plot(t, prod_S_Iz[,11], main="Evolution of S*Iz after a change in AMU", xlab="time (steps)", ylab="S*Iz", ylim=c(0,0.3), lty=1, lwd=2, type="l")
+plot(t, prod_S_Iz[,11], main="Evolution of S*Iz after a change in AMU", xlab="time (steps)", ylab="S*Iz", ylim=c(0,0.15), lty=1, lwd=2, type="l")
 
 capture.output(apply(prod_S_Iz, 2, linfun, t), file='NUL')
 
@@ -309,7 +309,7 @@ legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col
 #plotting Iw Iz mass product
 prod_Iw_Iz <- Iw*Iz
 
-plot(t, prod_Iw_Iz[,11], main="Evolution of Iw*Iz after a change in AMU", xlab="time (steps)", ylab="Iw*Iz", ylim=c(0,0.3), lty=1, lwd=2, type="l")
+plot(t, prod_Iw_Iz[,11], main="Evolution of Iw*Iz after a change in AMU", xlab="time (steps)", ylab="Iw*Iz", ylim=c(0,0.05), lty=1, lwd=2, type="l")
 
 capture.output(apply(prod_Iw_Iz, 2, linfun, t), file='NUL')
 
