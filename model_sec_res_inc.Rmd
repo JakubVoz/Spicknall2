@@ -352,7 +352,7 @@ plot(epsvar, prim_ss, xlab="AMU", ylab="Primary resistance incidence", main = "I
 par(mfrow=c(1,2))
 
 
-plot(t2, Newsec[,11], main="Incidence of secondary resistance \n after a change in AMU", xlab="time (steps)", ylab="new secondary Iz", ylim=c(0,0.004), lty=1, lwd=2, type="l")
+plot(t2, Newsec[,11], main="Incidence of secondary resistance \n after a change in AMU", xlab="time (steps)", ylab="new secondary Iz", ylim=c(0,0.01), lty=1, lwd=2, type="l")
 
 capture.output(apply(Newsec, 2, linfun, t2), file='NUL')
 
@@ -360,7 +360,7 @@ legend("topright" , inset=.05, c("AMU=0.50", "AMU=0"), lty=c(1,1), lwd=c(2,2), c
 
 #zoom
 
-plot(time_zoom, sec_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Incidence secondary resistace", ylim=c(0,0.004), lty=1, lwd=2, type="l")
+plot(time_zoom, sec_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Incidence secondary resistace", ylim=c(0,0.01), lty=1, lwd=2, type="l")
 
 capture.output(apply(sec_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -396,7 +396,7 @@ legend("topleft" , inset=.05, c("AMU=0.50", "AMU=0"), lty=c(1,1), lwd=c(2,2), co
 #steady-state p incidence
 
 par(mfrow=c(1,1))
-plot(epsvar, p_ss, xlab="AMU", ylab="p", main = "Impact of AMU on steady state p", type="l")
+plot(epsvar, p_ss, xlab="AMU", ylab="p", main = "Impact of AMU on steady state p", type="l", ylim=c(0,1))
 ```
 
 ```{r incid_plot_real_p, echo=FALSE, fig.align='center'}
@@ -511,7 +511,7 @@ plot(epsvar, Iz_to_Iw_ss, xlab="AMU", ylab="Iz to Iw flow", main = "Impact of AM
 
 par(mfrow=c(1,2))
 
-plot(t2, NewIw_to_S[,11], main="Flow : clearance of sensitive \n cases after a change in AMU", xlab="time (steps)", ylab="Iw to S flow", ylim=c(0,0.01), lty=1, lwd=2, type="l")
+plot(t2, NewIw_to_S[,11], main="Flow : clearance of sensitive \n cases after a change in AMU", xlab="time (steps)", ylab="Iw to S flow", ylim=c(0,0.02), lty=1, lwd=2, type="l")
 
 capture.output(apply(NewIw_to_S, 2, linfun, t2), file='NUL')
 
@@ -519,7 +519,7 @@ legend("topleft" , inset=.05, c("AMU=0.50", "AMU=0"), lty=c(1,1), lwd=c(2,2), co
 
 #zoom
 
-plot(time_zoom, Iw_to_S_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Iw to S flow", ylim=c(0,0.01), lty=1, lwd=2, type="l")
+plot(time_zoom, Iw_to_S_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Iw to S flow", ylim=c(0,0.02), lty=1, lwd=2, type="l")
 
 capture.output(apply(Iw_to_S_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -679,7 +679,7 @@ capture.output(apply(new_cases, 2, linfun, t2), file='NUL')
 legend("bottomleft" , inset=.05, c("AMU=0.50", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
-plot(time_zoom, new_cases_zoom[,11], main="Global incidence : zoom", xlab="time (steps)", ylab="Iw+Iz incidence", ylim=c(0.004,0.01), lty=1, lwd=2, type="l")
+plot(time_zoom, new_cases_zoom[,11], main="Global incidence : zoom", xlab="time (steps)", ylab="Iw+Iz incidence", ylim=c(0,0.01), lty=1, lwd=2, type="l")
 
 capture.output(apply(new_cases_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -732,7 +732,7 @@ legend("topleft" , inset=.05, c("AMU=0.50", "AMU=0"), lty=c(1,1), lwd=c(2,2), co
 #net Iz S flow
 
 
-plot(time_zoom, net_Iz_S[,11], main="Net flow : S to Iz", xlab="time (steps)", ylab="Iz to S", ylim=c(0, 0.001), lty=1, lwd=2, type="l")
+plot(time_zoom, net_Iz_S[,11], main="Net flow : S to Iz", xlab="time (steps)", ylab="Iz to S", ylim=c(0, 0.005), lty=1, lwd=2, type="l")
 
 capture.output(apply(net_Iz_S, 2, linfun, time_zoom), file='NUL')
 
@@ -743,7 +743,7 @@ legend("topleft" , inset=.05, c("AMU=0.50", "AMU=0"), lty=c(1,1), lwd=c(2,2), co
 #net Iw Iz flow
 
 
-plot(time_zoom, net_Iw_Iz[,11], main="Net flow : S to Iz", xlab="time (steps)", ylab="Iw to Iz", ylim=c(-0.002,0.003), lty=1, lwd=2, type="l")
+plot(time_zoom, net_Iw_Iz[,11], main="Net flow : S to Iz", xlab="time (steps)", ylab="Iw to Iz", ylim=c(-0.002,0.01), lty=1, lwd=2, type="l")
 
 capture.output(apply(net_Iw_Iz, 2, linfun, time_zoom), file='NUL')
 
