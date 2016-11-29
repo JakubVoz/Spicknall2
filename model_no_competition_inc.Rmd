@@ -1,0 +1,754 @@
+---
+title: "model_no_competition_inc"
+author: "Jakub"
+date: "29 listopadu 2016"
+output: html_document
+---
+
+
+
+```{r include=FALSE}
+library(deSolve)
+
+
+options("scipen" = 10)
+
+# initial state:
+N <- 1
+prop <- 0.01 #initial value of Iw and Iz
+
+# time:
+a <- 2000 #time span
+m <- 1 #time step
+
+zoom <- 100 #after breakpoint 1/zoom step
+zoom_area <- 4000 #time span after breakpoint - actually detailed zone rather that zoom
+
+zooming <- 200 #zooming after break point
+
+# parameters
+pbeta_w <- 0.04 #transmission parameter of Iw
+pbeta_z <- 0.04 #transmission parameter of Iz
+
+pgammaa <- 0.01 #innate recovery rate
+pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
+
+
+prho <- 0.05 #probability of clinical failure
+
+#epsilon change over time
+
+peps <- 0.10 #initial value of the ratio of treated patients
+pepsi <- seq(0,1,by=0.05) #variation of epsilon
+
+
+
+
+```
+
+
+```{r stable, include=FALSE, cache=TRUE}
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop, dnewcasesIz=0, dnewcasesIw=0, dsecondaryres=0, dprimaryres=0, newS_to_Iw=0, Iz_to_Iw=0, Iw_to_S=0, Iw_to_Iz=0, newS_to_Iz=0, Iz_to_S=0)
+
+times=seq(0, a, by=m)
+
+SIS=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       { dnewcasesIz=beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw
+         dnewcasesIw=beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz
+         dsecondaryres=rho*eps*Iw
+         dprimaryres=beta_z*Iz*S + eps*beta_z*Iz*Iw
+         dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
+        dnewS_to_Iw = beta_w*Iw*S
+        dIz_to_Iw = (1-eps)*beta_w*Iw*Iz
+        dIw_to_S = gamma*(1-eps)*Iw + gamma_prim*eps*Iw
+        dIz_to_S = gamma*Iz
+        dIw_to_Iz = eps*beta_z*Iz*Iw + rho*eps*Iw
+        dnewS_to_Iz = beta_z*Iz*S
+        
+        
+        
+        list(c(dS, dIw, dIz, dnewcasesIz, dnewcasesIw, dsecondaryres, dprimaryres, dnewS_to_Iw, dIz_to_Iw, dIw_to_S,  dIw_to_Iz, dnewS_to_Iz, dIz_to_S))
+       })
+}
+
+out_init=as.data.frame(
+  ode(y=state, times=times, func=SIS, parms=parameters)
+)
+
+```
+
+
+
+```{r plot_functions, echo=FALSE, fig.align='center', cache=TRUE}
+
+
+colglob <- colorRampPalette(c("blue", "red"))
+
+colforcol <- colglob(length(pepsi))
+
+
+linfun <- function(x, t){
+  lines(t, unlist(x), lty=1, lwd=2, col=colforcol[as.numeric(parent.frame()$i)])
+}
+```
+
+
+```{r multiple_var, include=FALSE, cache=TRUE}
+
+
+parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
+
+
+times3=seq(a, a+zoom_area, by=m/zoom)
+
+state3 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Iz=out_init$Iz[a+1], Iwz=out_init$Iwz[a+1], dnewcasesIz=0, dnewcasesIw=0, dsecondaryres=0, dprimaryres=0, newS_to_Iw=0, Iz_to_Iw=0, Iw_to_S=0, Iw_to_Iz=0, newS_to_Iz=0, Iz_to_S=0)
+
+break_point=function(x){
+  parameters3[5] <-x
+  out_multi=as.data.frame(
+  ode(y=state3, times=times3, func=SIS, parms=parameters3))
+  return(out_multi)
+}
+
+pepsi <- seq(0, 1, by=0.05)
+
+out <- do.call(cbind, lapply(pepsi,break_point))
+
+```
+
+```{r incidence, include=FALSE, cache=TRUE}
+#allows to calculate daily incidence
+incid = function(x, zoom) {
+  der <- rep(0, length(x))
+  for (i in 2:length(x)) {
+    der[i] <- x[i]-x[i-1]
+  }
+  der_day <- rep(0, round(length(der)/zoom))
+  for (i in 1:round(length(der)/zoom)) {
+    der_day[i] <- sum(der[((i-1)*zoom):(i*zoom)])
+  }
+  return(der_day)
+}
+
+
+```
+
+```{r incid_prep_plot, echo=FALSE, fig.align='center', cache=TRUE}
+#plotting incidence
+
+#selecting numbers of columns in the out for twenty values of eps after intervention
+nnewiz <- seq(5,ncol(out), by=14)
+nnewiw <- seq(6,ncol(out), by=14)
+nnewsec <- seq(7,ncol(out), by=14)
+nnewprim <- seq(8,ncol(out), by=14)
+
+nS_to_Iw <- seq(9,ncol(out), by=14)
+nS_to_Iz <- seq(13,ncol(out), by=14)
+nIz_to_Iw <- seq(10,ncol(out), by=14)
+nIw_to_S <- seq(11,ncol(out), by=14)
+
+nIw_to_Iz <- seq(12,ncol(out), by=14)
+nIz_to_S <- seq(14,ncol(out), by=14)
+
+
+#selecting columns for each incidence type
+NewIz <- out[,nnewiz]
+NewIw <- out[,nnewiw]
+Newsec <- out[,nnewsec]
+Newprim <- out[,nnewprim]
+
+NewS_to_Iw <- out[,nS_to_Iw]
+NewS_to_Iz <- out[,nS_to_Iz]
+NewIz_to_Iw <- out[,nIz_to_Iw]
+NewIw_to_S <- out[,nIw_to_S]
+NewIz_to_S <- out[,nIz_to_S]
+NewIw_to_Iz <- out[,nIw_to_Iz]
+
+#calculating incidence
+NewIz <- apply(NewIz, 2, incid, zoom)
+NewIw <- apply(NewIw, 2, incid, zoom)
+Newsec <- apply(Newsec, 2, incid, zoom)
+Newprim <- apply(Newprim, 2, incid, zoom)
+
+
+NewS_to_Iw <- apply(NewS_to_Iw, 2, incid, zoom)
+NewS_to_Iz <- apply(NewS_to_Iz, 2, incid, zoom)
+NewIz_to_Iw <- apply(NewIz_to_Iw, 2, incid, zoom)
+NewIw_to_S <- apply(NewIw_to_S, 2, incid, zoom)
+NewIz_to_S <- apply(NewIz_to_S, 2, incid, zoom)
+NewIw_to_Iz <- apply(NewIw_to_Iz, 2, incid, zoom)
+
+Newp <- NewIz/(NewIz+NewIw)
+Realp <- NewS_to_Iz/(NewS_to_Iz+NewS_to_Iw)
+Recov <- NewIz_to_S+NewIw_to_S
+Incidence <- NewS_to_Iw+NewS_to_Iz
+
+#timespan of testing
+t2 <- seq(1, zoom_area)
+
+#timespan of testing
+linfun <- function(x, t){
+  lines(t, unlist(x), lty=1, lwd=2, col=colforcol[as.numeric(parent.frame()$i)])
+}
+
+```
+
+
+```{r incid_prep_zoom, echo=FALSE, fig.align='center', cache=TRUE}
+
+Iz_zoom <- NewIz[1:(zooming+1),]
+Iw_zoom <- NewIw[1:(zooming+1),]
+sec_zoom <- Newsec[1:(zooming+1),]
+prim_zoom <- Newprim[1:(zooming+1),]
+p_zoom <- Newp[1:(zooming+1),]
+
+realp_zoom <- Realp[1:(zooming+1),]
+S_to_Iw_zoom <- NewS_to_Iw[1:(zooming+1),]
+S_to_Iz_zoom <- NewS_to_Iz[1:(zooming+1),]
+Iz_to_Iw_zoom <- NewIz_to_Iw[1:(zooming+1),]
+Iw_to_S_zoom <- NewIw_to_S[1:(zooming+1),]
+Iz_to_S_zoom <- NewIz_to_S[1:(zooming+1),]
+Iw_to_Iz_zoom <- NewIw_to_Iz[1:(zooming+1),]
+
+recov_zoom <- Recov[1:(zooming+1),]
+incidence_zoom <- Incidence[1:(zooming+1),]
+
+
+time_zoom <- seq(0,zooming,by=m)
+
+
+```
+
+```{r steady_state_var, echo=FALSE, fig.align='center', cache=TRUE}
+nS <- seq(2,ncol(out), by=14)
+nIw <- seq(3,ncol(out), by=14)
+nIz <- seq(4,ncol(out), by=14)
+
+
+S <- out[,nS]
+Iw <- out[,nIw]
+Iz <- out[,nIz]
+
+
+S_var_ss <- S[nrow(S),]
+Iw_var_ss <- Iw[nrow(Iw),]
+Iz_var_ss <- Iz[nrow(Iz),]
+
+
+```
+
+
+```{r incid_prep_steady_state, echo=FALSE, fig.align='center', cache=TRUE}
+
+Iz_ss <- NewIz[nrow(NewIz),]
+Iw_ss <- NewIw[nrow(NewIw),]
+sec_ss <- Newsec[nrow(Newsec),]
+prim_ss <- Newprim[nrow(Newprim),]
+p_ss <- Newp[nrow(Newp),]
+
+
+#flows of Iw
+realp_ss <- Realp[nrow(Realp),]
+S_to_Iw_ss <- NewS_to_Iw[nrow(NewS_to_Iw),]
+S_to_Iz_ss <- NewS_to_Iz[nrow(NewS_to_Iz),]
+Iz_to_Iw_ss <- NewIz_to_Iw[nrow(NewIz_to_Iw),]
+Iw_to_S_ss <- NewIw_to_S[nrow(NewIw_to_S),]
+Iz_to_S_ss <- NewIz_to_S[nrow(NewIz_to_S),]
+Iw_to_Iz_ss <- NewIw_to_Iz[nrow(NewIw_to_Iz),]
+
+
+recov_ss <- Recov[nrow(Recov),]
+incidence_ss <- Incidence[nrow(Incidence),]
+
+epsvar <- pepsi
+
+
+```
+
+```{r incid_plot_Iw, echo=FALSE, fig.align='center', cache=TRUE}
+
+par(mfrow=c(1,2))
+
+ 
+plot(t2, NewIw[,11], main="Incidence of susceptible infections \n after a change in AMU", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0,0.011), lty=1, lwd=2, type="l")
+
+capture.output(apply(NewIw, 2, linfun, t2),file='NUL') 
+
+legend("bottomleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+#zoom
+
+plot(time_zoom, Iw_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0,0.011), lty=1, lwd=2, type="l")
+
+capture.output(apply(Iw_zoom, 2, linfun, time_zoom), file='NUL')
+
+legend("bottomleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+#steady-state Iw incidence
+
+par(mfrow=c(1,1))
+plot(epsvar, Iw_ss, xlab="AMU", ylab="Iw incidence", main = "Impact of AMU on steady state Iw incidence", type="l")
+```
+
+
+```{r incid_plot_Iz, echo=FALSE, fig.align='center', cache=TRUE}
+
+par(mfrow=c(1,2))
+
+plot(t2, NewIz[,11], main="Incidence of resitant infections \n after a change in AMU", xlab="time (steps)", ylab="Incidence Iz", ylim=c(0,0.04), lty=1, lwd=2, type="l")
+
+capture.output(apply(NewIz, 2, linfun, t2), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+#zoom
+
+plot(time_zoom, Iz_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Incidence Iz", ylim=c(0,0.04), lty=1, lwd=2, type="l")
+
+capture.output(apply(Iz_zoom, 2, linfun, time_zoom), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+#steady-state Iz incidence
+
+par(mfrow=c(1,1))
+plot(epsvar, Iz_ss, xlab="AMU", ylab="Iz incidence", main = "Impact of AMU on steady state Iz incidence", type="l")
+
+```
+
+```{r incid_plot_prim, echo=FALSE, fig.align='center', cache=TRUE}
+
+par(mfrow=c(1,2))
+
+plot(t2, Newprim[,11], main="Incidence of primary resistance \n after a change in AMU", xlab="time (steps)", ylab="new primary Iz", ylim=c(0,0.04), lty=1, lwd=2, type="l")
+
+capture.output(apply(Newprim, 2, linfun, t2), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+#zoom
+
+plot(time_zoom, prim_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Incidence primary resistace", ylim=c(0,0.04), lty=1, lwd=2, type="l")
+
+capture.output(apply(prim_zoom, 2, linfun, time_zoom), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+#steady-state primary resistance incidence
+
+par(mfrow=c(1,1))
+plot(epsvar, prim_ss, xlab="AMU", ylab="Primary resistance incidence", main = "Impact of AMU on steady state primary resistance incidence", type="l")
+```
+
+```{r incid_plot_sec, echo=FALSE, fig.align='center', cache=TRUE}
+par(mfrow=c(1,2))
+
+
+plot(t2, Newsec[,11], main="Incidence of secondary resistance \n after a change in AMU", xlab="time (steps)", ylab="new secondary Iz", ylim=c(0,0.04), lty=1, lwd=2, type="l")
+
+capture.output(apply(Newsec, 2, linfun, t2), file='NUL')
+
+legend("topright" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+#zoom
+
+plot(time_zoom, sec_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Incidence secondary resistace", ylim=c(0,0.04), lty=1, lwd=2, type="l")
+
+capture.output(apply(sec_zoom, 2, linfun, time_zoom), file='NUL')
+
+legend("topright" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+#steady-state sec resistance incidence
+
+par(mfrow=c(1,1))
+plot(epsvar, sec_ss, xlab="AMU", ylab="Secondary resistance incidence", main = "Impact of AMU on steady state secondary resistance incidence", type="l")
+```
+
+```{r incid_plot_p, echo=FALSE, fig.align='center', cache=TRUE}
+
+par(mfrow=c(1,2))
+
+plot(t2, Newp[,11], main="Estimated p after a change in AMU", xlab="time (steps)", ylab="p", ylim=c(0,1), lty=1, lwd=2, type="l")
+
+capture.output(apply(Newp, 2, linfun, t2), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+#zoom
+
+plot(time_zoom, p_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="p", ylim=c(0,1), lty=1, lwd=2, type="l")
+
+capture.output(apply(p_zoom, 2, linfun, time_zoom), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+
+#steady-state p incidence
+
+par(mfrow=c(1,1))
+plot(epsvar, p_ss, xlab="AMU", ylab="p", main = "Impact of AMU on steady state p", type="l")
+```
+
+```{r incid_plot_real_p, echo=FALSE, fig.align='center'}
+
+par(mfrow=c(1,2))
+
+plot(t2, Realp[,11], main="Estimated real p after a change in AMU", xlab="time (steps)", ylab="Real p", ylim=c(0,1), lty=1, lwd=2, type="l")
+
+capture.output(apply(Newp, 2, linfun, t2), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+#zoom
+
+plot(time_zoom, realp_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="real p", ylim=c(0,1), lty=1, lwd=2, type="l")
+
+capture.output(apply(realp_zoom, 2, linfun, time_zoom), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+
+#steady-state real p incidence
+
+par(mfrow=c(1,1))
+plot(epsvar, realp_ss, xlab="AMU", ylab="real p", main = "Evolution of p ratio- incidence", type="l", lwd=2)
+```
+
+```{r S_to_Iw_flow, echo=FALSE, fig.align='center'}
+par(mfrow=c(1,2))
+
+plot(t2, NewS_to_Iw[,11], main="Flow : infection of susceptibles \n after a change in AMU", xlab="time (steps)", ylab="S to Iw", ylim=c(0,0.01), lty=1, lwd=2, type="l")
+
+capture.output(apply(NewS_to_Iw, 2, linfun, t2), file='NUL')
+
+legend("bottomleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+#zoom
+
+plot(time_zoom, S_to_Iw_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="S to Iw", ylim=c(0,0.01), lty=1, lwd=2, type="l")
+
+capture.output(apply(S_to_Iw_zoom, 2, linfun, time_zoom), file='NUL')
+
+legend("bottomleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+
+#steady-state flow
+
+par(mfrow=c(1,1))
+plot(epsvar, S_to_Iw_ss, xlab="AMU", ylab="S to Iw flow", main = "Impact of AMU on steady state S to Iw flow", type="l")
+
+
+```
+
+```{r S_to_Iz_flow, echo=FALSE, fig.align='center'}
+par(mfrow=c(1,2))
+
+plot(t2, NewS_to_Iz[,11], main="Flow : infection of susceptibles \n after a change in AMU", xlab="time (steps)", ylab="S to Iz", ylim=c(0,0.05), lty=1, lwd=2, type="l")
+
+capture.output(apply(NewS_to_Iz, 2, linfun, t2), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+#zoom
+
+plot(time_zoom, S_to_Iz_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="S to Iz", ylim=c(0,0.05), lty=1, lwd=2, type="l")
+
+capture.output(apply(S_to_Iz_zoom, 2, linfun, time_zoom), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+
+#steady-state flow
+
+par(mfrow=c(1,1))
+plot(epsvar, S_to_Iz_ss, xlab="AMU", ylab="S to Iz flow", main = "Impact of AMU on steady state S to Iz flow", type="l", lwd=2)
+
+
+```
+
+```{r Iz_to_Iw_flow, echo=FALSE, fig.align='center'}
+
+par(mfrow=c(1,2))
+
+plot(t2, NewIz_to_Iw[,11], main="Flow : infection and conversion of \n resistant cases after a change in AMU", xlab="time (steps)", ylab="Iz to Iw flow", ylim=c(0,0.03), lty=1, lwd=2, type="l")
+
+capture.output(apply(NewIz_to_Iw, 2, linfun, t2), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+#zoom
+
+plot(time_zoom, Iz_to_Iw_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Iz to Iw flow", ylim=c(0,0.03), lty=1, lwd=2, type="l")
+
+capture.output(apply(Iz_to_Iw_zoom, 2, linfun, time_zoom), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+
+#steady-state flow
+
+par(mfrow=c(1,1))
+plot(epsvar, Iz_to_Iw_ss, xlab="AMU", ylab="Iz to Iw flow", main = "Impact of AMU on steady state Iz to Iw flow", ylim=c(0,0.005), type="l")
+
+
+```
+
+```{r Iw_to_S_flow, echo=FALSE, fig.align='center'}
+
+par(mfrow=c(1,2))
+
+plot(t2, NewIw_to_S[,11], main="Flow : clearance of sensitive \n cases after a change in AMU", xlab="time (steps)", ylab="Iw to S flow", ylim=c(0,0.1), lty=1, lwd=2, type="l")
+
+capture.output(apply(NewIw_to_S, 2, linfun, t2), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+#zoom
+
+plot(time_zoom, Iw_to_S_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Iw to S flow", ylim=c(0,0.1), lty=1, lwd=2, type="l")
+
+capture.output(apply(Iw_to_S_zoom, 2, linfun, time_zoom), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+
+#steady-state flow
+
+par(mfrow=c(1,1))
+plot(epsvar, Iw_to_S_ss, xlab="AMU", ylab="Iw to S flow", main = "Impact of AMU on steady state Iw to S flow", ylim=c(0,0.01), type="l")
+
+
+```
+
+```{r Iw_to_Iz_flow, echo=FALSE, fig.align='center'}
+
+par(mfrow=c(1,2))
+
+plot(t2, NewIw_to_Iz[,11], main="Flow : gaining resistance in sensitive \n cases after a change in AMU", xlab="time (steps)", ylab="Iw to Iz flow", ylim=c(0,0.005), lty=1, lwd=2, type="l")
+
+capture.output(apply(NewIw_to_Iz, 2, linfun, t2), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+#zoom
+
+plot(time_zoom, Iw_to_Iz_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Iw to Iz flow", ylim=c(0,0.005), lty=1, lwd=2, type="l")
+
+capture.output(apply(Iw_to_Iz_zoom, 2, linfun, time_zoom), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+
+#steady-state flow
+
+par(mfrow=c(1,1))
+plot(epsvar, Iw_to_Iz_ss, xlab="AMU", ylab="Iw to Iz flow", main = "Impact of AMU on steady state Iw to Iz flow", type="l")
+
+
+```
+
+```{r comp_flows, echo=FALSE, fig.align='center'}
+
+plot(epsvar, S_to_Iw_ss, xlab="AMU", ylab="Iw to Iz flow", main = "Comparing strength and evolution \n of different flows related to Iw", type="l", lty=1, col="green", lwd=2)
+
+lines(epsvar, Iw_to_S_ss, lty=1, col="red", lwd=2)
+lines(epsvar, Iz_to_Iw_ss, lty=2, col="green", lwd=2)
+lines(epsvar, Iw_to_Iz_ss, lty=2, col="red", lwd=2)
+
+legend("topright", inset=.05, c("Inflow S to Iw", "Inflow Iz to Iw", "Outflow Iw to S", "Outflow Iw to Iz"), lty=c(1,2,1,2), lwd=rep(2,4), col=c("green", "green", "red", "red"))
+
+
+```
+
+```{r comp_steady_st, echo=FALSE, fig.align='center'}
+
+plot(epsvar, Iz_ss, xlab="AMU", ylab="Incidence", main = "Incidence of resistant cases", type="l", lwd=2)
+lines(epsvar, sec_ss, lty=3, lwd=2)
+lines(epsvar, prim_ss, lty=2, lwd=2)
+
+legend("topleft", inset=.05, c("Iz", "Primary Iz", "Secondary Iz"), lty=c(1,2,3), lwd=rep(2,3))
+
+plot(epsvar, Iw_ss, xlab="AMU", ylab="Incidence", main = "Resistant vs sensitive incidence", type="l", col="green", lwd=2)
+lines(epsvar, Iz_ss, col="purple", lwd=2)
+legend("topright", inset=.05, c("Resistant", "Sensitive"), col=c("purple", "green"), lwd=c(2,2))
+
+
+Iwz_ss <- S_to_Iz_ss + S_to_Iw_ss
+
+plot(epsvar, Iwz_ss, xlab="AMU", ylab="Proportion flow", main = "Incidence", type="l", col="red", lwd=2, ylim=c(0,0.012))
+lines(epsvar, S_to_Iz_ss, lty=2, col="red", lwd=2)
+lines(epsvar, S_to_Iw_ss, lty=3, col="red", lwd=2)
+
+legend("bottomleft", inset=.05, c("Global", "Resistant", "Sensitive"), col=c("red","red", "red"), lwd=c(2,2,2), lty=c(1,2,3))
+
+
+Clear <- Iw_to_S_ss + Iz_to_S_ss
+
+plot(epsvar, Clear, xlab="AMU", ylab="Proportion flow", main = "Clearance", type="l", col="green", lwd=2, ylim=c(0,0.012))
+lines(epsvar, Iz_to_S_ss, lty=2, col="green", lwd=2)
+lines(epsvar, Iw_to_S_ss, lty=3, col="green", lwd=2)
+
+legend("bottomleft", inset=.05, c("Global", "Resistant", "Sensitive"), col=rep('green',3), lwd=c(2,2,2), lty=c(1,2,3))
+```
+
+```{r comp_inc_flows, echo=FALSE, fig.align='center'}
+recov_ss <- Iw_to_S_ss+Iz_to_S_ss
+
+plot(epsvar, recov_ss, xlab="AMU", ylab="proportion change", main = "Comparing strength and evolution \n of different flows related to Infection", type="l", lty=1, col="green", lwd=2, ylim=c(0, 0.01))
+
+lines(epsvar, incidence_ss, lty=1, col="red", lwd=2)
+lines(epsvar, S_to_Iz_ss, lty=2, col="red", lwd=2)
+lines(epsvar, S_to_Iw_ss, lty=3, col="red", lwd=2)
+lines(epsvar, Iw_to_S_ss, lty=3, col="green", lwd=2)
+lines(epsvar, Iz_to_S_ss, lty=2, col="green", lwd=2)
+lines(epsvar, Iw_to_Iz_ss, lty=2, col="orange", lwd=2)
+lines(epsvar, Iz_to_Iw_ss, lty=3, col="orange", lwd=2)
+
+legend("topright", inset=.05, c("Incidence", "S to Iz", "S to Iw", "Recovery", "Iz to S", "Iw to S", "Iw to Iz", "Iz to Iw"), lty=c(1,2,3,1,2,3,2,3), lwd=rep(2,8), col=c(rep("red",3), rep("green",3), rep("orange",2)))
+
+plot(epsvar, S_var_ss, xlab="AMU", ylab="Steady state var", main = "Evolution of state variables \n at steady-state", type="l", lty=1, lwd=2, ylim=c(0, 1))
+
+lines(epsvar, Iw_var_ss, lty=3, lwd=2)
+lines(epsvar, Iz_var_ss, lty=2, lwd=2)
+
+legend("topright", inset=.05, c("S", "Iz", "Iw"), lty=c(1,2,3), lwd=rep(2,3))
+```
+
+```{r mass_product, echo=FALSE, fig.align='center'}
+
+prodSIz_ss <- S_var_ss*Iz_var_ss
+prodSIw_ss <- S_var_ss*Iw_var_ss
+
+plot(epsvar, prodSIw_ss, xlab="AMU", ylab="Mass product", main = "Evolution of mass product at steady state", type="l", lty=3, lwd=2, ylim=c(0, 0.25))
+
+lines(epsvar, prodSIz_ss, lty=2, lwd=2)
+
+
+legend("topright", inset=.05, c("S*Iz", "S*Iw"), lty=c(2,3), lwd=rep(2,8))
+
+```
+
+```{r ss_p_prevalence, echo=FALSE, fig.align='center'}
+
+p_prevalence_ss <- Iz_var_ss/(Iw_var_ss+Iz_var_ss)
+
+
+
+plot(epsvar, p_prevalence_ss, xlab="AMU", ylab="p", main = "Evolution of p ratio - prevalence", type="l", lty=1, lwd=2, ylim=c(0, 1))
+
+
+```
+
+```{r ss_burden_of_inf, echo=FALSE, fig.align='center'}
+
+burden <- (Iw_var_ss+Iz_var_ss)
+
+
+
+plot(epsvar, burden, xlab="AMU", ylab="Iw+Iz", main = "Steady-state burden of infection", type="l", lty=1, lwd=2, ylim=c(0, 1))
+
+
+```
+
+```{r new_cases_dynamics, echo=FALSE, fig.align='center'}
+
+new_cases <- NewS_to_Iz + NewS_to_Iw
+
+new_cases_zoom <- new_cases[1:(zooming+1),]
+
+plot(t2, new_cases[,11], main="Global incidence : dynamics", xlab="time (steps)", ylab="Iw+Iz incidence", ylim=c(0,0.01), lty=1, lwd=2, type="l")
+
+capture.output(apply(new_cases, 2, linfun, t2), file='NUL')
+
+legend("bottomleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+plot(time_zoom, new_cases_zoom[,11], main="Global incidence : zoom", xlab="time (steps)", ylab="Iw+Iz incidence", ylim=c(0.0,0.01), lty=1, lwd=2, type="l")
+
+capture.output(apply(new_cases_zoom, 2, linfun, time_zoom), file='NUL')
+
+legend("bottomleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+```
+
+```{r Iw_Iz_dynamics, echo=FALSE, fig.align='center'}
+
+par(mfrow=c(1,2))
+
+
+#zoom Iw_to_Iz
+
+plot(time_zoom, Iw_to_Iz_zoom[,11], main="Dynamics Iw to Iz", xlab="time (steps)", ylab="Iw to Iz flow", ylim=c(0,0.005), lty=1, lwd=2, type="l")
+
+capture.output(apply(Iw_to_Iz_zoom, 2, linfun, time_zoom), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+#zoom Iz_to_Iw
+
+plot(time_zoom, Iz_to_Iw_zoom[,11], main="Dynamics Iz to Iw", xlab="time (steps)", ylab="Iz to Iw flow", ylim=c(0,0.003), lty=1, lwd=2, type="l")
+
+capture.output(apply(Iz_to_Iw_zoom, 2, linfun, time_zoom), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+```
+
+
+```{r net_flows, echo=FALSE, fig.align='center'}
+
+par(mfrow=c(1,1))
+
+net_Iw_S <- S_to_Iw_zoom - Iw_to_S_zoom
+net_Iz_S <- Iz_to_S_zoom - S_to_Iz_zoom
+net_Iw_Iz <- Iw_to_Iz_zoom - Iz_to_Iw_zoom
+
+
+#net Iw S flow
+
+plot(time_zoom, net_Iw_S[,11], main="Net flow : Iw to S", xlab="time (steps)", ylab="Iw to S", ylim=c(-0.003,0.004), lty=1, lwd=2, type="l")
+
+capture.output(apply(net_Iw_S, 2, linfun, time_zoom), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+#net Iz S flow
+
+
+plot(time_zoom, net_Iz_S[,11], main="Net flow : S to Iz", xlab="time (steps)", ylab="Iz to S", ylim=c(0, 0.001), lty=1, lwd=2, type="l")
+
+capture.output(apply(net_Iz_S, 2, linfun, time_zoom), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+
+#net Iw Iz flow
+
+
+plot(time_zoom, net_Iw_Iz[,11], main="Net flow : S to Iz", xlab="time (steps)", ylab="Iw to Iz", ylim=c(-0.002,0.003), lty=1, lwd=2, type="l")
+
+capture.output(apply(net_Iw_Iz, 2, linfun, time_zoom), file='NUL')
+
+legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+```
+
