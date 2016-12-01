@@ -1,0 +1,192 @@
+---
+title: "inertie_study"
+author: "Jakub"
+date: "1 prosince 2016"
+output: html_document
+---
+
+```{r include=FALSE}
+library(deSolve)
+library(plyr)
+
+options("scipen" = 10)
+
+# initial state:
+N <- 1
+prop <- 0.01 #initial value of Iw and Iz
+
+# time:
+epsilon_max <- 1 #max eps_val
+eps_growth <- seq(0.0001, 0.01, length.out = 26) #eps=eps_growth*t
+
+a <- 2000 #time span for reaching initial conditions with eps=0
+a2 <- epsilon_max/eps_growth #time span after the start of eps variation
+m <- 1 #time step
+
+
+zoom <- 100 #after breakpoint 1/zoom step
+
+eps_value_disp <- 0.01
+recolt_value <- eps_value_disp*zoom/eps_growth
+
+
+
+
+
+# parameters
+pbeta_w <- 0.04 #transmission parameter of Iw
+pbeta_z <- 0.015 #transmission parameter of Iz
+
+pgammaa <- 0.01 #innate recovery rate
+pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
+
+
+prho <- 0.05 #probability of clinical failure
+
+#epsilon change over time
+
+peps <- 0.0
+
+
+```
+
+
+
+<center> <h2> Change in the proportion of treated patients </h2> </center>
+
+ 
+ 
+ 
+```{r stable, include=FALSE}
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+
+times=seq(0, a, by=m)
+
+SIS_init=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
+        
+        list(c(dS, dIw, dIz))
+       })
+}
+
+out_init=as.data.frame(
+  ode(y=state, times=times, func=SIS_init, parms=parameters)
+)
+
+```
+
+```{r auxilliary, include=FALSE, cache=TRUE}
+cbind.fill <- function(...){
+    nm <- list(...) 
+    nm <- lapply(nm, as.matrix)
+    n <- max(sapply(nm, nrow)) 
+    do.call(cbind, lapply(nm, function (x) 
+        rbind(x, matrix(, n-nrow(x), ncol(x))))) 
+}
+
+
+```
+
+
+```{r var_SIS, include=FALSE, cache=TRUE}
+parameters2 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, peps_growth=0)
+
+state2 <- c(S=out_init$S[nrow(out_init)], Iw=out_init$Iw[nrow(out_init)], Iz=out_init$Iz[nrow(out_init)])
+
+#t=seq(0, a2, by=1/zoom)
+
+SIS=function(t, state2, parameters2){
+  with(as.list(c(state2,parameters2)),
+       {late_eps=eps
+        eps=peps_growth*t
+        dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
+        
+        list(c(dS, dIw, dIz))
+       })
+}
+
+eps_speed_fun <- function(growth_rate) {
+  a2 <- epsilon_max/growth_rate
+  t=seq(0, a2, by=1/zoom)
+  parameters2[7] <- growth_rate 
+  out =as.data.frame(
+  ode(y=state2, times=t, func=SIS, parms=parameters2)
+)
+}
+```
+
+
+```{r var_calc, include=FALSE, cache=TRUE}
+
+
+
+out <- do.call(cbind.fill, lapply(eps_growth, eps_speed_fun))
+
+timecol <- seq(1, ncol(out), by=4)
+izcol <- seq(4, ncol(out), by=4)
+
+times <- out[,timecol]
+Iz <- out[,izcol]
+
+epsilon <- times
+
+
+for (i in 1:ncol(times)) {
+  epsilon[,i] <- times[,i]*eps_growth[i]
+}
+
+Iz2 <- Iz[seq(1, nrow(out), by=recolt_value[1]),1]
+epsilon2 <- epsilon[seq(1, nrow(out), by=recolt_value[1]),1]
+
+for (i in 2:ncol(Iz)) {
+  Iz3 <- Iz[!is.na(Iz[,i]),i]
+  epsilon3 <- epsilon[!is.na(epsilon[,i]),i]
+  
+  Iz2 <- cbind(Iz2, Iz3[seq(1, length(Iz3), by=recolt_value[i])])
+  epsilon2 <- cbind(epsilon2, epsilon3[seq(1, length(epsilon3), by=recolt_value[i])])
+  }
+
+
+
+
+
+
+#out <- mutate(out, eps = out$time*eps_growth)
+
+
+```
+
+```{r prep_plot, echo=FALSE, cache=TRUE}
+colglob <- colorRampPalette(c("blue", "red"))
+
+colforcol <- colglob(ncol(Iz))
+
+
+linfun <- function(x, t){
+  lines(t, unlist(x), lty=1, lwd=2, col=colforcol[as.numeric(parent.frame()$i)])
+}
+
+
+
+plot(epsilon2[,1], Iz2[,1], xlab="AMU", ylab="AMR", main = "Evolution of Iz", type="l", lty=1, lwd=2, ylim=c(0, 1))
+capture.output(apply(Iz2, 2, linfun, epsilon2[,1]), file='NUL')
+
+mintag <- paste(eps_growth[1])
+maxtag <- paste(eps_growth[length(eps_growth)])
+legend("topleft" , inset=.05, title='rate of change', c(mintag, maxtag), lty=c(1,1), lwd=c(2,2), col=c("blue", "red"))
+
+
+```
+
+
+
+```{r assist_func, echo=FALSE, fig.align='center', cache=TRUE, warning = FALSE}
+
+```
