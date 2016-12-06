@@ -32,12 +32,12 @@ pgammaa <- 0.01 #innate recovery rate
 pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
 
 
-prho <- 0.0 #probability of clinical failure
+prho <- 0.05 #probability of clinical failure
 
 #epsilon change over time
 
 peps <- 0.10 #initial value of the ratio of treated patients
-pepsi <- seq(0,1,by=0.02) #variation of epsilon
+pepsi <- seq(0,0.2,by=0.01) #variation of epsilon
 peps_inc <- 0.15 #increased value of epsilon for trial
 peps_dec <- 0.05 #decreased value of epsilon for trial
 
@@ -80,9 +80,9 @@ out_init=as.data.frame(
 ```
 
 ```{r multiple_var, include=FALSE, cache=TRUE, warning = FALSE}
+prho2 <- 0
 
-
-parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_dec, rho=prho)
+parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_dec, rho=prho2)
 
 
 times3=seq(a, a+zoom_area, by=m/zoom)

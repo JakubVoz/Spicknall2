@@ -34,12 +34,12 @@ pgammaa <- 0.01 #innate recovery rate
 pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
 
 
-prho <- 0.0 #probability of clinical failure
+prho <- 0.05 #probability of clinical failure
 
 #epsilon change over time
 
 peps <- 0.10 #initial value of the ratio of treated patients
-pepsi <- seq(0,1,by=0.05) #variation of epsilon
+pepsi <- seq(0,0.2,by=0.01) #variation of epsilon
 
 
 
@@ -99,14 +99,18 @@ linfun <- function(x, t){
 
 
 ```{r multiple_var, include=FALSE, cache=TRUE}
+prho2 <- 0
 
-
-parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
+parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho2)
 
 
 times3=seq(a, a+zoom_area, by=m/zoom)
 
-state3 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Iz=out_init$Iz[a+1], Iwz=out_init$Iwz[a+1], dnewcasesIz=0, dnewcasesIw=0, dsecondaryres=0, dprimaryres=0, newS_to_Iw=0, Iz_to_Iw=0, Iw_to_S=0, Iw_to_Iz=0, newS_to_Iz=0, Iz_to_S=0)
+
+#pb : a point stable Iz=0.00000
+#state3 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Iz=out_init$Iz[a+1], Iwz=out_init$Iwz[a+1], dnewcasesIz=0, dnewcasesIw=0, dsecondaryres=0, dprimaryres=0, newS_to_Iw=0, Iz_to_Iw=0, Iw_to_S=0, Iw_to_Iz=0, newS_to_Iz=0, Iz_to_S=0)
+
+state3 <- c(S=1-2*prop, Iw=prop, Iz=prop, dnewcasesIz=0, dnewcasesIw=0, dsecondaryres=0, dprimaryres=0, newS_to_Iw=0, Iz_to_Iw=0, Iw_to_S=0, Iw_to_Iz=0, newS_to_Iz=0, Iz_to_S=0)
 
 break_point=function(x){
   parameters3[5] <-x
