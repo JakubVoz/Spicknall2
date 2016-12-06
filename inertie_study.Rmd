@@ -17,7 +17,8 @@ prop <- 0.01 #initial value of Iw and Iz
 
 # time:
 epsilon_max <- 1 #max eps_val
-eps_growth <- seq(0.0001, 0.01, length.out = 26) #eps=eps_growth*t
+eps_real_max <- 0.99
+eps_growth <- seq(0.0001, 0.01, length.out = 10) #eps=eps_growth*t
 
 a <- 2000 #time span for reaching initial conditions with eps=0
 a2 <- epsilon_max/eps_growth #time span after the start of eps variation
@@ -80,7 +81,7 @@ out_init=as.data.frame(
 
 ```
 
-```{r auxilliary, include=FALSE, cache=TRUE}
+```{r auxilliary, include=FALSE}
 cbind.fill <- function(...){
     nm <- list(...) 
     nm <- lapply(nm, as.matrix)
@@ -93,7 +94,7 @@ cbind.fill <- function(...){
 ```
 
 
-```{r var_SIS, include=FALSE, cache=TRUE}
+```{r var_SIS, include=FALSE}
 parameters2 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, peps_growth=0)
 
 state2 <- c(S=out_init$S[nrow(out_init)], Iw=out_init$Iw[nrow(out_init)], Iz=out_init$Iz[nrow(out_init)])
@@ -102,7 +103,7 @@ state2 <- c(S=out_init$S[nrow(out_init)], Iw=out_init$Iw[nrow(out_init)], Iz=out
 
 SIS=function(t, state2, parameters2){
   with(as.list(c(state2,parameters2)),
-       {late_eps=eps
+       {
         eps=peps_growth*t
         dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
         dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
@@ -114,7 +115,7 @@ SIS=function(t, state2, parameters2){
 
 eps_speed_fun <- function(growth_rate) {
   a2 <- epsilon_max/growth_rate
-  t=seq(0, a2, by=1/zoom)
+  t=seq(0, a2+100, by=1/zoom)
   parameters2[7] <- growth_rate 
   out =as.data.frame(
   ode(y=state2, times=t, func=SIS, parms=parameters2)
@@ -123,17 +124,25 @@ eps_speed_fun <- function(growth_rate) {
 ```
 
 
-```{r var_calc, include=FALSE, cache=TRUE}
+```{r var_calc, include=FALSE}
 
 
 
 out <- do.call(cbind.fill, lapply(eps_growth, eps_speed_fun))
+```
+
+```{r var_plot, include=FALSE}
 
 timecol <- seq(1, ncol(out), by=4)
 izcol <- seq(4, ncol(out), by=4)
+iwcol <- seq(3, ncol(out), by=4)
+scol <- seq(2, ncol(out), by=4)
 
 times <- out[,timecol]
 Iz <- out[,izcol]
+Iw <- out[,iwcol]
+S <- out[,scol]
+
 
 epsilon <- times
 
@@ -144,16 +153,25 @@ for (i in 1:ncol(times)) {
 
 Iz2 <- Iz[seq(1, nrow(out), by=recolt_value[1]),1]
 epsilon2 <- epsilon[seq(1, nrow(out), by=recolt_value[1]),1]
+Iw2 <- Iw[seq(1, nrow(out), by=recolt_value[1]),1]
+S2 <- S[seq(1, nrow(out), by=recolt_value[1]),1]
 
 for (i in 2:ncol(Iz)) {
   Iz3 <- Iz[!is.na(Iz[,i]),i]
   epsilon3 <- epsilon[!is.na(epsilon[,i]),i]
+  Iw3 <- Iw[!is.na(Iw[,i]),i]
+  S3 <- S[!is.na(S[,i]),i]
   
   Iz2 <- cbind(Iz2, Iz3[seq(1, length(Iz3), by=recolt_value[i])])
   epsilon2 <- cbind(epsilon2, epsilon3[seq(1, length(epsilon3), by=recolt_value[i])])
+  Iw2 <- cbind(Iw2, Iw3[seq(1, length(Iw3), by=recolt_value[i])])
+  S2 <- cbind(S2, S3[seq(1, length(S3), by=recolt_value[i])])
   }
 
-
+Iz2 <- Iz2[1:101,]
+epsilon2 <- epsilon2[1:101,]
+Iw2 <- Iw2[1:101,]
+S2 <- S2[1:101,]
 
 
 
@@ -163,7 +181,7 @@ for (i in 2:ncol(Iz)) {
 
 ```
 
-```{r prep_plot, echo=FALSE, cache=TRUE}
+```{r prep_plot, echo=FALSE}
 colglob <- colorRampPalette(c("blue", "red"))
 
 colforcol <- colglob(ncol(Iz))
@@ -187,6 +205,69 @@ legend("topleft" , inset=.05, title='rate of change', c(mintag, maxtag), lty=c(1
 
 
 
-```{r assist_func, echo=FALSE, fig.align='center', cache=TRUE, warning = FALSE}
+```{r assist_func, echo=FALSE, fig.align='center', include=FALSE, warning = FALSE}
+
+
+#parameters4 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, peps_growth=eps_growth[1], eps_real_max=eps_real_max)
+
+#Stry <- as.data.frame(out[,17:20])
+#Stry <- Stry[!is.na(Stry[,1]),]
+#state4 <- c(S=Stry$S[length(Stry$S)], Iw=Stry$Iw[length(Stry$Iw)], Iz=Stry$Iz[length(Stry$Iz)], eps_dec=0)
+
+#t=seq(0, a2, by=1/zoom)
+
+#SIS_back=function(t, state4, parameters4){
+  #with(as.list(c(state4,parameters4)),
+ #      {
+#        eps=eps_real_max - peps_growth*t
+  #      dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+   #     dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+    #    dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
+     #   deps_dec=eps
+        
+      #  list(c(dS, dIw, dIz, deps_dec))
+      # })
+#}
+
+
+#eps_speed_fun <- function(growth_rate) {
+ # a4 <- eps_real_max/growth_rate
+#  t=seq(0, a4, by=1/zoom)
+#  parameters4[7] <- growth_rate 
+#  out =as.data.frame(
+#  ode(y=state4, times=t, func=SIS_back, parms=parameters4)
+#)
+#}
+
+#trial
+#a4 <- eps_real_max/eps_growth[5]
+#t=seq(0, a4, by=1/zoom)
+#parameters4[7] <- eps_growth[5]
+#out_back = as.data.frame(
+#  ode(y=state4, times=t, func=SIS_back, parms=parameters4)
+#)
+
+#hysteresis impossible?
+
+#parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
+
+#state <- c(S=Stry$S[length(Stry$S)], Iw=Stry$Iw[length(Stry$Iw)], Iz=Stry$Iz[length(Stry$Iz)])
+
+
+#times=seq(0, 10*a, by=m)
+
+#SIS_init=function(times, state, parameters){
+ # with(as.list(c(state,parameters)),
+#       {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+#        dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+#        dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
+        
+#        list(c(dS, dIw, dIz))
+#       })
+#}
+
+#out_try=as.data.frame(
+#  ode(y=state, times=times, func=SIS_init, parms=parameters)
+#)
 
 ```
