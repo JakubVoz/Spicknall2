@@ -39,7 +39,7 @@ prho <- 0.05 #probability of clinical failure
 #epsilon change over time
 
 peps <- 0.10 #initial value of the ratio of treated patients
-pepsi <- seq(0,1,by=0.05) #variation of epsilon
+pepsi <- seq(0,0.2,by=0.01) #variation of epsilon
 
 
 
@@ -115,7 +115,7 @@ break_point=function(x){
   return(out_multi)
 }
 
-pepsi <- seq(0, 1, by=0.05)
+pepsi <- seq(0, 0.20, by=0.01)
 
 out <- do.call(cbind, lapply(pepsi,break_point))
 
@@ -279,7 +279,7 @@ plot(t2, NewIw[,11], main="Incidence of susceptible infections \n after a change
 
 capture.output(apply(NewIw, 2, linfun, t2),file='NUL') 
 
-legend("bottomleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("bottomleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 #zoom
 
@@ -287,7 +287,7 @@ plot(time_zoom, Iw_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Incide
 
 capture.output(apply(Iw_zoom, 2, linfun, time_zoom), file='NUL')
 
-legend("bottomleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("bottomleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 #steady-state Iw incidence
 
@@ -304,7 +304,7 @@ plot(t2, NewIz[,11], main="Incidence of resitant infections \n after a change in
 
 capture.output(apply(NewIz, 2, linfun, t2), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 #zoom
 
@@ -312,7 +312,7 @@ plot(time_zoom, Iz_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Incide
 
 capture.output(apply(Iz_zoom, 2, linfun, time_zoom), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 #steady-state Iz incidence
@@ -330,7 +330,7 @@ plot(t2, Newprim[,11], main="Incidence of primary resistance \n after a change i
 
 capture.output(apply(Newprim, 2, linfun, t2), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 #zoom
@@ -339,7 +339,7 @@ plot(time_zoom, prim_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Inci
 
 capture.output(apply(prim_zoom, 2, linfun, time_zoom), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 #steady-state primary resistance incidence
@@ -356,7 +356,7 @@ plot(t2, Newsec[,11], main="Incidence of secondary resistance \n after a change 
 
 capture.output(apply(Newsec, 2, linfun, t2), file='NUL')
 
-legend("topright" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topright" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 #zoom
 
@@ -364,7 +364,7 @@ plot(time_zoom, sec_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Incid
 
 capture.output(apply(sec_zoom, 2, linfun, time_zoom), file='NUL')
 
-legend("topright" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topright" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 #steady-state sec resistance incidence
@@ -381,7 +381,7 @@ plot(t2, Newp[,11], main="Estimated p after a change in AMU", xlab="time (steps)
 
 capture.output(apply(Newp, 2, linfun, t2), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 #zoom
 
@@ -389,7 +389,7 @@ plot(time_zoom, p_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="p", yli
 
 capture.output(apply(p_zoom, 2, linfun, time_zoom), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 
@@ -407,7 +407,7 @@ plot(t2, Realp[,11], main="Estimated real p after a change in AMU", xlab="time (
 
 capture.output(apply(Newp, 2, linfun, t2), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 #zoom
 
@@ -415,7 +415,7 @@ plot(time_zoom, realp_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="rea
 
 capture.output(apply(realp_zoom, 2, linfun, time_zoom), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 
@@ -432,7 +432,7 @@ plot(t2, NewS_to_Iw[,11], main="Flow : infection of susceptibles \n after a chan
 
 capture.output(apply(NewS_to_Iw, 2, linfun, t2), file='NUL')
 
-legend("bottomleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("bottomleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 #zoom
 
@@ -440,7 +440,7 @@ plot(time_zoom, S_to_Iw_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="S
 
 capture.output(apply(S_to_Iw_zoom, 2, linfun, time_zoom), file='NUL')
 
-legend("bottomleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("bottomleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 
@@ -459,7 +459,7 @@ plot(t2, NewS_to_Iz[,11], main="Flow : infection of susceptibles \n after a chan
 
 capture.output(apply(NewS_to_Iz, 2, linfun, t2), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 #zoom
 
@@ -467,7 +467,7 @@ plot(time_zoom, S_to_Iz_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="S
 
 capture.output(apply(S_to_Iz_zoom, 2, linfun, time_zoom), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 
@@ -487,7 +487,7 @@ plot(t2, NewIz_to_Iw[,11], main="Flow : infection and conversion of \n resistant
 
 capture.output(apply(NewIz_to_Iw, 2, linfun, t2), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 #zoom
 
@@ -495,7 +495,7 @@ plot(time_zoom, Iz_to_Iw_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="
 
 capture.output(apply(Iz_to_Iw_zoom, 2, linfun, time_zoom), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 
@@ -515,7 +515,7 @@ plot(t2, NewIw_to_S[,11], main="Flow : clearance of sensitive \n cases after a c
 
 capture.output(apply(NewIw_to_S, 2, linfun, t2), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 #zoom
 
@@ -523,7 +523,7 @@ plot(time_zoom, Iw_to_S_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="I
 
 capture.output(apply(Iw_to_S_zoom, 2, linfun, time_zoom), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 
@@ -543,7 +543,7 @@ plot(t2, NewIw_to_Iz[,11], main="Flow : gaining resistance in sensitive \n cases
 
 capture.output(apply(NewIw_to_Iz, 2, linfun, t2), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 #zoom
 
@@ -551,7 +551,7 @@ plot(time_zoom, Iw_to_Iz_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="
 
 capture.output(apply(Iw_to_Iz_zoom, 2, linfun, time_zoom), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 
@@ -676,14 +676,14 @@ plot(t2, new_cases[,11], main="Global incidence : dynamics", xlab="time (steps)"
 
 capture.output(apply(new_cases, 2, linfun, t2), file='NUL')
 
-legend("bottomleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("bottomleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 plot(time_zoom, new_cases_zoom[,11], main="Global incidence : zoom", xlab="time (steps)", ylab="Iw+Iz incidence", ylim=c(0.0,0.01), lty=1, lwd=2, type="l")
 
 capture.output(apply(new_cases_zoom, 2, linfun, time_zoom), file='NUL')
 
-legend("bottomleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("bottomleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 ```
 
@@ -698,7 +698,7 @@ plot(time_zoom, Iw_to_Iz_zoom[,11], main="Dynamics Iw to Iz", xlab="time (steps)
 
 capture.output(apply(Iw_to_Iz_zoom, 2, linfun, time_zoom), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 #zoom Iz_to_Iw
 
@@ -706,7 +706,7 @@ plot(time_zoom, Iz_to_Iw_zoom[,11], main="Dynamics Iz to Iw", xlab="time (steps)
 
 capture.output(apply(Iz_to_Iw_zoom, 2, linfun, time_zoom), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 ```
@@ -727,7 +727,7 @@ plot(time_zoom, net_Iw_S[,11], main="Net flow : Iw to S", xlab="time (steps)", y
 
 capture.output(apply(net_Iw_S, 2, linfun, time_zoom), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 #net Iz S flow
 
@@ -736,7 +736,7 @@ plot(time_zoom, net_Iz_S[,11], main="Net flow : S to Iz", xlab="time (steps)", y
 
 capture.output(apply(net_Iz_S, 2, linfun, time_zoom), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 
@@ -747,7 +747,7 @@ plot(time_zoom, net_Iw_Iz[,11], main="Net flow : S to Iz", xlab="time (steps)", 
 
 capture.output(apply(net_Iw_Iz, 2, linfun, time_zoom), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 ```

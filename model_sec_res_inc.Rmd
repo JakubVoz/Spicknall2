@@ -39,7 +39,7 @@ prho <- 0.05 #probability of clinical failure
 #epsilon change over time
 
 peps <- 0.10 #initial value of the ratio of treated patients
-pepsi <- seq(0,0.5,by=0.025) #variation of epsilon
+pepsi <- seq(0,0.3,by=0.01) #variation of epsilon
 
 
 
@@ -115,7 +115,7 @@ break_point=function(x){
   return(out_multi)
 }
 
-pepsi <- seq(0, 0.5, by=0.025)
+pepsi <- seq(0, 0.3, by=0.01)
 
 out <- do.call(cbind, lapply(pepsi,break_point))
 

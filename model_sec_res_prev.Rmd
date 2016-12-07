@@ -37,7 +37,7 @@ prho <- 0.05 #probability of clinical failure
 #epsilon change over time
 
 peps <- 0.10 #initial value of the ratio of treated patients
-pepsi <- seq(0,1,by=0.02) #variation of epsilon
+pepsi <- seq(0,0.2,by=0.01) #variation of epsilon
 peps_inc <- 0.15 #increased value of epsilon for trial
 peps_dec <- 0.05 #decreased value of epsilon for trial
 
@@ -96,7 +96,7 @@ break_point=function(x){
   return(out_multi)
 }
 
-pepsi <- seq(0, 1, by=0.02)
+pepsi <- seq(0, 0.2, by=0.01)
 
 out <- do.call(cbind, lapply(pepsi,break_point))
 
@@ -170,7 +170,7 @@ plot(t, S[,11], main="Evolution of Susceptible population after a variation of  
 capture.output(apply(S, 2, linfun, t), file='NUL')
 
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 t2 <- seq(1, zoom_area, by=m)
 #plotting S derivative with respect to time
@@ -178,7 +178,7 @@ plot(t2, S_der[,11], main="Derivative of Susceptible population after a variatio
 
 capture.output(apply(S_der, 2, linfun, t2), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 S_der_zoom <- S_der[1:(zooming*m+1),]
@@ -189,7 +189,7 @@ plot(t3, S_der_zoom[,11], main="Derivative of Susceptible population after a var
 
 capture.output(apply(S_der_zoom, 2, linfun, t3), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 ```
 
 ```{r plot_prev_Iw, echo=FALSE, fig.align='center', cache=TRUE, warning = FALSE}
@@ -200,14 +200,14 @@ plot(t, Iw[,11], main="Evolution of population infected with sensitive strain af
 capture.output(apply(Iw, 2, linfun, t), file='NUL')
 
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 plot(t2, Iw_der[,11], main="Derivative of population infected with sensitive strain after a variation of  AMU", xlab="time (steps)", ylab="Iw ratio derivative", ylim=c(-0.010,0.010), lty=1, lwd=2, type="l")
 
 capture.output(apply(Iw_der, 2, linfun, t2), file='NUL')
 
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 Iw_der_zoom <- Iw_der[1:(zooming*m+1),]
@@ -218,7 +218,7 @@ plot(t3, Iw_der_zoom[,11], main="Derivative of population infected with sensitiv
 
 capture.output(apply(Iw_der_zoom, 2, linfun, t3), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 ```
 
 ```{r plot_prev_Iz, echo=FALSE, fig.align='center', cache=TRUE, warning = FALSE}
@@ -230,14 +230,14 @@ capture.output(apply(Iz, 2, linfun, t), file='NUL')
 
 
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 plot(t2, Iz_der[,11], main="Derivative of population infected with resistant strain after a variation of  AMU", xlab="time (steps)", ylab="Iz ratio derivative", ylim=c(-0.005,0.005), lty=1, lwd=2, type="l")
 
 capture.output(apply(Iz_der, 2, linfun, t2), file='NUL')
 
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 Iz_der_zoom <- Iz_der[1:(zooming*m+1),]
 
@@ -247,7 +247,7 @@ plot(t3, Iz_der_zoom[,11], main="Derivative of population infected with resistan
 
 capture.output(apply(Iz_der_zoom, 2, linfun, t3), file='NUL')
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 ```
 
@@ -262,7 +262,7 @@ plot(t, Ratio[,11], main="Evolution of p ratio - prevalence", xlab="time (steps)
 capture.output(apply(Ratio, 2, linfun, t), file='NUL')
 
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 epsvar <- pepsi
 
@@ -284,7 +284,7 @@ plot(t, prod_S_Iw[,11], main="Evolution of S*Iw after a change in AMU", xlab="ti
 capture.output(apply(prod_S_Iw, 2, linfun, t), file='NUL')
 
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 ```
@@ -299,7 +299,7 @@ plot(t, prod_S_Iz[,11], main="Evolution of S*Iz after a change in AMU", xlab="ti
 capture.output(apply(prod_S_Iz, 2, linfun, t), file='NUL')
 
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 ```
@@ -314,7 +314,7 @@ plot(t, prod_Iw_Iz[,11], main="Evolution of Iw*Iz after a change in AMU", xlab="
 capture.output(apply(prod_Iw_Iz, 2, linfun, t), file='NUL')
 
 
-legend("topleft" , inset=.05, c("AMU=1.0", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+legend("topleft" , inset=.05, c("AMU=0.20", "AMU=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 ```
