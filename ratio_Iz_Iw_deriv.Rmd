@@ -304,11 +304,11 @@ The steady state values of state variables are the following:
 knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_no_competition_inc_files/figure-html/comp_inc_flows-2.png")
 ```
 
-We observe therefore coexistence of the strains for values of AMU between approximately 0 and 15%. When $I_z$ is fixed, its value is that of $I_w$. The number of cases becomes the same as in pre-antibiotic era. 
+We observe therefore coexistence of the strains for values of AMU between approximately 0 and 15%. When $I_z$ is fixed, it has the same value as $I_z$ prevalence during prebiotic era.
 
 Interestingly, when no ATB is used, resistant strain does not coexist with the sensitive one due to indirect cost linked to co-infections. Although no direct cost of resistance is included in this particular model, when resistant cases are reinfected with sensitive strains, the sensitive strain prevails.
 
-Paradoxically the prevalence is lowest for an AMU of 10% due to indirect competition. The incidence is highest at the same time as the turnover of sensitive cases is highest (we observe a peak of $Iw$ and $S$ mass product). It returns to pre-antibiotic era as $I_z$ becomes fixed.
+Paradoxically the prevalence has the lowest value for an AMU of 10% due to indirect competition. The incidence is highest at the same time as the turnover of sensitive cases is highest (we observe a peak of $I_w$ and $S$ mass product). It returns to pre-antibiotic era as $I_z$ becomes fixed.
 
 ```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_no_competition_inc_files/figure-html/comp_inc_flows-1.png")
@@ -316,15 +316,19 @@ knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/mo
 
 As there is no cost of resistance, the interplay between resistant and sensitive strain will depend solely on $\varepsilon$ and $\rho$. As $\varepsilon$, that corresponds to the proportion of treated patients here, increases, a higher turnover of sensitive cases occurs, while the flow from $I_w$ to $I_z$ increases at the expense of $I_z$ to $I_w$ flow.
 
-Interestingly but not surprisingly, the global flows in our model are inversed in comparison with a model including cost of resistance.
+Interestingly but not surprisingly, the global flows in our model are inversed in comparison with a model including cost of resistance. This is due to the fact that $I_z$ spreads as easily as $I_w$. At the same time, patients infected with $I_w$ do recover more easily than those infected with $I_z$ as $\varepsilon$ increases. Therefore there is a stronger flow from $I_w$ to $S$ than from $I_z$, when the populations are equal.
 
 ```{r, out.width = "200px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/No cost on transmission.png")
 ```
 
-In comparison with the full model, the primary resistance becomes predominant over the secondary one for lower values of AMU, as the resistant bacteria are better transmitted (5% vs 13%). For most diseases, the secondary resistance is estimated to be more prevalent.
+In comparison with the full model, the primary resistance becomes predominant over the secondary one for lower values of AMU, as the resistant bacteria are better transmitted (10% vs 13%). For most diseases, the secondary resistance is estimated to be more prevalent.
 
-In general, when the cost of transmission increases, $i.e.$ the $\beta_z$ decreases while $\beta_z$ remains stable, $I_z$ is fixed and becomes prevalent for higher values of AMU.
+```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_no_competition_inc_files/figure-html/comp_steady_st-1.png")
+```
+
+In general, when the cost of transmission increases, $i.e.$ the $\beta_z$ decreases while $\beta_w$ remains stable, $I_z$ is fixed and becomes prevalent for higher values of AMU.
 
 <center> <h3> Inhibition of secondary resistance </h3> </center>
 
@@ -334,13 +338,13 @@ When only primary resistance is preserved, that is to say $\rho=0$, we observe t
 knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_prim_res_inc_files/figure-html/comp_inc_flows-2.png")
 ```
 
-Although the model was started with an important subpopulation of $I_z$ ($__cca__$ 12%), this subpopulation has vanished at steady state, being systematically converted into $I_w$. The stability of $I_z$ subpopulation is therefore substantially dependant on the secondary resistance in long term.
+Although the model was started with an important subpopulation of $I_z$ (_cca_ 12%), this subpopulation has vanished at steady state, being systematically converted into $I_w$. The stability of $I_z$ subpopulation is therefore substantially dependant on the secondary resistance in long term.
 
 ```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_prim_res_inc_files/figure-html/")
+knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_prim_res_inc_files/figure-html/comp_steady_st-3.png")
 ```
 
-Once the flows between $I_w$ and $I_z$ reach equilibria
+Without secondary resistance, the flows between $I_w$ and $I_z$ reach equilibria when $\beta_w*(1-\varepsilon)=\beta_z*\varepsilon$, that is to say when $\varepsilon=0.73$. The emergence of stable state is therefore rather linked to the upraise of $S$ values due to enhanced treatment.
 
 <center> <h3> Inhibition of primary resistance </h3> </center>
 
@@ -350,9 +354,23 @@ Here, the primary resistance is omitted, $i.e.$ $beta_z=0$ and the resistant str
 knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_sec_res_inc_files/figure-html/comp_inc_flows-2.png")
 ```
 
-Although the transmission of resistant strains is omitted and therefore the pool of resistant cases is fully dependant on treatment failures, the coexistence is observed for AMU < 25%.
+Although the transmission of resistant strains is omitted and therefore the pool of resistant cases is fully dependant on treatment failures, the coexistence is observed for AMU < 25% at steady states. Not surprisingly, the resistant cases vanish at the same time as sensitive ones do.
 
 
+```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_sec_res_inc_files/figure-html/comp_steady_st-3.png")
+```
 
+In comparison with a simple model in which only susceptible population and sensitive strains are present, the incidence is smaller for the same AMU. This is due to the treatment failures : in fact, the $I_z$ will represent here a dead-end for the pathogen that cannot be transmitted.
 
+<center> <h2> Study of inertia </h2> </center>
 
+<center> <h3> Varying the speed of change of AMU </h3> </center>
+
+In this part, we vary rate at which the proportion of patients varies, still considering that the proportion of patients is directly linked to the AMU. At first, we start from AMU=0 and increase its value up to 100%.
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/inertie_study_files/figure-html/prep_plot-1.png")
+```
+
+As the rate of change increases, the $I_z$ ratio is more distant from its steady state value.
