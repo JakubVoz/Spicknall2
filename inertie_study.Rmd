@@ -58,7 +58,7 @@ peps <- 0.0
  
  
  
-```{r stable, include=FALSE}
+```{r stable, include=FALSE, cache=TRUE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
 
 state <- c(S=1-2*prop, Iw=prop, Iz=prop)
@@ -94,7 +94,7 @@ cbind.fill <- function(...){
 ```
 
 
-```{r var_SIS, include=FALSE}
+```{r var_SIS, include=FALSE, cache=TRUE}
 parameters2 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, peps_growth=0)
 
 state2 <- c(S=out_init$S[nrow(out_init)], Iw=out_init$Iw[nrow(out_init)], Iz=out_init$Iz[nrow(out_init)])
@@ -124,7 +124,7 @@ eps_speed_fun <- function(growth_rate) {
 ```
 
 
-```{r var_calc, include=FALSE}
+```{r var_calc, include=FALSE, cache=TRUE}
 
 
 
