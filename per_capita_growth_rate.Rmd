@@ -1,0 +1,245 @@
+---
+title: "per_capita_growth_rate"
+author: "Jakub"
+date: "8 prosince 2016"
+output: html_document
+---
+
+```{r param_def, include=FALSE}
+library(plyr)
+
+#per capita maximum growth rate of sensitive bact
+max_sens_gr <- 1 
+
+#per capita maximum growth rate of resistant bact
+max_res_gr <- 0.8
+max_res_gr2 <- 0.8
+#per capita minimum growth rate of sensitive bact
+min_sens_gr <- -0.2
+
+#per capita minimum growth rate of res bact
+min_res_gr <- -0.2
+min_res_gr2 <- -0.2
+#minimum inhibitory concentration of sen bact
+
+mic_sens <- 0.35
+#minimum inhibitory concentration of res bact
+
+mic_res <- 0.65
+mic_res2 <- 0.5
+#slope for sens bact
+kappa_sens <- 10
+
+#slope for res bact  
+
+kappa_res <- 10
+kappa_res2 <- 10
+
+param_sens <- c(max_sens_gr, min_sens_gr, mic_sens, kappa_sens)
+
+param_res <- c(max_res_gr, min_res_gr, mic_res, kappa_res)
+param_res2 <- c(max_res_gr2, min_res_gr2, mic_res2, kappa_res2)
+
+#mutant emergence probability : we consider that if the amount of applied atb increases, the probability of resistant mutant apparition increases linearly
+max_mu <- 0.13
+min_mu <- 0.08
+max_dot <- 10
+min_dot <- 1
+
+#range of intervention - cl=lowest clinically effective dose, cu maximum tolerable dose (toxicity)
+cl=0.40
+cu=0.70
+n_values=(cu-cl)*100+1
+
+drug_quantities <- seq(cl, cu, length.out = n_values )
+
+AMU = 0.05
+
+prop_treated <- AMU/drug_quantities
+
+
+#selection of corresponding borders in sel_coef vector
+
+lowbound=cu*100+1
+highbound=cl*100+1
+
+
+
+x <- seq(0,1,by=0.01)
+```
+
+
+```{r func_gr_def, include=FALSE}
+
+
+
+growth = function(x, maxv, minv, micv, slopev) {
+  y <- maxv - ((maxv - minv)*(x/micv)^slopev)/((x/micv)^slopev - maxv/minv)
+  return(y)
+}
+
+```
+
+```{r calc_gr, include=FALSE}
+
+
+gr_sens <- lapply(x, growth, max_sens_gr, min_sens_gr, mic_sens, kappa_sens)
+
+gr_res <- lapply(x, growth, max_res_gr, min_res_gr, mic_res, kappa_res)
+
+gr_res2 <- lapply(x, growth, max_res_gr2, min_res_gr2, mic_res2, kappa_res2)
+
+MIC <- sum(gr_sens>0)/length(gr_sens)
+MICres <- sum(gr_res>0)/length(gr_res)
+MICres2 <- sum(gr_res2>0)/length(gr_res2)
+```
+
+
+
+```{r plot_gr, echo=FALSE}
+par(mfrow=c(1,2))
+
+plot(x, gr_sens, main="Sensitive and resistant strain growth rate", xlab="Drug quantity", ylab="Growth rate", ylim=c(-0.2,1), lwd=2, type="l", col='blue')
+
+lines(x, gr_res, type='l', col='red', lwd=2)
+
+lines(x, rep(0, length(x)), type='l', col='black', lwd=1, lty=2)
+abline(v=MIC, col='green')
+
+
+plot(x, gr_sens, main="Sensitive and resistant strain growth rate", xlab="Drug quantity", ylab="Growth rate", ylim=c(-0.2,1), lwd=2, type="l", col='blue')
+
+lines(x, gr_res2, type='l', col='red', lwd=2)
+
+lines(x, rep(0, length(x)), type='l', col='black', lwd=1, lty=2)
+abline(v=MIC, col='green')
+
+```
+
+
+
+```{r selection_coef, echo=FALSE}
+gr_sens <- unlist(gr_sens)
+gr_res <- unlist(gr_res)
+gr_res2 <- unlist(gr_res2)
+
+sel_coef <- gr_res - gr_sens
+sel_coef2 <- gr_res2 - gr_sens
+
+sel_coef[which(sel_coef<0)] <- 0
+sel_coef2[which(sel_coef2<0)] <- 0
+
+
+minSC <- sum(sel_coef==0)/length(sel_coef)
+
+plot(x, sel_coef, main="Selective coefficient evolution : first scenario", xlab="Drug quantity", ylab="Selective coefficient", ylim=c(0,1), lwd=2, type="l", col='black')
+abline(v=cl, col='green', lw=2)
+abline(v=cu, col='green', lw=2)
+
+plot(x, sel_coef2, main="Selective coefficient evolution : second scenario", xlab="Drug quantity", ylab="Selective coefficient", ylim=c(0,1), lwd=2, type="l", col='black')
+abline(v=cl, col='green', lw=2)
+abline(v=cu, col='green', lw=2)
+```
+
+```{r mutation_curve, echo=FALSE}
+mu_prob <- seq(min_mu, max_mu, length.out = n_values)
+doses <- seq(cl, cu, length.out = n_values)
+
+plot(doses, mu_prob, main="Probability of resistant mutant apparition", xlab="Drug quantity", ylab="mu", ylim=c(0,0.15), lwd=2, type="l", col='black')
+
+```
+```{r rho, echo=FALSE}
+sel_sel_coef <- sel_coef[lowbound:highbound]
+sel_sel_coef2 <- sel_coef2[lowbound:highbound]
+
+rho1 <- sel_sel_coef*mu_prob
+rho2 <- sel_sel_coef2*mu_prob
+
+plot(doses, rho1, main="Treatment failure rate", xlab="Drug quantity", ylab="rho", lwd=2, type="l", col='black', ylim=c(0, 0.10))
+
+lines(doses, rho2, type='l', col='red', lwd=2)
+
+```
+
+```{r treated_pat, echo=FALSE}
+
+plot(doses, prop_treated, main="Proportion of treated patients", xlab="Drug quantity", ylab="eps", ylim=c(0,0.15), lwd=2, type="l", col='black')
+
+```
+
+```{r treatment_fail, echo=FALSE}
+treat_fail <- rho1*prop_treated
+treat_fail2 <- rho2*prop_treated
+
+plot(doses, treat_fail, main="Treatment failure", xlab="Drug quantity", ylab="rho", lwd=2, type="l", col='black', ylim=c(0, 0.01))
+
+lines(doses, treat_fail2, type='l', col='red', lwd=2)
+
+```
+
+```{r model_param, echo=FALSE}
+
+library(deSolve)
+
+
+options("scipen" = 10)
+
+# initial state:
+N <- 1
+prop <- 0.01 #initial value of Iw and Iz
+
+# time:
+a <- 2000 #time span
+m <- 1 #time step
+
+# parameters
+pbeta_w <- 0.04 #transmission parameter of Iw
+pbeta_z <- 0.015 #transmission parameter of Iz
+
+pgammaa <- 0.01 #innate recovery rate
+pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
+
+
+
+```
+
+```{r model_def, echo=FALSE}
+
+varying_par <- cbind(prop_treated, rho1)
+
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=0, rho=0)
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+
+times=seq(0, a, by=m)
+
+SIS=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
+        
+        list(c(dS, dIw, dIz))
+       })
+}
+
+calc_fun = function(x) {
+  parameters[5] <- x[1]
+  parameters[6] <- x[2]
+  out=as.data.frame(
+  ode(y=state, times=times, func=SIS, parms=parameters))
+  return(out)
+}
+
+out <- do.call(cbind, apply(varying_par, 1 , calc_fun))
+
+
+```
+
+```{r calc, echo=FALSE}
+
+
+
+
+
+```
