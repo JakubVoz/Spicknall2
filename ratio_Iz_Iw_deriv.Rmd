@@ -344,7 +344,7 @@ Although the model was started with an important subpopulation of $I_z$ (_cca_ 1
 knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_prim_res_inc_files/figure-html/comp_steady_st-3.png")
 ```
 
-Without secondary resistance, the flows between $I_w$ and $I_z$ reach equilibria when $\beta_w*(1-\varepsilon)=\beta_z*\varepsilon$, that is to say when $\varepsilon=0.73$. The emergence of stable state is therefore rather linked to the upraise of $S$ values due to enhanced treatment.
+Without secondary resistance, the flows between $I_w$ and $I_z$ reach equilibria when $\beta_w*(1-\varepsilon)=\beta_z*\varepsilon$, that is to say when $\varepsilon=0.73$. The emergence of stable state is therefore rather linked to the upraise of $S$ values due to enhanced treatment than to the inversion of flows between $I_z$ and $I_w$.
 
 <center> <h3> Inhibition of primary resistance </h3> </center>
 
@@ -374,3 +374,4 @@ knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/in
 ```
 
 As the rate of change increases, the $I_z$ ratio is more distant from its steady state value.
+
