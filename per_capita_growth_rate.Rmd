@@ -171,7 +171,7 @@ plot(doses, prop_treated, main="Proportion of treated patients", xlab="Drug quan
 treat_fail <- rho1*prop_treated
 treat_fail2 <- rho2*prop_treated
 
-plot(doses, treat_fail, main="Treatment failure", xlab="Drug quantity", ylab="rho", lwd=2, type="l", col='black', ylim=c(0, 0.01))
+plot(doses, treat_fail, main="Treatment failure", xlab="Drug quantity", ylab="rho*eps", lwd=2, type="l", col='black', ylim=c(0, 0.01))
 
 lines(doses, treat_fail2, type='l', col='red', lwd=2)
 
@@ -189,7 +189,7 @@ N <- 1
 prop <- 0.01 #initial value of Iw and Iz
 
 # time:
-a <- 2000 #time span
+a <- 4000 #time span
 m <- 1 #time step
 
 # parameters
@@ -206,6 +206,8 @@ pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
 ```{r model_def, echo=FALSE}
 
 varying_par <- cbind(prop_treated, rho1)
+varying_par2 <- cbind(prop_treated, rho2)
+
 
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=0, rho=0)
 
@@ -231,15 +233,57 @@ calc_fun = function(x) {
   return(out)
 }
 
-out <- do.call(cbind, apply(varying_par, 1 , calc_fun))
 
 
 ```
 
 ```{r calc, echo=FALSE}
 
+out <- do.call(cbind, apply(varying_par, 1 , calc_fun))
+
+out2 <- do.call(cbind, apply(varying_par2, 1 , calc_fun))
+
+```
 
 
 
+```{r splitting_cols, echo=FALSE}
+
+niz <- seq(4, ncol(out), by=4)
+niw <- seq(3, ncol(out), by=4)
+
+iz_steady <- out[nrow(out),niz]
+iz_steady2 <- out2[nrow(out),niz]
+
+iw_steady <- out[nrow(out),niw]
+iw_steady2 <- out2[nrow(out),niw]
+
+p <- iz_steady/(iz_steady+iw_steady)
+p2 <- iz_steady2/(iz_steady2+iw_steady2)
+
+```
+
+
+```{r plot_ss_iz, echo=FALSE}
+plot(doses, iz_steady, main="Resistant cases at steady states \n while varying c*t", xlab="Drug quantity", ylab="Iz", ylim=c(0,0.30), lwd=2, type="l", col='black')
+
+lines(doses, iz_steady2, type='l', col='red', lwd=2)
+
+
+plot(prop_treated, iz_steady, main="Resistant cases at steady states \n while varying epsilon", xlab="proportion of treated", ylab="Iz", ylim=c(0,0.30), lwd=2, type="l", col='black')
+
+lines(prop_treated, iz_steady2, type='l', col='red', lwd=2)
+
+```
+
+```{r plot_ss_p, echo=FALSE}
+plot(doses, p, main="P while varying c*t", xlab="Drug quantity", ylab="p", ylim=c(0,1), lwd=2, type="l", col='black')
+
+lines(doses, p2, type='l', col='red', lwd=2)
+
+
+plot(prop_treated, p, main="P while varying epsilon", xlab="proportion of treated", ylab="p", ylim=c(0,1), lwd=2, type="l", col='black')
+
+lines(prop_treated, p2, type='l', col='red', lwd=2)
 
 ```
