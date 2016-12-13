@@ -1,0 +1,135 @@
+---
+title: "inertie_study_time_to_equilibrium2"
+author: "Jakub"
+date: "13 prosince 2016"
+output: html_document
+---
+
+
+
+```{r include=FALSE}
+library(deSolve)
+
+
+options("scipen" = 10)
+
+# initial state:
+N <- 1
+prop <- 0.01 #initial value of Iw and Iz
+
+# time:
+a <- 200000 #time span
+m <- 1 #time step
+
+
+
+# parameters
+pbeta_w <- 0.04 #transmission parameter of Iw
+pbeta_z <- 0.015 #transmission parameter of Iz
+
+pgammaa <- 0.01 #innate recovery rate
+pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
+
+
+prho <- 0.05 #probability of clinical failure
+
+#epsilon change over time
+
+
+delta_eps <- 0.01
+
+mineps <- 0.00
+maxeps <- 0.17
+
+peps <- seq(mineps+delta_eps, maxeps-delta_eps,  by=delta_eps)
+
+conv_crit <- 0.0001
+
+```
+
+
+```{r initial_ss, include=FALSE, cache=TRUE}
+
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=mineps, rho=prho)
+
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+
+times=seq(0, a, by=m)
+
+SIS=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       { 
+         dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
+        
+        
+        list(c(dS, dIw, dIz))
+       })
+}
+
+
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=maxeps, rho=prho)
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+
+times <- seq(0, a, by=m)
+
+
+
+root_main=function(times, state, parameters){
+  dstate <- unlist(SIS(times, state, parameters))
+  sum(abs(dstate)) - conv_crit
+  }
+
+exploit_param_eps=function(x) {
+  parameters[5] <- x
+  out <- lsodar(func=SIS, y=state, parms=parameters, times=times, rootfunc=root_main)
+  return(tail(out, n=1))
+  }
+
+out_min <- exploit_param_eps(mineps)
+
+out_max <- exploit_param_eps(maxeps)
+
+```
+
+```{r variation, include=FALSE, cache=TRUE}
+
+state[1] <- out_min[2]
+state[2] <- out_min[3]
+state[3] <- out_min[4]
+
+out_min_up <- do.call(rbind, lapply(peps, exploit_param_eps))
+
+state[1] <- out_max[2]
+state[2] <- out_max[3]
+state[3] <- out_max[4]
+
+out_max_down <- do.call(rbind, lapply(peps, exploit_param_eps))
+
+```
+
+```{r prep_plot, include=FALSE, cache=TRUE}
+
+time_up <- c(unlist(out_min_up[,1]))
+
+time_down <- c(unlist(out_max_down[,1]))
+
+diff_down_up <- time_down-time_up
+
+```
+
+```{r plotting, echo=FALSE, cache=TRUE}
+plot(peps, time_up, main="Inertia : difference between increasing \n and decreasing epsilon", xlab="proportion of treated patients", ylab="delta t", lwd=2, col='red', type='l', xlim=c(0,0.17))
+lines(peps, time_down, lwd=2, col='blue', type='l')
+
+
+legend("topleft" , inset=.05, c("initial eps=0.00", "initial eps=0.17"), lwd=c(2,2), col=c('red', 'blue'))
+
+
+plot(peps, diff_down_up, main="Inertia : difference between increasing \n and decreasing epsilon", xlab="proportion of treated patients", ylab="delta t", lwd=2, col='green', type='l', xlim=c(0,0.17))
+abline(h=0, col='black')
+```
+
