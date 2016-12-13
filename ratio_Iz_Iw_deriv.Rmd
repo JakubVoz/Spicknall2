@@ -363,6 +363,11 @@ knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/mo
 
 In comparison with a simple model in which only susceptible population and sensitive strains are present, the incidence is smaller for the same AMU. This is due to the treatment failures : in fact, the $I_z$ will represent here a dead-end for the pathogen that cannot be transmitted.
 
+
+<center> <h2> Study of hysteresis </h2> </center>
+
+The study of hysteresis allows to know whether the same stable states can be reached while increasing proportion of treated patients from a low state ($\varepsilon=0.00$) or decreasing it from a high state ($\varepsilon=0.20$)
+
 <center> <h2> Study of inertia </h2> </center>
 
 <center> <h3> Varying the speed of change of AMU </h3> </center>
