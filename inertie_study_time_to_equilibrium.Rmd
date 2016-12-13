@@ -39,7 +39,8 @@ peps <- 0 #initial value of the ratio of treated patients
 delta_eps <- 0.01
 pepsi <- seq(0,0.2,by=delta_eps) #variation of epsilon
 
-
+pepsi_1 <- pepsi
+delta_eps1 <- delta_eps
 
 conv_crit <- 0.000001
 
@@ -103,7 +104,7 @@ lines(pepsi, steady_S_eps, lty=1, lwd=2, type='l', col='red')
 lines(pepsi, steady_p_eps, lty=1, lwd=2, type='l', col='black')
 
 
-legend("bottomleft" , inset=.05, c("S", "Iz", "Iw", "p"), lty=c(1,2,3,1), lwd=c(2,2,2,2), col=c(rep('red',3), 'black'))
+legend("topleft" , inset=.05, c("S", "Iz", "Iw", "p"), lty=c(1,2,3,1), lwd=c(2,2,2,2), col=c(rep('red',3), 'black'))
 ```
 
 
@@ -115,7 +116,7 @@ change_up_ss <- matrix(c(unlist(table_ss[1:(nrow(table_ss)-2),]), seq(delta_eps,
 change_down_ss <- matrix(c(unlist(table_ss[3:(nrow(table_ss)),]), seq(delta_eps, 0.20-delta_eps, by=delta_eps)), ncol=4)
 ```
 
-```{r time_to_stabilization, echo=FALSE}
+```{r time_to_stabilization, echo=FALSE, cache=TRUE}
 #somehow doesn't work, I cannot subset in apply...
 
 
@@ -178,10 +179,14 @@ time_down <- out_down[2:nrow(out_down),1]
 
 pepsi_change <- seq(delta_eps, (0.20-delta_eps), by=delta_eps)
 
-plot(pepsi_change, time_up, main="Inertia", xlab="proportion of treated patients", ylab="time to stabilization", lwd=2, col='red', type='l')
+plot(pepsi_change, time_up, main="Inertia - delta epsilon = 0.01", xlab="proportion of treated patients", ylab="time to stabilization", lwd=2, col='red', type='l', xlim=c(0,0.20))
 lines(pepsi_change, time_down, lwd=2, col='blue', type='l')
 
-legend("bottomleft" , inset=.05, c("Increasing eps", "Decreasing eps"), lwd=c(2,2), col=c('red', 'blue'))
+legend("topleft" , inset=.05, c("Increasing eps", "Decreasing eps"), lwd=c(2,2), col=c('red', 'blue'))
+
+time_up1 <- time_up
+
+time_down1 <- time_down
 ```
 
 
@@ -223,6 +228,9 @@ peps <- 0 #initial value of the ratio of treated patients
 delta_eps <- 0.001
 pepsi <- seq(0,0.2,by=delta_eps) #variation of epsilon
 
+
+pepsi2 <- pepsi
+delta_eps2 <- delta_eps
 
 
 conv_crit <- 0.000001
@@ -287,7 +295,7 @@ lines(pepsi, steady_S_eps, lty=1, lwd=2, type='l', col='red')
 lines(pepsi, steady_p_eps, lty=1, lwd=2, type='l', col='black')
 
 
-legend("bottomleft" , inset=.05, c("S", "Iz", "Iw", "p"), lty=c(1,2,3,1), lwd=c(2,2,2,2), col=c(rep('red',3), 'black'))
+legend("topleft" , inset=.05, c("S", "Iz", "Iw", "p"), lty=c(1,2,3,1), lwd=c(2,2,2,2), col=c(rep('red',3), 'black'))
 ```
 
 
@@ -299,7 +307,7 @@ change_up_ss <- matrix(c(unlist(table_ss[1:(nrow(table_ss)-2),]), seq(delta_eps,
 change_down_ss <- matrix(c(unlist(table_ss[3:(nrow(table_ss)),]), seq(delta_eps, 0.20-delta_eps, by=delta_eps)), ncol=4)
 ```
 
-```{r time_to_stabilization2, echo=FALSE}
+```{r time_to_stabilization2, echo=FALSE, cache=TRUE}
 #somehow doesn't work, I cannot subset in apply...
 
 
@@ -362,9 +370,36 @@ time_down <- out_down[2:nrow(out_down),1]
 
 pepsi_change <- seq(delta_eps, (0.20-delta_eps), by=delta_eps)
 
-plot(pepsi_change, time_up, main="Inertia", xlab="proportion of treated patients", ylab="time to stabilization", lwd=2, col='red', type='l')
+plot(pepsi_change, time_up, main="Inertia", xlab="proportion of treated patients", ylab="time to stabilization", lwd=2, col='red', type='l', xlim=c(0,0.20))
 lines(pepsi_change, time_down, lwd=2, col='blue', type='l')
 
-legend("bottomleft" , inset=.05, c("Increasing eps", "Decreasing eps"), lwd=c(2,2), col=c('red', 'blue'))
+legend("topleft" , inset=.05, c("Increasing eps", "Decreasing eps"), lwd=c(2,2), col=c('red', 'blue'))
+
+time_up2 <- time_up
+time_down2 <- time_down
+
+
 ```
 
+
+
+```{r plot_dif, echo=FALSE}
+
+
+
+diff_1 <- time_down1 - time_up1
+diff_1 <- diff_1[1:17]
+epsx1 <- seq(0.01, 0.17, by=0.01)
+
+
+diff_2 <- time_down2 - time_up2
+diff_2 <- diff_2[1:170]
+epsx2 <- seq(0.001, 0.17, by=0.001)
+
+
+plot(epsx1, diff_1, main="Inertia : difference between increasing \n and decreasing epsilon", xlab="proportion of treated patients", ylab="delta t", lwd=2, col='red', type='l', xlim=c(0,0.17))
+lines(epsx2, diff_2, lwd=2, col='blue', type='l')
+abline(h=0, col='black')
+
+legend("topleft" , inset=.05, c("delta eps=0.01", "delta eps=0.001"), lwd=c(2,2), col=c('red', 'blue'))
+```
