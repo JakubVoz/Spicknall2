@@ -1,0 +1,314 @@
+---
+title: "hysteresis"
+author: "Jakub"
+date: "12 prosince 2016"
+output: html_document
+---
+
+
+```{r include=FALSE}
+library(deSolve)
+
+
+options("scipen" = 10)
+
+# initial state:
+N <- 1
+prop <- 0.01 #initial value of Iw and Iz
+
+# time:
+a <- 20000 #time span
+m <- 1 #time step
+
+zoom <- 1 #after breakpoint 1/zoom step
+zoom_area <- 200000 #time span after breakpoint
+
+
+# parameters
+pbeta_w <- 0.04 #transmission parameter of Iw
+pbeta_z <- 0.015 #transmission parameter of Iz
+
+pgammaa <- 0.01 #innate recovery rate
+pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
+
+
+prho <- 0.05 #probability of clinical failure
+
+#epsilon change over time
+
+peps <- 0 #initial value of the ratio of treated patients
+pepsi <- seq(0,0.2,by=0.01) #variation of epsilon
+
+
+
+
+```
+
+```{r stable, include=FALSE, cache=TRUE}
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+
+times=seq(0, a, by=m)
+
+SIS=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       { 
+         dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
+        
+        
+        list(c(dS, dIw, dIz))
+       })
+}
+#initial value 1 : steady state with eps=0
+out_init=as.data.frame(
+  ode(y=state, times=times, func=SIS, parms=parameters)
+)
+
+
+
+
+#initial value 2 : steady state with eps=1
+
+parameters2 <- parameters
+parameters2[5] <- 0.20
+
+out_init2=as.data.frame(
+  ode(y=state, times=times, func=SIS, parms=parameters2)
+)
+
+
+```
+
+
+```{r multiple_var, include=FALSE, cache=TRUE}
+
+
+parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
+
+
+times3=seq(a, a+zoom_area, by=m/zoom)
+
+state3 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Iz=out_init$Iz[a+1])
+
+break_point=function(x){
+  parameters3[5] <-x
+  out_multi=as.data.frame(
+  ode(y=state3, times=times3, func=SIS, parms=parameters3))
+  return(out_multi)
+}
+#end values 1 : steady states with eps=0-0.20, while starting with a steady state of eps=0
+
+pepsi <- seq(0, 0.2, by=0.01)
+
+out <- do.call(cbind, lapply(pepsi,break_point))
+
+state4 <- c(S=out_init2$S[a+1], Iw=out_init2$Iw[a+1], Iz=out_init2$Iz[a+1])
+
+#end values 2 : steady states with eps=0-0.20, while starting with a steady state of eps=0.20
+break_point2=function(x){
+  parameters3[5] <-x
+  out_multi=as.data.frame(
+  ode(y=state4, times=times3, func=SIS, parms=parameters3))
+  return(out_multi)
+}
+
+out2 <- do.call(cbind, lapply(pepsi,break_point2))
+
+
+```
+
+```{r incid_prep_plot, echo=FALSE, fig.align='center', cache=TRUE}
+#plotting incidence
+
+#selecting numbers of columns in the out for twenty values of eps after intervention
+niz <- seq(4,ncol(out), by=4)
+niw <- seq(3,ncol(out), by=4)
+
+
+
+#selecting columns for each incidence type
+numIz <- out[,niz]
+numIw <- out[,niw]
+Prevp <- numIz/(numIz+numIw)
+numS <- 1 - numIz - numIw
+
+
+numIz2 <- out2[,niz]
+numIw2 <- out2[,niw]
+Prevp2 <- numIz2/(numIz2+numIw2)
+numS2 <- 1 - numIz2 - numIw2
+
+#calculating incidence
+#NewIz <- apply(NewIz, 2, incid, zoom)
+#NewIw <- apply(NewIw, 2, incid, zoom)
+
+#steady-states
+ssIz <- numIz[nrow(numIz),]
+ssIw <- numIw[nrow(numIw),]
+ssp <- Prevp[nrow(Prevp),]
+ssS <- numS[nrow(numS),]
+
+
+ssIz2 <- numIz2[nrow(numIz2),]
+ssIw2 <- numIw2[nrow(numIw2),]
+ssp2 <- Prevp2[nrow(Prevp2),]
+ssS2 <- numS2[nrow(numS2),]
+
+#timespan of testing
+#t2 <- seq(1, zoom_area)
+
+#adding lines to a plot
+linfun <- function(x, t){
+  lines(t, unlist(x), lty=1, lwd=2, col=colforcol[as.numeric(parent.frame()$i)])
+}
+
+```
+
+```{r incid_plot_Iw, echo=FALSE, fig.align='center', cache=TRUE}
+
+par(mfrow=c(1,2))
+
+#starting: eps=0 steady  state
+
+plot(pepsi, ssIz, main="Starting with a steady state \n corresponding to eps=0", xlab="AMU", ylab="proportion", ylim=c(0,1), lty=2, lwd=2, type="l", col='blue')
+lines(pepsi, ssIw, lty=3, lwd=2, type='l', col='blue')
+lines(pepsi, ssS, lty=1, lwd=2, type='l', col='blue')
+lines(pepsi, ssp, lty=1, lwd=2, type='l', col='black')
+
+legend("bottomleft" , inset=.05, c("S", "Iz", "Iw", "p"), lty=c(1,2,3,1), lwd=c(2,2,2,2), col=c(rep('blue',3), 'black'))
+
+
+#starting: eps=0.20 steady  state
+
+plot(pepsi, ssIz2, main="Starting with a steady state \n corresponding to eps=0.20", xlab="AMU", ylab="proportion", ylim=c(0,1), lty=2, lwd=2, type="l", col='red')
+lines(pepsi, ssIw2, lty=3, lwd=2, type='l', col='red')
+lines(pepsi, ssS2, lty=1, lwd=2, type='l', col='red')
+lines(pepsi, ssp2, lty=1, lwd=2, type='l', col='black')
+
+
+legend("bottomleft" , inset=.05, c("S", "Iz", "Iw", "p"), lty=c(1,2,3,1), lwd=c(2,2,2,2), col=c(rep('red',3), 'black'))
+```
+
+
+
+```{r multiple_var_shorter_t, include=FALSE, cache=TRUE}
+zoom_area <- 20000 #time span after breakpoint
+
+parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
+
+
+times3=seq(a, a+zoom_area, by=m/zoom)
+
+state3 <- c(S=out_init$S[a+1], Iw=out_init$Iw[a+1], Iz=out_init$Iz[a+1])
+
+break_point=function(x){
+  parameters3[5] <-x
+  out_multi=as.data.frame(
+  ode(y=state3, times=times3, func=SIS, parms=parameters3))
+  return(out_multi)
+}
+#end values 1 : steady states with eps=0-0.20, while starting with a steady state of eps=0
+
+pepsi <- seq(0, 0.2, by=0.01)
+
+out <- do.call(cbind, lapply(pepsi,break_point))
+
+
+#end values 2 : steady states with eps=0-0.20, while starting with a steady state of eps=0.20
+
+state4 <- c(S=out_init2$S[a+1], Iw=out_init2$Iw[a+1], Iz=out_init2$Iz[a+1])
+
+break_point2=function(x){
+  parameters3[5] <-x
+  out_multi=as.data.frame(
+  ode(y=state4, times=times3, func=SIS, parms=parameters3))
+  return(out_multi)
+}
+
+out2 <- do.call(cbind, lapply(pepsi,break_point2))
+
+
+```
+
+```{r incid_prep_plot_shorter_t, echo=FALSE, fig.align='center', cache=TRUE}
+#plotting incidence
+
+#selecting numbers of columns in the out for twenty values of eps after intervention
+niz <- seq(4,ncol(out), by=4)
+niw <- seq(3,ncol(out), by=4)
+
+
+
+#selecting columns for each incidence type
+numIz <- out[,niz]
+numIw <- out[,niw]
+Prevp <- numIz/(numIz+numIw)
+numS <- 1 - numIz - numIw
+
+
+numIz2 <- out2[,niz]
+numIw2 <- out2[,niw]
+Prevp2 <- numIz2/(numIz2+numIw2)
+numS2 <- 1 - numIz2 - numIw2
+
+#calculating incidence
+#NewIz <- apply(NewIz, 2, incid, zoom)
+#NewIw <- apply(NewIw, 2, incid, zoom)
+
+#steady-states
+ssIz <- numIz[nrow(numIz),]
+ssIw <- numIw[nrow(numIw),]
+ssp <- Prevp[nrow(Prevp),]
+ssS <- numS[nrow(numS),]
+
+
+ssIz2 <- numIz2[nrow(numIz2),]
+ssIw2 <- numIw2[nrow(numIw2),]
+ssp2 <- Prevp2[nrow(Prevp2),]
+ssS2 <- numS2[nrow(numS2),]
+
+#timespan of testing
+#t2 <- seq(1, zoom_area)
+
+#adding lines to a plot
+linfun <- function(x, t){
+  lines(t, unlist(x), lty=1, lwd=2, col=colforcol[as.numeric(parent.frame()$i)])
+}
+
+```
+
+```{r incid_plot_Iw_shorter_t, echo=FALSE, fig.align='center', cache=TRUE}
+
+par(mfrow=c(1,2))
+
+#starting: eps=0 steady  state
+
+plot(pepsi, ssIz, main="Starting with a steady state \n corresponding to eps=0", xlab="AMU", ylab="proportion", ylim=c(0,1), lty=2, lwd=2, type="l", col='blue')
+lines(pepsi, ssIw, lty=3, lwd=2, type='l', col='blue')
+lines(pepsi, ssS, lty=1, lwd=2, type='l', col='blue')
+lines(pepsi, ssp, lty=1, lwd=2, type='l', col='black')
+
+legend("bottomleft" , inset=.05, c("S", "Iz", "Iw", "p"), lty=c(1,2,3,1), lwd=c(2,2,2,2), col=c(rep('blue',3), 'black'))
+
+
+#starting: eps=0.20 steady  state
+
+plot(pepsi, ssIz2, main="Starting with a steady state \n corresponding to eps=0.20", xlab="AMU", ylab="proportion", ylim=c(0,1), lty=2, lwd=2, type="l", col='red')
+lines(pepsi, ssIw2, lty=3, lwd=2, type='l', col='red')
+lines(pepsi, ssS2, lty=1, lwd=2, type='l', col='red')
+lines(pepsi, ssp2, lty=1, lwd=2, type='l', col='black')
+
+
+legend("bottomleft" , inset=.05, c("S", "Iz", "Iw", "p"), lty=c(1,2,3,1), lwd=c(2,2,2,2), col=c(rep('red',3), 'black'))
+```
+
+
+
+
+
+
+
+
