@@ -378,5 +378,39 @@ In this part, we vary rate at which the proportion of patients varies, still con
 knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/inertie_study_files/figure-html/prep_plot-1.png")
 ```
 
-As the rate of change increases, the $I_z$ ratio is more distant from its steady state value.
+As the rate of change increases, the proportion of $I_z$ is more distant from its steady state value. The rate of change of $\varepsilon$ can thus have a severe impact on the detected resistance level. Presuming that all hospitals are in equilibrium can be therefore too rough simplification.
+
+<center> <h3> Time to reach equilibrium while increasing or decreasing $\varepsilon$ </h3> </center>
+
+The idea is to compare the number of steps that are required for reaching a steady state while either increasing or decreasing the value of $\varepsilon$.
+
+The model starts at a steady state for a given value of $\varepsilon$. Then the $\varepsilon$ is increased or decreased by certain $\delta$ and the time required for reaching equilibrium (TRE), represented by a value of convergience criterion (here $c$=0.000001). The output is the following comparison of TREs for each final value of $\varepsilon$:
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("C:/Users/Jakub/Desktop/Spicknall_partial_models_data/inertie_study_time_to_equilibrium_files_crit_0.000001/figure-html/time_to_stabilization_plot-1.png")
+```
+
+For higher values of $\varepsilon$, when the proportion of treated patients is decreased, it takes longer time to reach the steady state. There are too phenomena responsible for the observed time lapse.
+
+As the $\varepsilon$ comes closer to the value of 0.18, the time to reach equilibrium while decreasing its value becomes theoretically infinity. This is due to the fact that there is no possible return from a stable state where $I_w$ reaches zero (for the sake of simplification our model does not take into account revertants).
+
+For smaller values of epsilon, there still exists a time lapse. The point of no return, observed in our model, cannot be responsible for this finding. Let us focus on the interval of epsilon where it does not intervene.
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("C:/Users/Jakub/Desktop/Spicknall_partial_models_data/inertie_study_time_to_equilibrium_files_crit_0.000001/figure-html/plot_dif-1.png")
+```
+
+Here, the plot represents the time lapse between reaching equilibrium while decreasing and increasing $\varepsilon$, either with a large or small $\delta$ (0.01 and 0.001). For each value of $\delta$, the time lapse is strictly positive and increases with the final value of $\varepsilon$. Therefore, in general the steady state is reached with a bigger delay while the proportion of treated patients is decreased than when it is increased by the same value.
+
+There is another possibility how to present this phenomena. In the following experiment, the steady states are reached for $\varepsilon$=0.00 and $\varepsilon$=0.17. Then it changes to a value between 0.01 and 0.16 and the time to reach the equilibrium is calculated as well as the difference of the times for given initial $\varepsilon$. Here, the convergence criterion is 0.0001.
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("C:/Users/Jakub/Desktop/Spicknall_partial_models_data/inertie_study_time_to_equilibrium2_files_c_0.0001/figure-html/plotting-1.png")
+```
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("C:/Users/Jakub/Desktop/Spicknall_partial_models_data/inertie_study_time_to_equilibrium2_files_c_0.0001/figure-html/plotting-2.png")
+```
+
+Once again, when the $\varepsilon$ value is decreased, the steady state is reached with a delay for most of its final values.
 
