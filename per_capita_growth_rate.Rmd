@@ -66,6 +66,7 @@ highbound=cl*100+1
 
 
 x <- seq(0,1,by=0.01)
+zoom <- 1
 ```
 
 
@@ -211,7 +212,7 @@ varying_par2 <- cbind(prop_treated, rho2)
 
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=0, rho=0)
 
-state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+state <- c(S=1-2*prop, Iw=prop, Iz=prop, new_Iz=0, new_Iw=0)
 
 times=seq(0, a, by=m)
 
@@ -220,8 +221,9 @@ SIS=function(times, state, parameters){
        {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
         dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
         dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
-        
-        list(c(dS, dIw, dIz))
+        dnewIw = beta_w*Iw*S
+        dnewIz = beta_z*Iz*S
+        list(c(dS, dIw, dIz, dnewIw, dnewIz))
        })
 }
 
@@ -249,8 +251,10 @@ out2 <- do.call(cbind, apply(varying_par2, 1 , calc_fun))
 
 ```{r splitting_cols, echo=FALSE}
 
-niz <- seq(4, ncol(out), by=4)
-niw <- seq(3, ncol(out), by=4)
+niz <- seq(4, ncol(out), by=6)
+niw <- seq(3, ncol(out), by=6)
+inciw <- seq(5, ncol(out), by=6)
+inciz <- seq(6, ncol(out), by=6)
 
 iz_steady <- out[nrow(out),niz]
 iz_steady2 <- out2[nrow(out),niz]
@@ -258,9 +262,40 @@ iz_steady2 <- out2[nrow(out),niz]
 iw_steady <- out[nrow(out),niw]
 iw_steady2 <- out2[nrow(out),niw]
 
+inciw_steady <- out[,inciw]
+inciw_steady2 <- out2[,inciw]
+
+inciz_steady <- out[,inciz]
+inciz_steady2 <- out2[,inciz]
+
 p <- iz_steady/(iz_steady+iw_steady)
 p2 <- iz_steady2/(iz_steady2+iw_steady2)
 
+burden <- iz_steady+iw_steady
+burden2 <- iz_steady2+iw_steady2
+
+```
+
+```{r incid_ss, echo=FALSE}
+incid = function(x, zoom) {
+  der <- rep(0, length(x))
+  for (i in 2:length(x)) {
+    der[i] <- x[i]-x[i-1]
+  }
+  return(der)
+}
+
+NewIz <- apply(inciz_steady, 2, incid, zoom)
+NewIz2 <- apply(inciz_steady2, 2, incid, zoom)
+
+NewIw <- apply(inciw_steady, 2, incid, zoom)
+NewIw2 <- apply(inciw_steady2, 2, incid, zoom)
+
+newiz_ss <- NewIz[nrow(NewIz),]
+newiz_ss2 <- NewIz2[nrow(NewIz2),]
+
+newiw_ss <- NewIw[nrow(NewIw),]
+newiw_ss2 <- NewIw2[nrow(NewIw2),]
 ```
 
 
@@ -285,5 +320,33 @@ lines(doses, p2, type='l', col='red', lwd=2)
 plot(prop_treated, p, main="P while varying epsilon", xlab="proportion of treated", ylab="p", ylim=c(0,1), lwd=2, type="l", col='black')
 
 lines(prop_treated, p2, type='l', col='red', lwd=2)
+
+```
+```{r plot_ss_burden, echo=FALSE}
+plot(doses, burden, main="Burden while varying c*t", xlab="Drug quantity", ylab="burden", ylim=c(0,1), lwd=2, type="l", col='black')
+
+lines(doses, burden2, type='l', col='red', lwd=2)
+
+
+plot(prop_treated, burden, main="Burden while varying epsilon", xlab="proportion of treated", ylab="Burden", ylim=c(0,1), lwd=2, type="l", col='black')
+
+lines(prop_treated, burden2, type='l', col='red', lwd=2)
+
+```
+
+
+```{r plot_ss_incid, echo=FALSE}
+newcase <- newiw_ss+newiz_ss
+newcase2 <- newiw_ss2+newiz_ss2
+
+
+plot(doses, newcase, main="Global incidence while varying c*t", xlab="Drug quantity", ylab="Incidence", ylim=c(0,0.01), lwd=2, type="l", col='black')
+
+lines(doses, newcase2, type='l', col='red', lwd=2)
+
+
+plot(prop_treated, newcase, main="Global incidence while varying epsilon", xlab="proportion of treated", ylab="Incidence", ylim=c(0,0.01), lwd=2, type="l", col='black')
+
+lines(prop_treated, newcase2, type='l', col='red', lwd=2)
 
 ```
