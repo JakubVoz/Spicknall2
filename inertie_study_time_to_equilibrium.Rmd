@@ -403,3 +403,23 @@ abline(h=0, col='black')
 
 legend("topleft" , inset=.05, c("delta eps=0.01", "delta eps=0.001"), lwd=c(2,2), col=c('red', 'blue'))
 ```
+
+
+```{r plot_same_metrics, echo=FALSE}
+
+
+
+diff_1_same_metrics <- diff_1/delta_eps1
+epsx1 <- seq(0.01, 0.17, by=delta_eps1)
+
+
+diff_2_same_metrics <- diff_2/delta_eps2
+epsx2 <- seq(0.001, 0.17, by=delta_eps2)
+
+
+plot(epsx1, diff_1_same_metrics, main="Inertia : difference between increasing \n and decreasing epsilon", xlab="proportion of treated patients", ylab="delta t/ delta eps", lwd=2, col='red', type='l', xlim=c(0,0.17))
+lines(epsx2, diff_2_same_metrics, lwd=2, col='blue', type='l')
+abline(h=0, col='black')
+
+legend("topleft" , inset=.05, c("delta eps=0.01", "delta eps=0.001"), lwd=c(2,2), col=c('red', 'blue'))
+```
