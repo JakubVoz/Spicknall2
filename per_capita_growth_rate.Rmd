@@ -60,8 +60,8 @@ prop_treated <- AMU/drug_quantities
 
 #selection of corresponding borders in sel_coef vector
 
-lowbound=cu*100+1
-highbound=cl*100+1
+lowbound=cl*100+1
+highbound=cu*100+1
 
 
 
@@ -70,7 +70,7 @@ zoom <- 1
 ```
 
 
-```{r func_gr_def, include=FALSE}
+```{r func_gr_def, include=FALSE, cache=TRUE}
 
 
 
@@ -81,7 +81,7 @@ growth = function(x, maxv, minv, micv, slopev) {
 
 ```
 
-```{r calc_gr, include=FALSE}
+```{r calc_gr, include=FALSE, cache=TRUE}
 
 
 gr_sens <- lapply(x, growth, max_sens_gr, min_sens_gr, mic_sens, kappa_sens)
@@ -97,7 +97,7 @@ MICres2 <- sum(gr_res2>0)/length(gr_res2)
 
 
 
-```{r plot_gr, echo=FALSE}
+```{r plot_gr, echo=FALSE, cache=TRUE}
 par(mfrow=c(1,2))
 
 plot(x, gr_sens, main="Sensitive and resistant strain growth rate", xlab="Drug quantity", ylab="Growth rate", ylim=c(-0.2,1), lwd=2, type="l", col='blue')
@@ -119,7 +119,7 @@ abline(v=MIC, col='green')
 
 
 
-```{r selection_coef, echo=FALSE}
+```{r selection_coef, echo=FALSE, cache=TRUE}
 gr_sens <- unlist(gr_sens)
 gr_res <- unlist(gr_res)
 gr_res2 <- unlist(gr_res2)
@@ -142,7 +142,7 @@ abline(v=cl, col='green', lw=2)
 abline(v=cu, col='green', lw=2)
 ```
 
-```{r mutation_curve, echo=FALSE}
+```{r mutation_curve, echo=FALSE, cache=TRUE}
 mu_prob <- seq(min_mu, max_mu, length.out = n_values)
 doses <- seq(cl, cu, length.out = n_values)
 
@@ -162,13 +162,13 @@ lines(doses, rho2, type='l', col='red', lwd=2)
 
 ```
 
-```{r treated_pat, echo=FALSE}
+```{r treated_pat, echo=FALSE, cache=TRUE}
 
 plot(doses, prop_treated, main="Proportion of treated patients", xlab="Drug quantity", ylab="eps", ylim=c(0,0.15), lwd=2, type="l", col='black')
 
 ```
 
-```{r treatment_fail, echo=FALSE}
+```{r treatment_fail, echo=FALSE, cache=TRUE}
 treat_fail <- rho1*prop_treated
 treat_fail2 <- rho2*prop_treated
 
@@ -178,7 +178,7 @@ lines(doses, treat_fail2, type='l', col='red', lwd=2)
 
 ```
 
-```{r model_param, echo=FALSE}
+```{r model_param, echo=FALSE, cache=TRUE}
 
 library(deSolve)
 
@@ -204,7 +204,7 @@ pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
 
 ```
 
-```{r model_def, echo=FALSE}
+```{r model_def, echo=FALSE, cache=TRUE}
 
 varying_par <- cbind(prop_treated, rho1)
 varying_par2 <- cbind(prop_treated, rho2)
@@ -239,7 +239,7 @@ calc_fun = function(x) {
 
 ```
 
-```{r calc, echo=FALSE}
+```{r calc, echo=FALSE, cache=TRUE}
 
 out <- do.call(cbind, apply(varying_par, 1 , calc_fun))
 
@@ -249,7 +249,7 @@ out2 <- do.call(cbind, apply(varying_par2, 1 , calc_fun))
 
 
 
-```{r splitting_cols, echo=FALSE}
+```{r splitting_cols, echo=FALSE, cache=TRUE}
 
 niz <- seq(4, ncol(out), by=6)
 niw <- seq(3, ncol(out), by=6)
@@ -276,7 +276,7 @@ burden2 <- iz_steady2+iw_steady2
 
 ```
 
-```{r incid_ss, echo=FALSE}
+```{r incid_ss, echo=FALSE, cache=TRUE}
 incid = function(x, zoom) {
   der <- rep(0, length(x))
   for (i in 2:length(x)) {
