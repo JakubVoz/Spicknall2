@@ -307,7 +307,35 @@ legend("bottomleft" , inset=.05, c("S", "Iz", "Iw", "p"), lty=c(1,2,3,1), lwd=c(
 
 
 
+```{r incid_plot_Iw_theoretic, echo=FALSE, fig.align='center', cache=TRUE}
 
+par(mfrow=c(1,2))
+
+#starting: eps=0 steady  state
+
+plot(pepsi, ssIz, main="Starting with a steady state \n corresponding to eps=0", xlab="AMU", ylab="proportion", ylim=c(0,1), lty=2, lwd=2, type="l", col='blue')
+lines(pepsi, ssIw, lty=3, lwd=2, type='l', col='blue')
+lines(pepsi, ssS, lty=1, lwd=2, type='l', col='blue')
+lines(pepsi, ssp, lty=1, lwd=2, type='l', col='black')
+
+legend("bottomleft" , inset=.05, c("S", "Iz", "Iw", "p"), lty=c(1,2,3,1), lwd=c(2,2,2,2), col=c(rep('blue',3), 'black'))
+
+
+#starting: eps=0.20 steady  state
+
+ssIz3 <- rep(0.333, length(pepsi))
+ssIw3 <- rep(0, length(pepsi))
+ssS3 <- rep(0.666, length(pepsi))
+ssp3 <- rep(1, length(pepsi))
+
+plot(pepsi, ssIz3, main="Starting with a steady state \n corresponding to eps=0.20", xlab="AMU", ylab="proportion", ylim=c(0,1), lty=2, lwd=2, type="l", col='red')
+lines(pepsi, ssIw3, lty=3, lwd=2, type='l', col='red')
+lines(pepsi, ssS3, lty=1, lwd=2, type='l', col='red')
+lines(pepsi, ssp3, lty=1, lwd=2, type='l', col='black')
+
+
+legend("bottomleft" , inset=.05, c("S", "Iz", "Iw", "p"), lty=c(1,2,3,1), lwd=c(2,2,2,2), col=c(rep('red',3), 'black'))
+```
 
 
 
