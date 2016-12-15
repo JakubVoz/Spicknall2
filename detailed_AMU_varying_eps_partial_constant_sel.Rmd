@@ -1,0 +1,426 @@
+---
+title: "detailed_AMU_varying_eps_partial_constant_sel"
+author: "Jakub"
+date: "15 prosince 2016"
+output: html_document
+---
+
+
+```{r param_def, include=FALSE}
+library(plyr)
+
+#per capita maximum growth rate of sensitive bact
+max_sens_gr <- 1 
+max_sens_gr2 <- 1 
+#per capita maximum growth rate of resistant bact
+max_res_gr <- 0.8
+max_res_gr2 <- 0.8
+#per capita minimum growth rate of sensitive bact
+min_sens_gr <- -0.2
+min_sens_gr2 <- -0.2
+#per capita minimum growth rate of res bact
+min_res_gr <- -0.2
+min_res_gr2 <- -0.2
+#minimum inhibitory concentration of sen bact
+
+mic_sens <- 0.35
+mic_sens2 <- 0.35
+#minimum inhibitory concentration of res bact
+
+mic_res <- 0.65
+mic_res2 <- 0.5
+#slope for sens bact
+kappa_sens <- 10
+kappa_sens2 <- 10
+#slope for res bact  
+
+kappa_res <- 10
+kappa_res2 <- 10
+
+param_sens <- c(max_sens_gr, min_sens_gr, mic_sens, kappa_sens)
+param_sens2 <- c(max_sens_gr2, min_sens_gr2, mic_sens2, kappa_sens2)
+
+param_res <- c(max_res_gr, min_res_gr, mic_res, kappa_res)
+param_res2 <- c(max_res_gr2, min_res_gr2, mic_res2, kappa_res2)
+
+#mutant emergence probability : we consider that if the amount of applied atb increases, the probability of resistant mutant apparition increases linearly
+max_mu <- 0.13
+min_mu <- 0.08
+max_dot <- 10
+min_dot <- 1
+
+#range of intervention - cl=lowest clinically effective dose, cu maximum tolerable dose (toxicity)
+cl=0.40
+cu=0.70
+n_values=(cu-cl)*100+1
+
+drug_quantities <- seq(cl, cu, length.out = n_values )
+
+AMU = c(0.02, 0.04, 0.06, 0.08, 0.10, 0.12, 0.14, 0.16, 0.18, 0.2)
+
+prop_treated <- do.call(cbind, lapply(AMU, function (x) x/drug_quantities))
+
+eps_max <- max(prop_treated)
+
+#selection of corresponding borders in sel_coef vector
+
+lowbound=cl*100+1
+highbound=cu*100+1
+
+
+
+high_sel_val <- 0.6
+low_sel_val <- 0.3
+
+
+x <- seq(0,1,by=0.01)
+zoom <- 1
+```
+
+
+```{r func_gr_def, include=FALSE, cache=TRUE}
+
+
+
+growth = function(x, maxv, minv, micv, slopev) {
+  y <- maxv - ((maxv - minv)*(x/micv)^slopev)/((x/micv)^slopev - maxv/minv)
+  return(y)
+}
+
+
+
+colglob <- colorRampPalette(c("blue", "red"))
+
+colforcol <- colglob(length(AMU))
+
+
+linfun <- function(x, t, ltype){
+  lines(t, unlist(x), lty=ltype, lwd=2, col=colforcol[as.numeric(parent.frame()$i)])
+}
+
+```
+
+
+
+
+```{r mutation_curve, echo=FALSE, cache=TRUE}
+mu_prob <- seq(min_mu, max_mu, length.out = n_values)
+doses <- seq(cl, cu, length.out = n_values)
+
+plot(doses, mu_prob, main="Probability of resistant mutant apparition", xlab="Drug quantity", ylab="mu", ylim=c(0,0.15), lwd=2, type="l", col='black')
+
+```
+
+```{r rho, echo=FALSE, cache=TRUE}
+sel_sel_coef <- rep(high_sel_val, highbound-lowbound+1)
+sel_sel_coef2 <- rep(low_sel_val, highbound-lowbound+1)
+
+rho1 <- sel_sel_coef*mu_prob
+rho2 <- sel_sel_coef2*mu_prob
+
+plot(doses, rho1, main="Treatment failure rate", xlab="Drug quantity", ylab="rho", lwd=2, type="l", col='black', ylim=c(0, 0.10))
+
+lines(doses, rho2, type='l', col='red', lwd=2)
+
+legend("topleft" , inset=.05, c("Sc. 1", "Sc. 2"), lty=c(1,1), lwd=c(2,2), col=c("black", "red"))
+
+```
+
+```{r treated_pat, echo=FALSE, cache=TRUE}
+
+
+
+plot(doses, prop_treated[,1], main="Proportion of treated patients", xlab="Drug quantity", ylab="eps", ylim=c(0 , eps_max), lwd=2, type="l", col='black')
+
+capture.output(apply(prop_treated, 2, linfun, doses, 1), file='NUL')
+
+tag_min <- paste('AMU =', AMU[1])
+tag_max <- paste('AMU =', AMU[length(AMU)])
+
+legend("topright" , inset=.05, c(tag_min, tag_max), lty=c(1,1), lwd=c(2,2), col=c("blue", "red"))
+
+```
+
+```{r treatment_fail, echo=FALSE, cache=TRUE}
+
+
+treat_fail <- do.call(cbind, lapply(prop_treated, function (x) x*rho1))
+treat_fail2 <- do.call(cbind, lapply(prop_treated, function (x) x*rho2))
+
+plot(doses, treat_fail[,1], main="Treatment failure", xlab="Drug quantity", ylab="rho*eps", lwd=2, type="l", col='black', ylim=c(0, 0.005))
+
+capture.output(apply(treat_fail, 2, linfun, doses, 1), file='NUL')
+capture.output(apply(treat_fail2, 2, linfun, doses, 2), file='NUL')
+
+legend("bottomright" , inset=.05, c('Scenario 1', 'Scenario 2', tag_min, tag_max), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+
+```
+
+```{r model_param, echo=FALSE, cache=TRUE}
+
+library(deSolve)
+
+
+options("scipen" = 10)
+
+# initial state:
+N <- 1
+prop <- 0.01 #initial value of Iw and Iz
+
+# time:
+a <- 4000 #time span
+m <- 1 #time step
+
+# parameters
+pbeta_w <- 0.04 #transmission parameter of Iw
+pbeta_z <- 0.015 #transmission parameter of Iz
+
+pgammaa <- 0.01 #innate recovery rate
+pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
+
+
+
+```
+
+```{r model_def, echo=FALSE, cache=TRUE}
+
+varying_par <- cbind(prop_treated, rho1)
+
+varying_par2 <- cbind(prop_treated, rho2)
+
+
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=0, rho=0)
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop, new_Iz=0, new_Iw=0)
+
+times=seq(0, a, by=m)
+
+SIS=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
+        dnewIw = beta_w*Iw*S
+        dnewIz = beta_z*Iz*S
+        list(c(dS, dIw, dIz, dnewIw, dnewIz))
+       })
+}
+
+calc_fun = function(x) {
+  parameters[5] <- x[1]
+  parameters[6] <- x[2]
+  out=as.data.frame(
+  ode(y=state, times=times, func=SIS, parms=parameters))
+  return(out)
+}
+
+
+
+```
+
+```{r calc_main, echo=FALSE, cache=TRUE}
+out_sc1 <- do.call(cbind, apply(cbind(varying_par[,1], varying_par[,ncol(varying_par)]), 1 , calc_fun))
+
+
+for (i in 2:(ncol(varying_par)-1)) {
+  out <- do.call(cbind, apply(cbind(varying_par[,i], varying_par[,ncol(varying_par)]), 1 , calc_fun))
+  out_sc1 <- cbind(out_sc1, out)
+}
+
+
+out_sc2 <- do.call(cbind, apply(cbind(varying_par2[,1], varying_par2[,ncol(varying_par2)]), 1 , calc_fun))
+
+for (i in 2:(ncol(varying_par2)-1)) {
+  out2 <- do.call(cbind, apply(cbind(varying_par2[,i], varying_par2[,ncol(varying_par2)]), 1 , calc_fun))
+  out_sc2 <- cbind(out_sc2, out2)
+}
+
+```
+
+
+
+```{r splitting_cols, echo=FALSE, cache=TRUE}
+
+niz <- seq(4, ncol(out_sc1), by=6)
+niw <- seq(3, ncol(out_sc1), by=6)
+inciw <- seq(5, ncol(out_sc1), by=6)
+inciz <- seq(6, ncol(out_sc1), by=6)
+
+iz_steady <- out_sc1[nrow(out_sc1),niz]
+iz_steady2 <- out_sc2[nrow(out_sc2),niz]
+
+iw_steady <- out_sc1[nrow(out_sc1),niw]
+iw_steady2 <- out_sc2[nrow(out_sc2),niw]
+
+inciw_steady <- out_sc1[,inciw]
+inciw_steady2 <- out_sc2[,inciw]
+
+inciz_steady <- out_sc1[,inciz]
+inciz_steady2 <- out_sc2[,inciz]
+
+
+```
+
+```{r incid_ss, echo=FALSE, cache=TRUE}
+incid = function(x, zoom) {
+  der <- rep(0, length(x))
+  for (i in 2:length(x)) {
+    der[i] <- x[i]-x[i-1]
+  }
+  return(der)
+}
+
+NewIz <- apply(inciz_steady, 2, incid, zoom)
+NewIz2 <- apply(inciz_steady2, 2, incid, zoom)
+
+NewIw <- apply(inciw_steady, 2, incid, zoom)
+NewIw2 <- apply(inciw_steady2, 2, incid, zoom)
+
+newiz_ss <- NewIz[nrow(NewIz),]
+newiz_ss2 <- NewIz2[nrow(NewIz2),]
+
+newiw_ss <- NewIw[nrow(NewIw),]
+newiw_ss2 <- NewIw2[nrow(NewIw2),]
+```
+
+```{r splitting_AMU, echo=FALSE, cache=TRUE}
+iz_steady <- matrix(unlist(iz_steady), nrow=length(doses))
+iz_steady2 <- matrix(unlist(iz_steady2), nrow=length(doses))
+
+iw_steady <- matrix(unlist(iw_steady), nrow=length(doses))
+iw_steady2 <- matrix(unlist(iw_steady2), nrow=length(doses))
+
+newiz_ss <- matrix(unlist(newiz_ss), nrow=length(doses))
+newiz_ss2 <- matrix(unlist(newiz_ss2), nrow=length(doses))
+
+newiw_ss <- matrix(unlist(newiw_ss), nrow=length(doses))
+newiw_ss2 <- matrix(unlist(newiw_ss2), nrow=length(doses))
+
+p <- iz_steady/(iw_steady+iz_steady)
+p2 <- iz_steady2/(iw_steady2+iz_steady2)
+
+p_incid <- newiz_ss/(newiz_ss+newiw_ss)
+p_incid2 <- newiz_ss2/(newiz_ss2+newiw_ss2)
+
+
+burden <- iz_steady+iw_steady
+burden2 <- iz_steady2+iw_steady2
+```
+
+
+```{r plot_ss_iz, echo=FALSE}
+plot(doses, iz_steady[,1], main="Resistant cases at steady states \n while varying c*t", xlab="Drug quantity", ylab="Iz", ylim=c(0,0.40), lwd=2, lty=1, type="l", col='black')
+
+capture.output(apply(iz_steady, 2, linfun, doses, 1), file='NUL')
+capture.output(apply(iz_steady2, 2, linfun, doses, 2), file='NUL')
+
+legend("bottomright" , inset=.05, c('Scenario 1', 'Scenario 2', tag_min, tag_max), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+
+plot(prop_treated[,1], iz_steady[,1], main="Resistant cases at steady states \n while varying epsilon", xlab="proportion of treated", ylab="Iz", ylim=c(0,0.40), xlim=c(0,eps_max), lwd=2, type="l", col='black')
+
+for (i in 1:ncol(prop_treated)) {
+  lines(prop_treated[,i], iz_steady[,i], col=colforcol[i], lty=1, lwd=2)
+}
+for (i in 1:ncol(prop_treated)) {
+  lines(prop_treated[,i], iz_steady2[,i], col=colforcol[i], lty=2, lwd=2)
+}
+
+legend("topleft" , inset=.05, c('Scenario 1', 'Scenario 2', tag_min, tag_max), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+```
+```{r plot_ss_iw, echo=FALSE}
+plot(doses, iw_steady[,1], main="Sensitive cases at steady states \n while varying c*t", xlab="Drug quantity", ylab="Iw", ylim=c(0,0.70), lwd=2, lty=1, type="l", col='black')
+
+capture.output(apply(iw_steady, 2, linfun, doses, 1), file='NUL')
+capture.output(apply(iw_steady2, 2, linfun, doses, 2), file='NUL')
+
+legend("bottomright" , inset=.05, c('Scenario 1', 'Scenario 2', tag_min, tag_max), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+
+plot(prop_treated[,1], iw_steady[,1], main="Sensitive cases at steady states \n while varying epsilon", xlab="proportion of treated", ylab="Iw", ylim=c(0,0.70), xlim=c(0,eps_max), lwd=2, type="l", col='black')
+
+for (i in 1:ncol(prop_treated)) {
+  lines(prop_treated[,i], iw_steady[,i], col=colforcol[i], lty=1, lwd=2)
+}
+for (i in 1:ncol(prop_treated)) {
+  lines(prop_treated[,i], iw_steady2[,i], col=colforcol[i], lty=2, lwd=2)
+}
+
+legend("topright" , inset=.05, c('Scenario 1', 'Scenario 2', tag_min, tag_max), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+```
+
+```{r plot_ss_p, echo=FALSE}
+plot(doses, p[,1], main="P while varying c*t", xlab="Drug quantity", ylab="p", ylim=c(0,1), lwd=2, type="l", col='black')
+
+capture.output(apply(p, 2, linfun, doses, 1), file='NUL')
+capture.output(apply(p2, 2, linfun, doses, 2), file='NUL')
+
+legend("topleft" , inset=.03, c('Scenario 1', 'Scenario 2', tag_min, tag_max), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+
+plot(prop_treated[,1], p[,1], main="P while varying epsilon", xlab="proportion of treated", ylab="p", ylim=c(0,1), xlim=c(0,0.3), lwd=2, type="l", col='black')
+
+for (i in 1:ncol(prop_treated)) {
+  lines(prop_treated[,i], p[,i], col=colforcol[i], lty=1, lwd=2)
+}
+for (i in 1:ncol(prop_treated)) {
+  lines(prop_treated[,i], p2[,i], col=colforcol[i], lty=2, lwd=2)
+}
+
+legend("topleft" , inset=.05, c('Scenario 1', 'Scenario 2', tag_min, tag_max), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+```
+
+
+
+```{r plot_ss_burden, echo=FALSE}
+plot(doses, burden[,1], main="Burden while varying c*t", xlab="Drug quantity", ylab="burden", ylim=c(0,1), lwd=2, type="l", col='black')
+
+capture.output(apply(burden, 2, linfun, doses, 1), file='NUL')
+capture.output(apply(burden2, 2, linfun, doses, 2), file='NUL')
+
+legend("topleft" , inset=.03, c('Scenario 1', 'Scenario 2', tag_min, tag_max), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+plot(prop_treated[,1], burden[,1], main="Burden while varying epsilon", xlab="proportion of treated", ylab="burden", ylim=c(0,1), xlim=c(0,0.3), lwd=2, type="l", col='black')
+
+for (i in 1:ncol(prop_treated)) {
+  lines(prop_treated[,i], burden[,i], col=colforcol[i], lty=1, lwd=2)
+}
+for (i in 1:ncol(prop_treated)) {
+  lines(prop_treated[,i], burden2[,i], col=colforcol[i], lty=2, lwd=2)
+}
+
+legend("bottomleft" , inset=.05, c('Scenario 1', 'Scenario 2', tag_min, tag_max), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+```
+
+
+```{r plot_ss_incid, echo=FALSE}
+newcase <- newiw_ss+newiz_ss
+newcase2 <- newiw_ss2+newiz_ss2
+
+
+plot(doses, newcase[,1], main="Global incidence while varying c*t", xlab="Drug quantity", ylab="Incidence", ylim=c(0,0.01), lwd=2, type="l", col='black')
+
+capture.output(apply(newcase, 2, linfun, doses, 1), file='NUL')
+capture.output(apply(newcase2, 2, linfun, doses, 2), file='NUL')
+
+legend("bottomleft" , inset=.05, c('Scenario 1', 'Scenario 2', tag_min, tag_max), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+
+
+plot(prop_treated[,1], newcase[,1], main="Global incidence while varying epsilon", xlab="proportion of treated", ylab="Incidence", ylim=c(0,0.01), xlim=c(0,eps_max), lwd=2, type="l", col='black')
+
+for (i in 1:ncol(prop_treated)) {
+  lines(prop_treated[,i], newcase[,i], col=colforcol[i], lty=1, lwd=2)
+}
+for (i in 1:ncol(prop_treated)) {
+  lines(prop_treated[,i], newcase2[,i], col=colforcol[i], lty=2, lwd=2)
+}
+
+legend("bottomleft" , inset=.05, c('Scenario 1', 'Scenario 2', tag_min, tag_max), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+```
