@@ -397,10 +397,18 @@ As the $\varepsilon$ comes closer to the value of 0.18, the time to reach equili
 For smaller values of epsilon, there still exists a time lapse. The point of no return, observed in our model, cannot be responsible for this finding. Let us focus on the interval of epsilon where it does not intervene.
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
-knitr::include_graphics("C:/Users/Jakub/Desktop/Spicknall_partial_models_data/inertie_study_time_to_equilibrium_files_crit_0.000001/figure-html/plot_dif-1.png")
+knitr::include_graphics("C:/Users/Jakub/Desktop/Spicknall_partial_models_data/inertie_study_time_to_equilibrium_files/figure-html/plot_dif-1.png")
 ```
 
 Here, the plot represents the time lapse between reaching equilibrium while decreasing and increasing $\varepsilon$, either with a large or small $\delta$ (0.01 and 0.001). For each value of $\delta$, the time lapse is strictly positive and increases with the final value of $\varepsilon$. Therefore, in general the steady state is reached with a bigger delay while the proportion of treated patients is decreased than when it is increased by the same value.
+
+We can compare the differences obtained with different values of $\delta\varepsilon$ (0.01 and 0.001) while using the same metrics such as $\frac{\delta t}{\delta \varepsilon}$ :
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("C:/Users/Jakub/Desktop/Spicknall_partial_models_data/inertie_study_time_to_equilibrium_files/figure-html/plot_same_metrics-1.png")
+```
+
+Though the TRE is smaller for smaller values of $\delta\varepsilon$, when using the same metrics, the lapse per "step of $\varepsilon$ is bigger. We can imagine, that there is simply a 'time cost' related to the approaching of steady state and thus TRE of a big leap in terms of $varepsilon$ is not equal to the sum of TREs of intermediate steady states.
 
 There is another possibility how to present this phenomena. In the following experiment, the steady states are reached for $\varepsilon$=0.00 and $\varepsilon$=0.17. Then it changes to a value between 0.01 and 0.16 and the time to reach the equilibrium is calculated as well as the difference of the times for given initial $\varepsilon$. Here, the convergence criterion is 0.0001.
 
