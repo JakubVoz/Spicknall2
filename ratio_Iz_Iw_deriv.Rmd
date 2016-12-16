@@ -366,7 +366,24 @@ In comparison with a simple model in which only susceptible population and sensi
 
 <center> <h2> Study of hysteresis </h2> </center>
 
-The study of hysteresis allows to know whether the same stable states can be reached while increasing proportion of treated patients from a low state ($\varepsilon=0.00$) or decreasing it from a high state ($\varepsilon=0.20$)
+The study of hysteresis allows to know whether the same stable states can be reached while increasing proportion of treated patients from a low state ($\varepsilon=0.00$) or decreasing it from a high state ($\varepsilon=0.20$):
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/hysteresis_files/figure-html/incid_plot_Iw_theoretic-1.png")
+```
+
+Theoretically there is a hysteresis due to the fact that no possible conversion from $I_z$ to $I_w$ is included in  model. The plot above represents the theoretical hysteresis. In theory, once the AMU stabilizes over 0.18, there is a point of no return, not allowing the sensitive bacteria to re-establish. This is due to the fact, that in our model there is no possibility of reversion of resistant mutants which seems to be realistic considering today's research (changing genetic background and eventual compensatory mutations will make reversion very unlikely).
+
+In an actual model, longer the model procedes while AMU>0.18, longer it will take to re-establish the population at steady state from the plot on the left for AMU<0.18. 
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/hysteresis_files/figure-html/incid_plot_Iw_shorter_t-1.png")
+```
+
+There might be therefore a considerable range of AMU for which seemingly the point of no return equilibrium is maintained when decreasing AMU under 0.18.
+
+In conclusion, there is hysteresis in our model in theory, once the AMU reaches and stabilizes at a level beyond the point of no return, corresponding to 0.18.
+
 
 <center> <h2> Study of inertia </h2> </center>
 
