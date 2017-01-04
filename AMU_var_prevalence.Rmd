@@ -329,10 +329,23 @@ AMU_ss_Iw_Iz <- (Iw_ss+Iz_ss)*epsvar
 AMU_ss_Iw <- as.matrix(AMU_ss_Iw)
 AMU_ss_Iw_Iz <- as.matrix(AMU_ss_Iw_Iz)
 
-plot(AMU_ss_Iw, p_steady, main="Evolution of p ratio - prevalence, Iw treated", xlab="AMU", ylab="p", ylim=c(0,1), col='red', type = 'l', lty=1)
+plot(AMU_ss_Iw, p_steady, main="Evolution of p ratio - prevalence, Iw treated", xlab="AMU", ylab="p", ylim=c(0,1), col='red', type = 'l', lty=1, lwd=2)
 
 
-plot(AMU_ss_Iw_Iz, p_steady, main="Evolution of p ratio - prevalence, all treated", xlab="AMU", ylab="p", ylim=c(0,1), lwd=2, col='red', lty=2, type = 'l')
+plot(AMU_ss_Iw_Iz, p_steady, main="Evolution of p ratio - prevalence, all treated", xlab="AMU", ylab="p", ylim=c(0,1), lwd=2, col='red', lty=1, type = 'l')
 
+#burden of infection
+
+burd <- Iw_ss+Iz_ss
+
+plot(AMU_ss_Iw, burd, main="Evolution of burden of infection - Iw treated", xlab="AMU", ylab="Burden of Infection", ylim=c(0,1), col='red', type = 'l', lty=1, lwd=2)
+
+plot(AMU_ss_Iw_Iz, burd, main="Evolution of burden of infection - all treated", xlab="AMU", ylab="Burden of Infection", ylim=c(0,1), col='red', type = 'l', lty=1, lwd=2)
+
+#AMU as fn of PTP
+
+plot(epsvar, AMU_ss_Iw, main="Evolution of AMU, Iw treated", xlab="PTP", ylab="AMU", ylim=c(0,0.1), lwd=2, col='red', lty=1, type = 'l')
+
+plot(epsvar, AMU_ss_Iw_Iz, main="Evolution of AMU, all treated", xlab="PTP", ylab="AMU", ylim=c(0,0.1), lwd=2, col='red', lty=1, type = 'l')
 
 ```
