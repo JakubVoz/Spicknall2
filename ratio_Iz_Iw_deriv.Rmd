@@ -167,7 +167,7 @@ knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_AMU
 
 The first part of the graph results from a multiplication of a decreasing linear function ($I_w + I_z$) and an increasing linear function ($PTP$). For extreme values of PTP, there is a linear relation between AMU and PTP as $I_w + I_z$ reaches stability.
 
-This means that at steady states, with nearly the same quantity of antibiotics (0.055 and 0.06) nearly a double proportion of patients can be treated (10% and 17%).
+This means that at steady states, with nearly the same quantity of antibiotics (0.050 and 0.06) nearly a double proportion of patients can be treated (10% and 17%).
 
 
 
@@ -209,7 +209,7 @@ knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_AMU
 P as a function of AMU shows an exponential growth with saturation, which is due to :
 
 a) interplay of increasing $I_z$ and decreasing $I_w$ with increasing PTP
-b) saturation part of the curve of AMU=f(PTP) ([0.055, 0.06] of AMU corresponds to [10%,17%] of PTP)
+b) saturation part of the curve of AMU=f(PTP) ([0.050, 0.06] of AMU corresponds to [10%,17%] of PTP)
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/ss_burden_of_inf-1.png")
@@ -255,7 +255,7 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/incid_plot_real_p
 
 ```
 
-When relating p and AMU, the proportion of resistant cases among new cases increases very steeply at higher values (0.055 ti 0.060) of AMU. This is once again due to:
+When relating p and AMU, the proportion of resistant cases among new cases increases very steeply at higher values (0.050 ti 0.060) of AMU. This is once again due to:
 
 a) exponential increase in p=f(PTP)
 b) relative steadiness in AMU=f(PTP) for higher values of PTP (10 - 17%)
