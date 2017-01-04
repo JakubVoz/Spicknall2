@@ -153,6 +153,22 @@ knitr::include_graphics("./final_mod_files/figure-html/steady_state_rho_plot-1.p
 
 Based on literature, the proportion of treatment failures is between 4 and 8% (add a quote) for tuberculosis. It has a significant impact on the proportion of $I_w$ and $I_z$. When it increases the prevalence of $I_z$ increases at the expense of $I_w$, while the global burden of the disease decreases. Interestingly, when there is no treatment failure, there is no stable coexistence of sensitive and resistant strains in our model.
 
+<center> <h3> Steady states when varying AMU </h3> </center>
+
+In this part, we consider AMU as being the burden of infection multiplied by the proportion of treated patients. In fact, usage of ATB in patients infected with resistant strains does not have any impact on patient's recovery in our model. Though, here we consider that the ATB are consumed in this subpopulation as well, which may be due to poor or late resistance detection in hospitals or to self-medication in population.
+
+Therefore in this model, $AMU = (I_w +I_z)*PTP$.
+
+The following plot represents the AMU in function of PTP. 
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_AMU-6.png")
+```
+
+The first part of the graph results from a multiplication of a decreasing linear function ($I_w + I_z$) and an increasing linear function ($PTP$). For extreme values of PTP, there is a linear relation between AMU and PTP as $I_w + I_z$ reaches stability.
+
+This means that at steady states, with nearly the same quantity of antibiotics (0.055 and 0.06) nearly a double proportion of patients can be treated (10% and 17%).
+
 <center> <h3> Steady state net flow in the model </h3> </center>
 
 The steady state flows from one population to another are followed for PTP varying between 0 and 20%.
@@ -189,6 +205,23 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/ss_burden_of_inf-
 
 Here, the burden of infection corresponds to the total proportion of infected people. It decreases linearly as the PTP increases, due to the decrease of $I_w$ that is faster than the increase of $I_z$.
 
+
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_AMU-2.png")
+```
+
+P as a function of AMU shows an exponential growth with saturation, which is due to :
+
+a) interplay of increasing $I_z$ and decreasing $I_w$ with increasing PTP
+b) saturation part of the curve of AMU=f(PTP) ([0.055, 0.06] of AMU corresponds to [10%,17%] of PTP)
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_AMU-4.png")
+```
+
+Finally, when plotting the BOI in function of AMU, decreasing tendency is preserved. Before reaching a stability, there is a fastening decrease of BOI, which is once again due to the saturation tendancy in AMU=f(PTP).
+
 <center> <h3> Steady state incidence </h3> </center>
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
@@ -217,6 +250,20 @@ This resistance is represented in our model as a flow from $I_w$ to $I_z$ depend
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/incid_plot_real_p-2.png")
 
 ```
+
+When relating p and AMU, the proportion of resistant cases among new cases increases very steeply at higher values (0.055 ti 0.060) of AMU. This is once again due to:
+
+a) relatively steep increase in p=f(PTP)
+b) relative steadiness in AMU=f(PTP) for higher values of PTP (10 - 17%)
+
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/p_incid_as_func_AMU_ss-1.png")
+
+```
+
+
 
 <center> <h2> Dynamics exploitation </h2> </center>
 
