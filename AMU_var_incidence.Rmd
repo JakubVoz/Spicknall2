@@ -757,4 +757,86 @@ legend("topleft" , inset=.05, c("PTP=0.20", "PTP=0"), lty=c(1,1), lwd=c(2,2), co
 
 ```
 
+```{r AMU_as_func_t_and_vareps, echo=FALSE, fig.align='center'}
 
+
+
+par(mfrow=c(1,1))
+
+Iw <- Iw[seq(1, nrow(Iw), length.out = length(t2)),]
+Iz <- Iz[seq(1, nrow(Iz), length.out = length(t2)),]
+
+AMU_Iw <- Iw
+for (i in 1:length(pepsi)) {
+  AMU_Iw[,i] <- AMU_Iw[,i]*pepsi[i]
+}
+
+AMU_Iw_Iz <- Iw + Iz
+
+for (i in 1:length(pepsi)) {
+  AMU_Iw_Iz[,i] <- AMU_Iw_Iz[,i]*pepsi[i]
+}
+
+
+vrai_Iz_zoom <- Iz[1:(zooming+1),]
+vrai_Iw_zoom <- Iw[1:(zooming+1),]
+#zoom
+
+AMU_Iw_zoom <- vrai_Iw_zoom
+
+for (i in 1:length(pepsi)) {
+  AMU_Iw_zoom[,i] <- AMU_Iw_zoom[,i]*pepsi[i]
+}
+
+AMU_Iw_Iz_zoom <- vrai_Iw_zoom + vrai_Iz_zoom
+
+for (i in 1:length(pepsi)) {
+  AMU_Iw_Iz_zoom[,i] <- AMU_Iw_Iz_zoom[,i]*pepsi[i]
+}
+
+
+
+plot(t2, AMU_Iw[,11], main="AMU in time, Iw treated", xlab="time (steps)", ylab="AMU", ylim=c(0,0.1), lty=1, lwd=2, type="l")
+
+capture.output(apply(AMU_Iw, 2, linfun, t2), file='NUL')
+
+legend("topleft" , inset=.05, c("PTP=0.20", "PTP=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+plot(t2, AMU_Iw_Iz[,11], main="AMU in time, all treated", xlab="time (steps)", ylab="AMU", ylim=c(0,0.1), lty=1, lwd=2, type="l")
+
+capture.output(apply(AMU_Iw_Iz, 2, linfun, t2), file='NUL')
+
+legend("topleft" , inset=.05, c("PTP=0.20", "PTP=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+
+#zoom plot
+plot(time_zoom, AMU_Iw_zoom[,11], main="AMU in time, Iw treated", xlab="time (steps)", ylab="AMU", ylim=c(0,0.1), lty=1, lwd=2, type="l")
+
+capture.output(apply(AMU_Iw_zoom, 2, linfun, time_zoom), file='NUL')
+
+legend("topleft" , inset=.05, c("PTP=0.20", "PTP=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+
+plot(time_zoom, AMU_Iw_Iz_zoom[,11], main="AMU in time, all treated", xlab="time (steps)", ylab="AMU", ylim=c(0,0.1), lty=1, lwd=2, type="l")
+
+capture.output(apply(AMU_Iw_Iz_zoom, 2, linfun, time_zoom), file='NUL')
+
+legend("topleft" , inset=.05, c("PTP=0.20", "PTP=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
+
+```
+
+
+
+```{r p_incid_as_func_AMU_ss, echo=FALSE, fig.align='center'}
+
+AMU_var_ss <- burden*epsvar
+
+AMU_var_ss <- data.matrix(AMU_var_ss)
+realp_ss <- data.matrix(realp_ss)
+
+plot(AMU_var_ss, realp_ss, main="P incidence, all treated", xlab="AMU", ylab="real p", ylim=c(0,1), lty=1, lwd=2, type="l")
+
+
+```
