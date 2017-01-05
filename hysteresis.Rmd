@@ -37,7 +37,7 @@ prho <- 0.05 #probability of clinical failure
 #epsilon change over time
 
 peps <- 0 #initial value of the ratio of treated patients
-pepsi <- seq(0,0.2,by=0.01) #variation of epsilon
+pepsi <- seq(0,0.18,by=0.01) #variation of epsilon
 
 
 
