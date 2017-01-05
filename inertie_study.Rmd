@@ -193,12 +193,14 @@ linfun <- function(x, t){
 
 
 
-plot(epsilon2[,1], Iz2[,1], xlab="AMU", ylab="AMR", main = "Evolution of Iz", type="l", lty=1, lwd=2, ylim=c(0, 1))
-capture.output(apply(Iz2, 2, linfun, epsilon2[,1]), file='NUL')
+plot(epsilon2[,1], Iz2[,1], xlab=expression(epsilon), ylab="AMR", main = "Evolution of Iz", type="l", lty=1, lwd=2, ylim=c(0, 1), col='black')
+Iz2_without_control <- Iz2[,2:ncol(Iz2)]
+capture.output(apply(Iz2_without_control, 2, linfun, epsilon2[,1]), file='NUL')
 
-mintag <- paste(eps_growth[1])
+controltag <- paste(eps_growth[1], "~ equilibrium")
+mintag <- paste(eps_growth[2])
 maxtag <- paste(eps_growth[length(eps_growth)])
-legend("topleft" , inset=.05, title='rate of change', c(mintag, maxtag), lty=c(1,1), lwd=c(2,2), col=c("blue", "red"))
+legend("topleft" , inset=.05, title='rate of change', c(controltag,mintag, maxtag), lty=c(1,1,1), lwd=c(2,2,2), col=c("black","blue", "red"))
 
 
 ```
