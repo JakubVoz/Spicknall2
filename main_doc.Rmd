@@ -336,7 +336,7 @@ It is indeed the incidence of sensitive cases that is responsible for the short-
 
 The susceptible incidence depends on mass product of $I_w$ and $S$.
 
-We consider now a simpler model with only $I_w$ and $S$ populations, related with the same relationships as in our model. Do these short-term peaks in $I_w$ incidence appear as well?
+We consider now a simpler model with only $I_w$ and $S$ populations, related with the same relationships as in our model. Do these short-term peaks in $I_w$ incidence appear as well? If it is so, the anti-honeymoon period is due only to the interplay between $I_w$ and $S$ when the $\varepsilon$ is suddenly decreased. The second possibility is that the transient anti-honeymoon period is due to the interplay between $I_w$ and $I_z$.
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
@@ -347,7 +347,7 @@ knitr::include_graphics("./simple_models_files/figure-html/model_Iw_S-1.png")
 
 The short-term peaks do not appear in a simpler model and thus this phenomenon is emerging due to the presence of $I_z$.
 
-As the sensitive incidence, and thus the short-term peaks, are directly dependent on the mass-product of $I_w$ and $S$, a change in flow between $I_z$ and $I_w$ may have a direct impact on the this mass product. In particular, the secondary resistance may be the cause of the short-term peaks as the variation of $\varepsilon$ has a huge and immediate impact on its strength : the decrease of $\varepsilon$ would decrease this flow and we would see a fast accumulation in $I_w$ population at the cost of $I_z$.
+As the sensitive incidence, and thus the anti-honeymoon period, are directly dependent on the mass-product of $I_w$ and $S$, a change in flow between $I_z$ and $I_w$ may have a direct impact on the this mass product. In particular, the secondary resistance may be the cause of the short-term peaks as the variation of $\varepsilon$ has a huge and immediate impact on its strength : the decrease of $\varepsilon$ would decrease this flow and we would see a fast accumulation in $I_w$ population at the cost of $I_z$.
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
@@ -357,9 +357,30 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/Iw_Iz_dynamics-1.
 
 Concurrently to the presence of short-term peaks, the $I_w$ to $I_z$ flow, corresponding to the spread of resistance in infected cases, plummets. In fact, the decrease of $\varepsilon$ has an immediate effect on this flow. Meanwhile the impact on the loss of resistance ($I_z$ to $I_w$ flow) is slower : it reaches the minimum value by the 150th step.
 
-This shows that a decrease in $\varepsilon$ is followed by fast redistribution of infected cases from resistant ones to sensitive ones. Due to the accumulation of sensitive cases, the mass product of $I_w$ and $S$ will increase sharply for short time, though $S$ decreases at the same time.
+Finally, dynamics in recovery of infected cases may contribute as well to the anti-honeymoon period : as the $\varepsilon$ is suddenly decreased, the expectancy of duration spent in $I_w$ population should increase. This would then transiently promote the accumulation of sensitive cases and therefore the possibility of transmission.
 
-During short-time period, the net flows in our model are as follows:
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/recovery_flows-1.png")
+
+```
+
+As we can see, the recovery dynamics of sensitive cases after a sudden decrease of $\varepsilon$ are in accordance with our hypothesis and contribute to the anti-honeymoon effect.
+
+The anti-honeymoon effect, following an abrupt drop in $\varepsilon$, is a consequence of several phenomena:
+
+a. The flow from $I_w$ to $I_z$ is suddenly cut, while the flow in opposite direction slows slowly, resulting in a redistribution of infected cases.
+b. The average duration of sensitive infection becomes longer, resulting in accumulation of sensitive cases.
+c. As a result of the accumulation of sensitive cases, the mass product of $S$ and $I_w$ increases. In consequence, the $S$ is transiently drawn by $I_w$.
+
+
+Finally, we represent here the net flows between the three subpopulations after a change in $\varepsilon$:
+
+```{r, out.width = "800px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/net_flows_aggregated-1.png")
+```
+
+During short-time period after a sharp decrease in $\varepsilon$, the net flows in our model are as follows:
 
 ```{r, out.width = "200px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/Sharp decrease in AMU.png")
