@@ -22,20 +22,27 @@ m <- 1 #time step
 
 pbeta_w <- 0.04 #transmission parameter of Iw
 pbeta_z <- 0.015 #transmission parameter of Iz
+pbeta_z2 <- 0.04 #transmission parameter of Iz when there is no transmission cost
+pbeta_z_test <- 0.015 #transmission parameter of Iz when there is no transmission cost
+
+
 
 pgammaa <- 0.01 #innate recovery rate
 pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
 
 
 prho <- 0.05 #probability of clinical failure
+prho_test <- 0.05
 
 peps <- 0.10 #initial value of the ratio of treated patients
+peps_test <- 0.10 #initial value of the ratio of treated patients
 
 
 
 
 
 prhoi <- seq(0,0.10,by=0.001)
+prhoi_ext <- seq(0,0.50,by=0.001)
 pepsi <- seq(0,1,by=0.01)
 
 
@@ -61,10 +68,10 @@ conv_crit <- 0.00001
 
 \end{aligned}
  
-```{r trial, include=FALSE, cache=TRUE}
-parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
+```{r trial, include=FALSE}
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z_test, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps_test, rho=prho_test)
 
-state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+state <- c(S=0.1, Iw=0.1, Iz=0.8)
 
 times <- seq(0, a, by=m)
 
@@ -96,6 +103,7 @@ legend("topleft" , inset=.05, c("S Susceptible","Iw Sensitive strain", "Iz Resis
 
 
 
+<h2> $\varepsilon$ variation </h2>
 
 ``` {r steady_state_eps, include=FALSE, cache=TRUE}
 
@@ -131,7 +139,7 @@ steady_QA_Iw_Iz_eps <- (steady_Iw_eps+steady_Iz_eps)*pepsi
 
 ```{r steady_state_eps_plot, echo=FALSE, fig.align='center'}
 
-plot(pepsi, steady_Iw_eps, main="Steady-states : treatment variations", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+plot(pepsi, steady_Iw_eps, main="Steady-states : treatment variations", xlab=expression(epsilon), ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
 lines(pepsi, steady_Iz_eps, lty=2, lwd=2)
 lines(pepsi, steady_S_eps, lty=1, lwd=2)
@@ -139,7 +147,7 @@ lines(pepsi, steady_S_eps, lty=1, lwd=2)
 legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "S Susceptible population"), lty=c(3,2,1), lwd=c(2,2,2))
 
 
-plot(pepsi, steady_Iw_eps, main="Steady-states : treatment variations", xlab="proportion of treated patients", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+plot(pepsi, steady_Iw_eps, main="Steady-states : treatment variations", xlab=expression(epsilon), ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
 lines(pepsi, steady_Iz_eps, lty=2, lwd=2)
 lines(pepsi, steady_S_eps, lty=1, lwd=2)
@@ -149,6 +157,10 @@ lines(pepsi, steady_QA_Iw_Iz_eps, lty=2, lwd=2, col='red')
 legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "S Susceptible population", 'QA : Iw treated', 'QA : all treated' ), lty=c(3,2,1,1,2), lwd=c(2,2,2,2,2), col=c(rep('black',3), rep('red',2)))
 
 ```
+
+
+<h2> Introduction of QA </h2>
+
 
 ```{r steady_state_QA_plot, echo=FALSE, fig.align='center'}
 
@@ -160,6 +172,9 @@ lines(pepsi, steady_QA_Iw_Iz_eps, lty=2, lwd=2, col='red')
 legend("topright" , inset=.05, c('QA : Iw treated', 'QA : all treated' ), lty=c(1,2), lwd=c(2,2), col=c(rep('red',2)))
 
 ```
+
+
+<h2> $\rho$ variation </h2>
 
 ``` {r steady_state_rho, include=FALSE, cache=TRUE}
 
@@ -189,10 +204,18 @@ steady_S_rho <- steady_rho[,2]
 steady_Iw_rho <- steady_rho[,3]
 steady_Iz_rho <- steady_rho[,4]
 
+steady_rho_ext <- do.call(rbind, lapply(prhoi_ext, exploit_param_rho))
+steady_rho_ext <- unlist(steady_rho_ext)
+
+steady_time_rho_ext <- steady_rho_ext[,1]
+steady_S_rho_ext <- steady_rho_ext[,2]
+steady_Iw_rho_ext <- steady_rho_ext[,3]
+steady_Iz_rho_ext <- steady_rho_ext[,4]
+
 ```
 
 ```{r steady_state_rho_plot, echo=FALSE, fig.align='center'}
-plot(prhoi, steady_Iw_rho, main="Steady-states : treatment failure variations", xlab="proportion of treatment failures", ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+plot(prhoi, steady_Iw_rho, main="Steady-states : treatment failure variations", xlab=expression(rho), ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
 lines(prhoi, steady_Iz_rho, lty=2, lwd=2)
 lines(prhoi, steady_S_rho, lty=1, lwd=2)
@@ -201,3 +224,74 @@ legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "
 
 ```
 
+```{r steady_state_rho_ext_plot, echo=FALSE, fig.align='center'}
+plot(prhoi_ext, steady_Iw_rho_ext, main="Steady-states : treatment failure variations", xlab=expression(rho), ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+
+lines(prhoi_ext, steady_Iz_rho_ext, lty=2, lwd=2)
+lines(prhoi_ext, steady_S_rho_ext, lty=1, lwd=2)
+
+legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "S Susceptible population" ), lty=c(3,2,1), lwd=c(2,2,2))
+
+```
+
+<h3> $\rho$ variation without transmission cost for resistant strain</h3>
+
+
+``` {r steady_state_no_cost_rho, include=FALSE, cache=TRUE}
+prhoi <- seq(0,0.10,by=0.001)
+
+parameters2 <- c(beta_w=pbeta_w, beta_z=pbeta_z2, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
+
+state2 <- c(S=1-2*prop, Iw=prop, Iz=prop)
+
+times2 <- seq(0, a, by=m)
+
+
+root_main2=function(times2, state2, parameters2){
+  dstate <- unlist(SIS(times2, state2, parameters2))
+  sum(abs(dstate)) - conv_crit
+  }
+
+exploit_param_rho2=function(x) {
+  parameters2[6] <- x
+  out <- lsodar(func=SIS, y=state2, parms=parameters2, times=times2, rootfunc=root_main2)
+  return(tail(out, n=1))
+  }
+
+steady_rho2 <- do.call(rbind, lapply(prhoi, exploit_param_rho2))
+steady_rho2 <- unlist(steady_rho2)
+
+steady_time_rho2 <- steady_rho2[,1]
+steady_S_rho2 <- steady_rho2[,2]
+steady_Iw_rho2 <- steady_rho2[,3]
+steady_Iz_rho2 <- steady_rho2[,4]
+
+steady_rho2_ext <- do.call(rbind, lapply(prhoi_ext, exploit_param_rho2))
+steady_rho2_ext <- unlist(steady_rho2_ext)
+
+steady_time_rho2_ext <- steady_rho2_ext[,1]
+steady_S_rho2_ext <- steady_rho2_ext[,2]
+steady_Iw_rho2_ext <- steady_rho2_ext[,3]
+steady_Iz_rho2_ext <- steady_rho2_ext[,4]
+
+```
+
+```{r steady_state_rho_no_cost_plot, echo=FALSE, fig.align='center'}
+plot(prhoi, steady_Iw_rho2, main="Steady-states : treatment failure variations \n when without transmission cost", xlab=expression(rho), ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+
+lines(prhoi, steady_Iz_rho2, lty=2, lwd=2)
+lines(prhoi, steady_S_rho2, lty=1, lwd=2)
+
+legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "S Susceptible population" ), lty=c(3,2,1), lwd=c(2,2,2))
+
+```
+
+```{r steady_state_rho_ext_no_cost_plot, echo=FALSE, fig.align='center'}
+plot(prhoi_ext, steady_Iw_rho2_ext, main="Steady-states : treatment failure variations \n when without transmission cost", xlab=expression(rho), ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+
+lines(prhoi_ext, steady_Iz_rho2_ext, lty=2, lwd=2)
+lines(prhoi_ext, steady_S_rho2_ext, lty=1, lwd=2)
+
+legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "S Susceptible population" ), lty=c(3,2,1), lwd=c(2,2,2))
+
+```
