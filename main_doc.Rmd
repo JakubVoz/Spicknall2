@@ -501,7 +501,15 @@ In this part, we vary rate at which the proportion of patients varies, still con
 knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/inertie_study_files/figure-html/prep_plot-1.png")
 ```
 
-As the rate of change increases, the proportion of $I_z$ is more distant from its steady state value. The rate of change of $\varepsilon$ can thus have a severe impact on the detected resistance level. Presuming that all hospitals are in equilibrium can be therefore too rough simplification.
+As the rate of change increases, the proportion of $I_z$ is more distant from its steady state value. The rate of change of $\varepsilon$ can thus have a severe impact on the detected resistance level. Presuming that all hospitals are in equilibrium can be a rough simplification.
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/inertie_study_files/figure-html/prep_plot-2.png")
+```
+
+Delay in reaching equilibrium due to rapid increase of $\varepsilon$ can be observed for the p (defined as the ratio between $I_z$ and burden of infection) as well.
+
+The question is now whether there are the same times are required for  reaching equilibrium (TREs) while increasing or decreasing $\varepsilon$.
 
 ##Time to reach equilibrium while increasing or decreasing $\varepsilon$
 

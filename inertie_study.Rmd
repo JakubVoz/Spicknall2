@@ -203,6 +203,14 @@ maxtag <- paste(eps_growth[length(eps_growth)])
 legend("topleft" , inset=.05, title='rate of change', c(controltag,mintag, maxtag), lty=c(1,1,1), lwd=c(2,2,2), col=c("black","blue", "red"))
 
 
+p_prev <- Iz2/(Iz2+Iw2)
+
+plot(epsilon2[,1], p_prev[,1], xlab=expression(epsilon), ylab="AMR ratio", main = "Evolution of p", type="l", lty=1, lwd=2, ylim=c(0, 1), col='black')
+p_prev_without_control <- p_prev[,2:ncol(p_prev)]
+capture.output(apply(p_prev_without_control, 2, linfun, epsilon2[,1]), file='NUL')
+
+legend("topleft" , inset=.05, title='rate of change', c(controltag,mintag, maxtag), lty=c(1,1,1), lwd=c(2,2,2), col=c("black","blue", "red"))
+
 ```
 
 
