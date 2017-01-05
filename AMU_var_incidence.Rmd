@@ -755,7 +755,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 #net Iz S flow
 
 
-plot(time_zoom, net_Iz_S[,11], main="Net flow : S to Iz", xlab="time (steps)", ylab="Iz to S", ylim=c(0, 0.001), lty=1, lwd=2, type="l")
+plot(time_zoom, net_Iz_S[,11], main="Net flow : Iz to S", xlab="time (steps)", ylab="Iz to S", ylim=c(0, 0.001), lty=1, lwd=2, type="l")
 
 capture.output(apply(net_Iz_S, 2, linfun, time_zoom), file='NUL')
 
@@ -792,7 +792,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 #net Iz S flow
 
 
-plot(time_zoom, net_Iz_S[,11], main="S to Iz", xlab="time (steps)", ylab="Iz to S", ylim=c(-0.004, 0.003), lty=1, lwd=2, type="l")
+plot(time_zoom, net_Iz_S[,11], main="Iz to S", xlab="time (steps)", ylab="Iz to S", ylim=c(-0.004, 0.003), lty=1, lwd=2, type="l")
 
 capture.output(apply(net_Iz_S, 2, linfun, time_zoom), file='NUL')
 

@@ -380,6 +380,8 @@ Finally, we represent here the net flows between the three subpopulations after 
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/net_flows_aggregated-1.png")
 ```
 
+We can notice that $I_w$ to $S$ and $I_w$ and $I_z$ net flows are discontinuous because some of their components ($I_w$ to $S$, $I_w$ to $I_z$ and $I_z$ to $I_w$ flows) depend directly on $\varepsilon$ changing abruptly at t=0. On the otherhand $I_z$ to $S$ net flow is continuous because each of its components is independent on $\varepsilon$.
+
 During short-time period after a sharp decrease in $\varepsilon$, the net flows in our model are as follows:
 
 ```{r, out.width = "200px", echo=FALSE, cache=TRUE, fig.align='center'}
