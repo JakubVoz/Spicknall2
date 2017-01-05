@@ -144,7 +144,7 @@ out2 <- cbind(out, mutate(out, p=out$Iz/(out$Iw+out$Iz), q=out$Iw+out$Iz))
 knitr::include_graphics("./final_mod_files/figure-html/steady_state_eps_plot-1.png")
 ```
 
-According to our model, the proportions of different populations change for the range of PTP (proportion of treated patients) between 0 and 20%. $I_w$ decreases linearly with the increase of PTP. For now on, the behavior of our model will be analyzed for this span of PTP (!! relevance??).
+According to our model, the proportions of different populations change for the range of $\varepsilon$ (proportion of treated patients) between 0 and 20%. $I_w$ decreases linearly with the increase of $\varepsilon$. For now on, the behavior of our model will be analyzed for this span of $\varepsilon$ (!! relevance??).
 
 
 ```{r ss_rho_var, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
@@ -153,19 +153,19 @@ knitr::include_graphics("./final_mod_files/figure-html/steady_state_rho_plot-1.p
 
 Based on literature, the proportion of treatment failures is between 4 and 8% (add a quote) for tuberculosis. It has a significant impact on the proportion of $I_w$ and $I_z$. When it increases the prevalence of $I_z$ increases at the expense of $I_w$, while the global burden of the disease decreases. Interestingly, when there is no treatment failure, there is no stable coexistence of sensitive and resistant strains in our model.
 
-<center> <h3> Steady state AMU when varying PTP </h3> </center>
+<center> <h3> Steady state QA when varying $\varepsilon$ </h3> </center>
 
-In this part, we consider AMU as being the burden of infection multiplied by the proportion of treated patients. In fact, usage of ATB in patients infected with resistant strains does not have any impact on patient's recovery in our model. Though, here we consider that the ATB are consumed in this subpopulation as well, which may be due to poor or late resistance detection in hospitals or to self-medication in population.
+We consider Quantity of antibiotics as being the burden of infection multiplied by the proportion of treated patients. In fact, usage of ATB in patients infected with resistant strains does not have any impact on patient's recovery in our model. Though, here we consider that the ATB are consumed in this subpopulation as well and at the same rate, which may be due to poor or late resistance detection in hospitals or to self-medication in population.
 
-Therefore in this model, $AMU = (I_w +I_z)*PTP$.
+Therefore in this model, $QA = (I_w +I_z)*\varepsilon$.
 
-The following plot represents the AMU in function of PTP. 
+The following plot represents the QA in function of $\varepsilon$. 
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
-knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_AMU-6.png")
+knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_QA-6.png")
 ```
 
-The first part of the graph results from a multiplication of a decreasing linear function ($I_w + I_z$) and an increasing linear function ($PTP$). For extreme values of PTP, there is a linear relation between AMU and PTP as $I_w + I_z$ reaches stability.
+The first part of the graph results from a multiplication of a decreasing linear function ($I_w + I_z$) and an increasing linear function ($\varepsilon$). For extreme values of $\varepsilon$, there is a linear relation between QA and $\varepsilon$ as $I_w + I_z$ reaches stability.
 
 This means that at steady states, with nearly the same quantity of antibiotics (0.050 and 0.06) nearly a double proportion of patients can be treated (10% and 17%).
 
@@ -173,7 +173,7 @@ This means that at steady states, with nearly the same quantity of antibiotics (
 
 <center> <h3> Steady state net flow in the model </h3> </center>
 
-The steady state flows from one population to another are followed for PTP varying between 0 and 20%.
+The steady state flows from one population to another are followed for $\varepsilon$ varying between 0 and 20%.
 
 ```{r ss_flow_eps_var, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_inc_flows-1.png")
@@ -203,28 +203,28 @@ Here, the p corresponds to the ratio of prevalence at steady-states. Usually, it
 
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
-knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_AMU-2.png")
+knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_QA-2.png")
 ```
 
-P as a function of AMU shows an exponential growth with saturation, which is due to :
+P as a function of QA shows an exponential growth with saturation, which is due to :
 
-a) interplay of increasing $I_z$ and decreasing $I_w$ with increasing PTP
-b) saturation part of the curve of AMU=f(PTP) ([0.050, 0.06] of AMU corresponds to [10%,17%] of PTP)
+a) interplay of increasing $I_z$ and decreasing $I_w$ with increasing $\varepsilon$
+b) saturation part of the curve of QA=f($\varepsilon$) ([0.050, 0.06] of QA corresponds to [10%,17%] of $\varepsilon$)
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/ss_burden_of_inf-1.png")
 ```
 
-Here, the burden of infection corresponds to the total proportion of infected people. It decreases linearly as the PTP increases, due to the decrease of $I_w$ that is faster than the increase of $I_z$.
+Here, the burden of infection corresponds to the total proportion of infected people. It decreases linearly as the $\varepsilon$ increases, due to the decrease of $I_w$ that is faster than the increase of $I_z$.
 
 
 
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
-knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_AMU-4.png")
+knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_QA-4.png")
 ```
 
-Finally, when plotting the BOI in function of AMU, decreasing tendency is preserved. Before reaching a stability, there is a fastening decrease of BOI, which is once again due to the saturation tendancy in AMU=f(PTP).
+Finally, when plotting the BOI in function of QA, decreasing tendency is preserved. Before reaching a stability, there is a fastening decrease of BOI, which is once again due to the saturation tendancy in QA=f($\varepsilon$).
 
 <center> <h3> Steady state incidence </h3> </center>
 
@@ -235,9 +235,9 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_steady_st-3.
 
 Though the burden of infection decreases linearly with the use of antibiotics, the global incidence evolves in a more complex way. There is a peak for incidence when app. 7% of the patients are treated. 
 
-The increase of global incidence for lower values of PTP, cannot be solely explained by the emergence of resistance and its spread : the incidence of sensitive infections increases until 5% PTP. In fact, though the proportion of sensitive cases decreases very fast with PTP in comparison to the speed of increase of susceptible population, their product increases until app. 9% PTP and remains at equal or higher values of the situation without PTP until app. 11% of PTP. The increasing spread of resistant infections explains then the delayed peak of global incidence in comparison with the sensitive one.
+The increase of global incidence for lower values of $\varepsilon$, cannot be solely explained by the emergence of resistance and its spread : the incidence of sensitive infections increases until 5% $\varepsilon$. In fact, though the proportion of sensitive cases decreases very fast with $\varepsilon$ in comparison to the speed of increase of susceptible population, their product increases until app. 9% $\varepsilon$ and remains at equal or higher values of the situation without $\varepsilon$ until app. 11% of $\varepsilon$. The increasing spread of resistant infections explains then the delayed peak of global incidence in comparison with the sensitive one.
 
-The global incidence then decreases to its value without AMU at 14% PTP.
+The global incidence then decreases to its value without antibiotic use at 14% $\varepsilon$.
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
@@ -247,7 +247,7 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/incid_plot_sec-2.
 
 The situation where resistance emerges in a treated patient, comprehending a horizontal tranfer of AMR, $de$ $novo$ mutations and minor resistant population outcompeting its sensitive fellows, is called secondary resistance.
 
-This resistance is represented in our model as a flow from $I_w$ to $I_z$ depending on the PTP and probability of acquiring resistance when treated. As we can see, it reaches a peak for 10% PTP. For higher values of PTP, the deterioration of $I_w$ population makes the secondary resistance plummet.
+This resistance is represented in our model as a flow from $I_w$ to $I_z$ depending on the $\varepsilon$ and probability of acquiring resistance when treated. As we can see, it reaches a peak for 10% $\varepsilon$. For higher values of $\varepsilon$, the deterioration of $I_w$ population makes the secondary resistance plummet.
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
@@ -255,15 +255,15 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/incid_plot_real_p
 
 ```
 
-When relating p and AMU, the proportion of resistant cases among new cases increases very steeply at higher values (0.050 ti 0.060) of AMU. This is once again due to:
+When relating p and QA, the proportion of resistant cases among new cases increases very steeply at higher values (0.050 ti 0.060) of QA. This is once again due to:
 
-a) exponential increase in p=f(PTP)
-b) relative steadiness in AMU=f(PTP) for higher values of PTP (10 - 17%)
+a) exponential increase in p=f($\varepsilon$)
+b) relative steadiness in QA=f($\varepsilon$) for higher values of $\varepsilon$ (10 - 17%)
 
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
-knitr::include_graphics("./AMU_var_incidence_files/figure-html/p_incid_as_func_AMU_ss-1.png")
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/p_incid_as_func_QA_ss-1.png")
 
 ```
 
@@ -271,9 +271,9 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/p_incid_as_func_A
 
 <center> <h2> Dynamics exploitation </h2> </center>
 
-In this part, we analyse the dynamics in our model. At time $t=0$, the steady state for $PTP=10%$ was reached. Afterwards, the PTP changes to values between 0% and 20%.
+In this part, we analyse the dynamics in our model. At time $t=0$, the steady state for $\varepsilon=10%$ was reached. Afterwards, the $\varepsilon$ changes to values between 0% and 20%.
 
-<center> <h3> Dynamics of p after a change in PTP</h3> </center>
+<center> <h3> Dynamics of p after a change in $\varepsilon$</h3> </center>
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
@@ -289,11 +289,11 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/new_cases_dynamic
 
 ```
 
-We have seen that at steady state the global incidence increases in the interval of 0% to 7% PTP. This means that paradoxically, there are more new infections with higher level of PTP.
+We have seen that at steady state the global incidence increases in the interval of 0% to 7% $\varepsilon$. This means that paradoxically, there are more new infections with higher level of $\varepsilon$.
 
-Here, we see that in short-term dynamics, the incidence depends strongly on PTP : when PTP increases the global incidence decreases for each value of PTP.
+Here, we see that in short-term dynamics, the incidence depends strongly on $\varepsilon$ : when $\varepsilon$ increases the global incidence decreases for each value of $\varepsilon$.
 
-For lower values of PTP, we can see a 
+For lower values of $\varepsilon$, we can see a 
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
@@ -303,7 +303,7 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/S_to_Iz_flow-1.pn
 
 ```
 
-It is indeed the incidence of sensitive cases that is responsible for the short-term peaks of global incidence when PTP decreases. 
+It is indeed the incidence of sensitive cases that is responsible for the short-term peaks of global incidence when $\varepsilon$ decreases. 
 
 The susceptible incidence depends on mass product of $I_w$ and $S$.
 
@@ -318,7 +318,7 @@ knitr::include_graphics("./simple_models_files/figure-html/model_Iw_S-1.png")
 
 The short-term peaks do not appear in a simpler model and thus this phenomenon is emerging due to the presence of $I_z$.
 
-As the sensitive incidence, and thus the short-term peaks, are directly dependent on the mass-product of $I_w$ and $S$, a change in flow between $I_z$ and $I_w$ may have a direct impact on the this mass product. In particular, the secondary resistance may be the cause of the short-term peaks as the variation of PTP has a huge and immediate impact on its strength : the decrease of PTP would decrease this flow and we would see a fast accumulation in $I_w$ population at the cost of $I_z$.
+As the sensitive incidence, and thus the short-term peaks, are directly dependent on the mass-product of $I_w$ and $S$, a change in flow between $I_z$ and $I_w$ may have a direct impact on the this mass product. In particular, the secondary resistance may be the cause of the short-term peaks as the variation of $\varepsilon$ has a huge and immediate impact on its strength : the decrease of $\varepsilon$ would decrease this flow and we would see a fast accumulation in $I_w$ population at the cost of $I_z$.
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
@@ -326,9 +326,9 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/Iw_Iz_dynamics-1.
 
 ```
 
-Concurrently to the presence of short-term peaks, the $I_w$ to $I_z$ flow, corresponding to the spread of resistance in infected cases, plummets. In fact, the decrease of AMU has an immediate effect on this flow. Meanwhile the impact on the loss of resistance ($I_z$ to $I_w$ flow) is slower : it reaches the minimum value by the 150th step.
+Concurrently to the presence of short-term peaks, the $I_w$ to $I_z$ flow, corresponding to the spread of resistance in infected cases, plummets. In fact, the decrease of $\varepsilon$ has an immediate effect on this flow. Meanwhile the impact on the loss of resistance ($I_z$ to $I_w$ flow) is slower : it reaches the minimum value by the 150th step.
 
-This shows that a decrease in PTP is followed by fast redistribution of infected cases from resistant ones to sensitive ones. Due to the accumulation of sensitive cases, the mass product of $I_w$ and $S$ will increase sharply for short time, though $S$ decreases at the same time.
+This shows that a decrease in $\varepsilon$ is followed by fast redistribution of infected cases from resistant ones to sensitive ones. Due to the accumulation of sensitive cases, the mass product of $I_w$ and $S$ will increase sharply for short time, though $S$ decreases at the same time.
 
 During short-time period, the net flows in our model are as follows:
 
@@ -336,7 +336,7 @@ During short-time period, the net flows in our model are as follows:
 knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/Sharp decrease in AMU.png")
 ```
 
-At sharp increase of PTP the net flows in our model change as well:
+At sharp increase of $\varepsilon$ the net flows in our model change as well:
 
 ```{r, out.width = "200px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/Sharp increase in AMU.png")
@@ -355,17 +355,17 @@ The steady state values of state variables are the following:
 knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_no_competition_inc_files/figure-html/comp_inc_flows-2.png")
 ```
 
-We observe therefore coexistence of the strains for values of PTP between approximately 0 and 15%. When $I_z$ is fixed, it has the same value as $I_z$ prevalence during prebiotic era.
+We observe therefore coexistence of the strains for values of $\varepsilon$ between approximately 0 and 15%. When $I_z$ is fixed, it has the same value as $I_z$ prevalence during prebiotic era.
 
 Interestingly, when no ATB is used, resistant strain does not coexist with the sensitive one due to indirect cost linked to co-infections. Although no direct cost of resistance is included in this particular model, when resistant cases are reinfected with sensitive strains, the sensitive strain prevails.
 
-Paradoxically the prevalence has the lowest value for a PTP of 10% due to indirect competition. The incidence is highest at the same time as the turnover of sensitive cases is highest (we observe a peak of $I_w$ and $S$ mass product). It returns to pre-antibiotic era as $I_z$ becomes fixed.
+Paradoxically the prevalence has the lowest value for a $\varepsilon$ of 10% due to indirect competition. The incidence is highest at the same time as the turnover of sensitive cases is highest (we observe a peak of $I_w$ and $S$ mass product). It returns to pre-antibiotic era as $I_z$ becomes fixed.
 
 ```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_no_competition_inc_files/figure-html/comp_inc_flows-1.png")
 ```
 
-As there is no cost of resistance, the interplay between resistant and sensitive strain will depend solely on $\varepsilon$ and $\rho$. As $\varepsilon$, that corresponds to the PTP here, increases, a higher turnover of sensitive cases occurs, while the flow from $I_w$ to $I_z$ increases at the expense of $I_z$ to $I_w$ flow.
+As there is no cost of resistance, the interplay between resistant and sensitive strain will depend solely on $\varepsilon$ and $\rho$. As $\varepsilon$, that corresponds to the $\varepsilon$ here, increases, a higher turnover of sensitive cases occurs, while the flow from $I_w$ to $I_z$ increases at the expense of $I_z$ to $I_w$ flow.
 
 Interestingly but not surprisingly, the global flows in our model are inversed in comparison with a model including cost of resistance. This is due to the fact that $I_z$ spreads as easily as $I_w$. At the same time, patients infected with $I_w$ do recover more easily than those infected with $I_z$ as $\varepsilon$ increases. Therefore there is a stronger flow from $I_w$ to $S$ than from $I_z$, when the populations are equal.
 
@@ -373,17 +373,17 @@ Interestingly but not surprisingly, the global flows in our model are inversed i
 knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/No cost on transmission.png")
 ```
 
-In comparison with the full model, the primary resistance becomes predominant over the secondary one for lower values of PTP, as the resistant bacteria are better transmitted (10% vs 13%). For most diseases, the secondary resistance is estimated to be more prevalent.
+In comparison with the full model, the primary resistance becomes predominant over the secondary one for lower values of $\varepsilon$, as the resistant bacteria are better transmitted (10% vs 13%). For most diseases, the secondary resistance is estimated to be more prevalent.
 
 ```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_no_competition_inc_files/figure-html/comp_steady_st-1.png")
 ```
 
-In general, when the cost of transmission increases, $i.e.$ the $\beta_z$ decreases while $\beta_w$ remains stable, $I_z$ is fixed and becomes prevalent for higher values of PTP.
+In general, when the cost of transmission increases, $i.e.$ the $\beta_z$ decreases while $\beta_w$ remains stable, $I_z$ is fixed and becomes prevalent for higher values of $\varepsilon$.
 
 <center> <h3> Inhibition of secondary resistance </h3> </center>
 
-When only primary resistance is preserved, that is to say $\rho=0$, we observe that the coexistence is very limited (for PTP between 0.27 and 0.29).
+When only primary resistance is preserved, that is to say $\rho=0$, we observe that the coexistence is very limited (for $\varepsilon$ between 0.27 and 0.29).
 
 ```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_prim_res_inc_files/figure-html/comp_inc_flows-2.png")
@@ -405,14 +405,14 @@ Here, the primary resistance is omitted, $i.e.$ $beta_z=0$ and the resistant str
 knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_sec_res_inc_files/figure-html/comp_inc_flows-2.png")
 ```
 
-Although the transmission of resistant strains is omitted and therefore the pool of resistant cases is fully dependant on treatment failures, the coexistence is observed for PTP < 25% at steady states. Not surprisingly, the resistant cases vanish at the same time as sensitive ones do.
+Although the transmission of resistant strains is omitted and therefore the pool of resistant cases is fully dependant on treatment failures, the coexistence is observed for $\varepsilon$ < 25% at steady states. Not surprisingly, the resistant cases vanish at the same time as sensitive ones do.
 
 
 ```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_sec_res_inc_files/figure-html/comp_steady_st-3.png")
 ```
 
-In comparison with a simple model in which only susceptible population and sensitive strains are present, the incidence is smaller for the same PTP. This is due to the treatment failures : in fact, the $I_z$ will represent here a dead-end for the pathogen that cannot be transmitted.
+In comparison with a simple model in which only susceptible population and sensitive strains are present, the incidence is smaller for the same $\varepsilon$. This is due to the treatment failures : in fact, the $I_z$ will represent here a dead-end for the pathogen that cannot be transmitted.
 
 
 <center> <h2> Study of hysteresis </h2> </center>
@@ -423,24 +423,24 @@ The study of hysteresis allows to know whether the same stable states can be rea
 knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/hysteresis_files/figure-html/incid_plot_Iw_theoretic-1.png")
 ```
 
-Theoretically there is a hysteresis due to the fact that no possible conversion from $I_z$ to $I_w$ is included in  model. The plot above represents the theoretical hysteresis. In theory, once the PTP stabilizes over 0.18, there is a point of no return, not allowing the sensitive bacteria to re-establish. This is due to the fact, that in our model there is no possibility of reversion of resistant mutants which seems to be realistic considering today's research (changing genetic background and eventual compensatory mutations will make reversion highly unlikely).
+Theoretically there is a hysteresis due to the fact that no possible conversion from $I_z$ to $I_w$ is included in  model. The plot above represents the theoretical hysteresis. In theory, once the $\varepsilon$ stabilizes over 0.18, there is a point of no return, not allowing the sensitive bacteria to re-establish. This is due to the fact, that in our model there is no possibility of reversion of resistant mutants which seems to be realistic considering today's research (changing genetic background and eventual compensatory mutations will make reversion highly unlikely).
 
-In an actual model, longer the model procedes while PTP>0.18, longer it will take to re-establish the population at steady state from the plot on the left for PTP<0.18. 
+In an actual model, longer the model procedes while $\varepsilon$>0.18, longer it will take to re-establish the population at steady state from the plot on the left for $\varepsilon$<0.18. 
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/hysteresis_files/figure-html/incid_plot_Iw_shorter_t-1.png")
 ```
 
-There might be therefore a considerable range of PTP for which seemingly the point of no return equilibrium is maintained when decreasing PTP under 0.18.
+There might be therefore a considerable range of $\varepsilon$ for which seemingly the point of no return equilibrium is maintained when decreasing $\varepsilon$ under 0.18.
 
-In conclusion, there is hysteresis in our model in theory, once the PTP reaches and stabilizes at a level beyond the point of no return, corresponding to 0.18.
+In conclusion, there is hysteresis in our model in theory, once the $\varepsilon$ reaches and stabilizes at a level beyond the point of no return, corresponding to 0.18.
 
 
 <center> <h2> Study of inertia </h2> </center>
 
-<center> <h3> Varying the speed of change of PTP </h3> </center>
+<center> <h3> Varying the speed of change of $\varepsilon$ </h3> </center>
 
-In this part, we vary rate at which the proportion of patients varies, still considering that the proportion of patients is directly linked to the PTP. At first, we start from PTP=0 and increase its value up to 100%.
+In this part, we vary rate at which the proportion of patients varies, still considering that the proportion of patients is directly linked to the $\varepsilon$. At first, we start from $\varepsilon$=0 and increase its value up to 100%.
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/inertie_study_files/figure-html/prep_plot-1.png")
