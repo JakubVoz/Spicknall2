@@ -124,8 +124,8 @@ steady_time_eps <- steady_eps[,1]
 steady_S_eps <- steady_eps[,2]
 steady_Iw_eps <- steady_eps[,3]
 steady_Iz_eps <- steady_eps[,4]
-steady_AMU_Iw_eps <- steady_Iw_eps*pepsi
-steady_AMU_Iw_Iz_eps <- (steady_Iw_eps+steady_Iz_eps)*pepsi
+steady_QA_Iw_eps <- steady_Iw_eps*pepsi
+steady_QA_Iw_Iz_eps <- (steady_Iw_eps+steady_Iz_eps)*pepsi
 
 ```
 
@@ -143,21 +143,21 @@ plot(pepsi, steady_Iw_eps, main="Steady-states : treatment variations", xlab="pr
 
 lines(pepsi, steady_Iz_eps, lty=2, lwd=2)
 lines(pepsi, steady_S_eps, lty=1, lwd=2)
-lines(pepsi, steady_AMU_Iw_eps, lty=1, lwd=2, col='red')
-lines(pepsi, steady_AMU_Iw_Iz_eps, lty=2, lwd=2, col='red')
+lines(pepsi, steady_QA_Iw_eps, lty=1, lwd=2, col='red')
+lines(pepsi, steady_QA_Iw_Iz_eps, lty=2, lwd=2, col='red')
 
-legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "S Susceptible population", 'AMU : Iw treated', 'AMU : all treated' ), lty=c(3,2,1,1,2), lwd=c(2,2,2,2,2), col=c(rep('black',3), rep('red',2)))
+legend("topright" , inset=.05, c("Iw Sensitive strain", "Iz Resistant strain", "S Susceptible population", 'QA : Iw treated', 'QA : all treated' ), lty=c(3,2,1,1,2), lwd=c(2,2,2,2,2), col=c(rep('black',3), rep('red',2)))
 
 ```
 
-```{r steady_state_AMU_plot, echo=FALSE, fig.align='center'}
+```{r steady_state_QA_plot, echo=FALSE, fig.align='center'}
 
-plot(pepsi, steady_AMU_Iw_eps, main="AMU : treatment variations", xlab="PTP", ylab="AMU", ylim=c(0,0.4), lty=1, lwd=2, type="l", col='red')
+plot(pepsi, steady_QA_Iw_eps, main="QA : treatment variations", xlab=expression(epsilon), ylab="QA", ylim=c(0,0.4), lty=1, lwd=2, type="l", col='red')
 
 
-lines(pepsi, steady_AMU_Iw_Iz_eps, lty=2, lwd=2, col='red')
+lines(pepsi, steady_QA_Iw_Iz_eps, lty=2, lwd=2, col='red')
 
-legend("topright" , inset=.05, c('AMU : Iw treated', 'AMU : all treated' ), lty=c(1,2), lwd=c(2,2), col=c(rep('red',2)))
+legend("topright" , inset=.05, c('QA : Iw treated', 'QA : all treated' ), lty=c(1,2), lwd=c(2,2), col=c(rep('red',2)))
 
 ```
 
