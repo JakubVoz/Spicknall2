@@ -165,7 +165,7 @@ out2 <- cbind(out, mutate(out, p=out$Iz/(out$Iw+out$Iz), q=out$Iw+out$Iz))
 
 #Steady state exploration
 
-##Steady states when varying proportion of treated patients or rate of acquisition of AMR
+##Steady states when varying $\varepsilon$
 
 ```{r ss_eps_var, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("./final_mod_files/figure-html/steady_state_eps_plot-1.png")
@@ -173,6 +173,8 @@ knitr::include_graphics("./final_mod_files/figure-html/steady_state_eps_plot-1.p
 
 According to our model, the proportions of different populations change for the range of $\varepsilon$ (proportion of treated patients) between 0 and 20%. $I_w$ decreases linearly with the increase of $\varepsilon$. For now on, the behavior of our model will be analyzed for this span of $\varepsilon$ (!! relevance??).
 
+
+##Steady states when varying $\rho$
 
 ```{r ss_rho_var, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("./final_mod_files/figure-html/steady_state_rho_plot-1.png")
@@ -406,7 +408,18 @@ In comparison with the full model, the primary resistance becomes predominant ov
 knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_no_competition_inc_files/figure-html/comp_steady_st-1.png")
 ```
 
-In general, when the cost of transmission increases, $i.e.$ the $\beta_z$ decreases while $\beta_w$ remains stable, $I_z$ is fixed and becomes prevalent for higher values of $\varepsilon$.
+In general, when the transmission cost increases, $i.e.$ the $\beta_z$ decreases while $\beta_w$ remains stable, $I_z$ is fixed and becomes prevalent for higher values of $\varepsilon$.
+
+
+```{r ss_rho_var_no_cost, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./final_mod_files/figure-html/steady_state_rho_no_cost_plot-1.png")
+knitr::include_graphics("./final_mod_files/figure-html/steady_state_rho_plot-1.png")
+```
+
+Consistant with the above-mentioned findings, when $\rho=0$, $i.e.$ there is no treatment failure and therefore no secondary resistance, resistant strain cannot coexist.
+
+Moreover unlike in the situation where the transmission cost does exist, the global burden of infection increases with $\rho$. This is due to the fact, that the resistant strain has the behaviour of a sensitive one in antibiotics-free environment. Therefore, at values of $\rho$ incompatible with $I_w$ coexistence ($\rho$>0.15), $I_z$ gains the same levels as $I_w$ in antibiotics-free environment ($I_z$=0.75; data not shown).
+
 
 ##Inhibition of secondary resistance
 
