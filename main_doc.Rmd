@@ -344,9 +344,9 @@ The susceptible incidence depends on mass product of $I_w$ and $S$.
 
 We consider now a simpler model with only $I_w$ and $S$ populations, related with the same relationships as in our model. Do these short-term peaks in $I_w$ incidence appear as well? If it is so, the anti-honeymoon period is due only to the interplay between $I_w$ and $S$ when the $\varepsilon$ is suddenly decreased. The second possibility is that the transient anti-honeymoon period is due to the interplay between $I_w$ and $I_z$.
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "800px", echo=FALSE, cache=TRUE, fig.align='center'}
 
-knitr::include_graphics("./simple_models_files/figure-html/model_Iw_S-1.png")
+knitr::include_graphics("./simple_models_files/figure-html/model_Iw_S_plots-1.png")
 
 
 ```
@@ -527,6 +527,8 @@ The question is now whether there are the same times are required for  reaching 
 
 ##Time to reach equilibrium while increasing or decreasing $\varepsilon$
 
+###Comparing TREs for the same end value of $varepsilon$
+
 The idea is to compare the number of steps that are required for reaching a steady state while either increasing or decreasing the value of $\varepsilon$.
 
 The model starts at a steady state for a given value of $\varepsilon$. Then the $\varepsilon$ is increased or decreased by certain $\delta$ and the time required for reaching equilibrium (TRE), represented by a value of convergience criterion (here $c$=0.000001). The output is the following comparison of TREs for each final value of $\varepsilon$:
@@ -566,6 +568,46 @@ knitr::include_graphics("C:/Users/Jakub/Desktop/Spicknall_partial_models_data/in
 ```
 
 Once again, when the $\varepsilon$ value is decreased, the steady state is reached with a delay for most of its final values.
+
+###Comparing TREs for the same start value of $varepsilon$
+
+####TREs
+convergence criterion = 0.000001
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./inertie_study_time_to_equilibrium_start_files/figure-html/time_to_stabilization_plot-1.png")
+```
+
+convergence criterion = 0.0001
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./inertie_study_time_to_equilibrium_start2_files/figure-html/time_to_stabilization_plot-1.png")
+```
+
+####Difference between TREs : Delay
+
+convergence criterion = 0.000001
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./inertie_study_time_to_equilibrium_start_files/figure-html/plot_dif-1.png")
+```
+
+convergence criterion = 0.0001
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./inertie_study_time_to_equilibrium_start2_files/figure-html/plot_dif-1.png")
+```
+
+####Delay with same metrics
+
+convergence criterion = 0.000001
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./inertie_study_time_to_equilibrium_start_files/figure-html/plot_same_metrics-1.png")
+```
+
+convergence criterion = 0.0001
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./inertie_study_time_to_equilibrium_start2_files/figure-html/plot_same_metrics-1.png")
+```
 
 
 #Detailing AMU
