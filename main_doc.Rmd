@@ -310,6 +310,8 @@ knitr::include_graphics("./AMU_var_prevalence_files/figure-html/plot_prev_p-1.pn
 
 ```
 
+Here, p corresponds to the ratio of $I_z$ and burden of infection. As the study of its dynamics show, it changes following $\varepsilon$.
+
 ##Dynamics of Incidence
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
@@ -320,9 +322,13 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/new_cases_dynamic
 
 We have seen that at steady state the global incidence increases in the interval of 0% to 7% $\varepsilon$. This means that paradoxically, there are more new infections with higher level of $\varepsilon$.
 
-Here, we see that in short-term dynamics, the incidence depends strongly on $\varepsilon$ : when $\varepsilon$ increases the global incidence decreases for each value of $\varepsilon$.
+Here, we see that in short-term dynamics, the incidence depends strongly on $\varepsilon$ : when $\varepsilon$ decreases the global incidence increases for each value of $\varepsilon$.
 
-For lower values of $\varepsilon$, we can see a 
+There is therefore a transient period, that follows a decrease in $\varepsilon$, during which the incidence is higher not only than at the prior state but than at equilibrium as well.
+
+DESCRIPTION OF HONEY-MOON PERIOD
+
+On following pages, we will study the cause of this anti-honeymoon period, during which the incidence is strikingly higher than at equilibrium and at state prior to $\varepsilon$ reduction.
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
@@ -332,7 +338,7 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/S_to_Iz_flow-1.pn
 
 ```
 
-It is indeed the incidence of sensitive cases that is responsible for the short-term peaks of global incidence when $\varepsilon$ decreases. 
+It is indeed the increase in the incidence of sensitive cases that seems to be responsible for the anti-honeymoon period after an abrupt reduction of $\varepsilon$. 
 
 The susceptible incidence depends on mass product of $I_w$ and $S$.
 
@@ -345,7 +351,7 @@ knitr::include_graphics("./simple_models_files/figure-html/model_Iw_S-1.png")
 
 ```
 
-The short-term peaks do not appear in a simpler model and thus this phenomenon is emerging due to the presence of $I_z$.
+Anti-honeymoon period does not appear in a simpler model and thus this phenomenon emerges due to the presence of $I_z$.
 
 As the sensitive incidence, and thus the anti-honeymoon period, are directly dependent on the mass-product of $I_w$ and $S$, a change in flow between $I_z$ and $I_w$ may have a direct impact on the this mass product. In particular, the secondary resistance may be the cause of the short-term peaks as the variation of $\varepsilon$ has a huge and immediate impact on its strength : the decrease of $\varepsilon$ would decrease this flow and we would see a fast accumulation in $I_w$ population at the cost of $I_z$.
 
@@ -365,7 +371,7 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/recovery_flows-1.
 
 ```
 
-As we can see, the recovery dynamics of sensitive cases after a sudden decrease of $\varepsilon$ are in accordance with our hypothesis and contribute to the anti-honeymoon effect.
+As we can see, the recovery dynamics of sensitive cases after a sudden decrease of $\varepsilon$ is in accordance with our hypothesis and contribute to the anti-honeymoon effect.
 
 The anti-honeymoon effect, following an abrupt drop in $\varepsilon$, is a consequence of several phenomena:
 
