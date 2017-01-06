@@ -613,7 +613,7 @@ legend("topright", inset=.05, c("Resistant", "Sensitive"), col=c("purple", "gree
 
 Iwz_ss <- S_to_Iz_ss + S_to_Iw_ss
 
-plot(epsvar, Iwz_ss, xlab=expression(epsilon), ylab="Proportion flow", main = "Incidence", type="l", col="red", lwd=2, ylim=c(0,0.012))
+plot(epsvar, Iwz_ss, xlab=expression(epsilon), ylab="Proportion flow", main = "Incidence", type="l", col="red", lwd=2, ylim=c(0,0.012), xlim=c(0,0.3))
 lines(epsvar, S_to_Iz_ss, lty=2, col="red", lwd=2)
 lines(epsvar, S_to_Iw_ss, lty=3, col="red", lwd=2)
 

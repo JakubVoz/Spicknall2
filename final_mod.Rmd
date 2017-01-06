@@ -144,7 +144,7 @@ plot(pepsi, steady_Iw_eps, main="Steady-states : treatment variations", xlab=exp
 lines(pepsi, steady_Iz_eps, lty=2, lwd=2)
 lines(pepsi, steady_S_eps, lty=1, lwd=2)
 
-legend("topright" , inset=.05, c("Iw", "Iz", "S"), lty=c(3,2,1), lwd=c(2,2,2))
+legend("topleft", inset=.05, c("S", "Iz", "Iw"), lty=c(1,2,3), lwd=rep(2,3))
 
 
 #zoom : control for no interhost compet
@@ -159,7 +159,7 @@ plot(pepsi2, steady_Iw_eps2, main="Steady-states : treatment variations", xlab=e
 lines(pepsi2, steady_Iz_eps2, lty=2, lwd=2)
 lines(pepsi2, steady_S_eps2, lty=1, lwd=2)
 
-legend("topright" , inset=.05, c("Iw", "Iz", "S"), lty=c(3,2,1), lwd=c(2,2,2))
+legend("topleft", inset=.05, c("S", "Iz", "Iw"), lty=c(1,2,3), lwd=rep(2,3))
 
 #zoom : control for no sec resistance partial model
 
@@ -173,7 +173,7 @@ plot(pepsi3, steady_Iw_eps3, main="Steady-states : treatment variations", xlab=e
 lines(pepsi3, steady_Iz_eps3, lty=2, lwd=2)
 lines(pepsi3, steady_S_eps3, lty=1, lwd=2)
 
-legend("topright" , inset=.05, c("Iw", "Iz", "S"), lty=c(3,2,1), lwd=c(2,2,2))
+legend("topleft", inset=.05, c("S", "Iz", "Iw"), lty=c(1,2,3), lwd=rep(2,3))
 
 
 

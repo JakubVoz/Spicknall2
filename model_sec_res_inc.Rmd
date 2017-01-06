@@ -627,7 +627,7 @@ plot(epsvar, S_var_ss, xlab=expression(epsilon), ylab="Steady state var", main =
 lines(epsvar, Iw_var_ss, lty=3, lwd=2)
 lines(epsvar, Iz_var_ss, lty=2, lwd=2)
 
-legend("topright" , inset=.05, c("Iw", "Iz", "S"), lty=c(3,2,1), lwd=c(2,2,2))
+legend("topleft", inset=.05, c("S", "Iz", "Iw"), lty=c(1,2,3), lwd=rep(2,3))
 ```
 
 ```{r mass_product, echo=FALSE, fig.align='center'}
