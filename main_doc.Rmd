@@ -397,24 +397,27 @@ knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/Sharp increase in AMU.pn
 
 #Inhibition of certain functions in our model
 
-##Inhibition of competition
+##Inhibition of interhost competition
 
-To inhibit the competition in our model, $\beta_z$ takes the value of $0.4$ that is to say becomes equal to $\beta_w$.
+To inhibit the interhost competition in our model, $\beta_z$ takes the value of $0.4$ that is to say becomes equal to $\beta_w$.
 
 The steady state values of state variables are the following:
 
-```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_no_competition_inc_files/figure-html/comp_inc_flows-2.png")
+```{r,echo=FALSE, out.width="400px", fig.width=3, fig.height=3,fig.show='hold',fig.align='center'}
+
+knitr::include_graphics("./model_no_competition_inc_files/figure-html/comp_inc_flows-2.png")
+knitr::include_graphics("./final_mod_files/figure-html/steady_state_eps_plot-2.png")
 ```
 
 We observe therefore coexistence of the strains for values of $\varepsilon$ between approximately 0 and 15%. When $I_z$ is fixed, it has the same value as $I_z$ prevalence during prebiotic era.
 
 Interestingly, when no ATB is used, resistant strain does not coexist with the sensitive one due to indirect cost linked to co-infections. Although no direct cost of resistance is included in this particular model, when resistant cases are reinfected with sensitive strains, the sensitive strain prevails.
 
-Paradoxically the prevalence has the lowest value for a $\varepsilon$ of 10% due to indirect competition. The incidence is highest at the same time as the turnover of sensitive cases is highest (we observe a peak of $I_w$ and $S$ mass product). It returns to pre-antibiotic era as $I_z$ becomes fixed.
+Paradoxically the prevalence has the lowest value for $\varepsilon$ of 10% due to indirect competition. The incidence is highest at the same time as the turnover of sensitive cases is highest (we observe a peak of $I_w$ and $S$ mass product). It returns to pre-antibiotic era as $I_z$ becomes fixed.
 
 ```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_no_competition_inc_files/figure-html/comp_inc_flows-1.png")
+knitr::include_graphics("./model_no_competition_inc_files/figure-html/comp_inc_flows-1.png")
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_inc_flows-1.png")
 ```
 
 As there is no cost of resistance, the interplay between resistant and sensitive strain will depend solely on $\varepsilon$ and $\rho$. As $\varepsilon$, that corresponds to the $\varepsilon$ here, increases, a higher turnover of sensitive cases occurs, while the flow from $I_w$ to $I_z$ increases at the expense of $I_z$ to $I_w$ flow.
@@ -428,13 +431,14 @@ knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/No cost on transmission.
 In comparison with the full model, the primary resistance becomes predominant over the secondary one for lower values of $\varepsilon$, as the resistant bacteria are better transmitted (10% vs 13%). For most diseases, the secondary resistance is estimated to be more prevalent.
 
 ```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_no_competition_inc_files/figure-html/comp_steady_st-1.png")
+knitr::include_graphics("./model_no_competition_inc_files/figure-html/comp_steady_st-1.png")
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_steady_st-1.png")
 ```
 
 In general, when the transmission cost increases, $i.e.$ the $\beta_z$ decreases while $\beta_w$ remains stable, $I_z$ is fixed and becomes prevalent for higher values of $\varepsilon$.
 
 
-```{r ss_rho_var_no_cost, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r ss_rho_var_no_cost, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("./final_mod_files/figure-html/steady_state_rho_no_cost_plot-1.png")
 knitr::include_graphics("./final_mod_files/figure-html/steady_state_rho_plot-1.png")
 ```
