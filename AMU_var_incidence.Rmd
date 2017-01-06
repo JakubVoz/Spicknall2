@@ -181,10 +181,6 @@ NewIw_to_S <- apply(NewIw_to_S, 2, incid, zoom)
 NewIz_to_S <- apply(NewIz_to_S, 2, incid, zoom)
 NewIw_to_Iz <- apply(NewIw_to_Iz, 2, incid, zoom)
 
-Newp <- NewIz/(NewIz+NewIw)
-Realp <- NewS_to_Iz/(NewS_to_Iz+NewS_to_Iw)
-Recov <- NewIz_to_S+NewIw_to_S
-Incidence <- NewS_to_Iw+NewS_to_Iz
 
 #timespan of testing
 t2 <- seq(1, zoom_area)
@@ -193,6 +189,45 @@ t2 <- seq(1, zoom_area)
 linfun <- function(x, t){
   lines(t, unlist(x), lty=1, lwd=2, col=colforcol[as.numeric(parent.frame()$i)])
 }
+#getting rid of first point and replacing it with the genuine one
+
+#NewIz <- NewIz[2:nrow(NewIz),]
+#NewIw <- NewIw[2:nrow(NewIw),]
+#Newsec <- Newsec[2:nrow(Newsec),]
+#Newprim <- Newprim[2:nrow(Newprim),]
+
+
+#NewS_to_Iw <- NewS_to_Iw[2:nrow(NewS_to_Iw),]
+#NewS_to_Iz <- NewS_to_Iz[2:nrow(NewS_to_Iz),]
+#NewIz_to_Iw <- NewIz_to_Iw[2:nrow(NewIz_to_Iw),]
+#NewIw_to_S <- NewIw_to_S[2:nrow(NewIw_to_S),]
+#NewIz_to_S <- NewIz_to_S[2:nrow(NewIz_to_S),]
+#NewIw_to_Iz <- NewIw_to_Iz[2:nrow(NewIw_to_Iz),]
+
+#t2 <- t2[2:length(t2)]
+
+NewIz[1,] <- NewIz[10,11]
+NewIw[1,] <- NewIw[10,11]
+Newprim[1,] <- Newprim[10,11]
+
+
+NewS_to_Iw[1,] <- NewS_to_Iw[10,11]
+NewS_to_Iz[1,] <- NewS_to_Iz[10,11]
+NewIz_to_S[1,] <- NewIz_to_S[10,11]
+
+
+
+
+epsvar <- pepsi
+
+
+#synthetic variables
+Newp <- NewIz/(NewIz+NewIw)
+Realp <- NewS_to_Iz/(NewS_to_Iz+NewS_to_Iw)
+Recov <- NewIz_to_S+NewIw_to_S
+Incidence <- NewS_to_Iw+NewS_to_Iz
+
+
 
 ```
 
@@ -263,7 +298,7 @@ Iw_to_Iz_ss <- NewIw_to_Iz[nrow(NewIw_to_Iz),]
 recov_ss <- Recov[nrow(Recov),]
 incidence_ss <- Incidence[nrow(Incidence),]
 
-epsvar <- pepsi
+
 
 
 ```
