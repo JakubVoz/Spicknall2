@@ -633,7 +633,7 @@ legend("bottomleft", inset=.05, c("Global", "Resistant", "Sensitive"), col=rep('
 ```{r comp_inc_flows, echo=FALSE, fig.align='center'}
 recov_ss <- Iw_to_S_ss+Iz_to_S_ss
 
-plot(epsvar, recov_ss, xlab=expression(epsilon), ylab="proportion change", main = "Comparing strength and evolution \n of different flows related to Infection", type="l", lty=1, col="green", lwd=2, ylim=c(0, 0.01))
+plot(epsvar, recov_ss, xlab=expression(epsilon), ylab="proportion change", main = "Comparing strength and evolution of different flows", type="l", lty=1, col="green", lwd=2, ylim=c(0, 0.01))
 
 lines(epsvar, incidence_ss, lty=1, col="red", lwd=2)
 lines(epsvar, S_to_Iz_ss, lty=2, col="red", lwd=2)
