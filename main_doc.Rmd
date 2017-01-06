@@ -472,6 +472,7 @@ Here, the primary resistance is omitted, $i.e.$ $beta_z=0$ and the resistant str
 
 ```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("./model_sec_res_inc_files/figure-html/comp_inc_flows-2.png")
+knitr::include_graphics("./final_mod_files/figure-html/steady_state_eps_plot-3.png")
 ```
 
 Although the transmission of resistant strains is omitted and therefore the pool of resistant cases is fully dependant on treatment failures, the coexistence is observed for $\varepsilon$ < 25% at steady states. Not surprisingly, the resistant cases vanish at the same time as sensitive ones do.
@@ -479,6 +480,7 @@ Although the transmission of resistant strains is omitted and therefore the pool
 
 ```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("./model_sec_res_inc_files/figure-html/comp_steady_st-3.png")
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_steady_st-3.png")
 ```
 
 In comparison with a simple model in which only susceptible population and sensitive strains are present, the incidence is smaller for the same $\varepsilon$. This is due to the treatment failures : in fact, the $I_z$ will represent here a dead-end for the pathogen that cannot be transmitted.
