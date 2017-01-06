@@ -279,7 +279,7 @@ epsvar <- pepsi
 par(mfrow=c(1,2))
 
  
-plot(t2, NewIw[,2], main="Incidence of susceptible infections \n after a change in epsilon", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0,0.011), lty=1, lwd=2, type="l")
+plot(t2, NewIw[,2], main="Incidence of susceptible infections \n no secondary resistance", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0,0.011), lty=1, lwd=2, type="l")
 
 capture.output(apply(NewIw, 2, linfun, t2),file='NUL') 
 
@@ -287,7 +287,7 @@ legend("bottomleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2),
 
 #zoom
 
-plot(time_zoom, Iw_zoom[,2], main="Dynamics", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0,0.011), lty=1, lwd=2, type="l")
+plot(time_zoom, Iw_zoom[,2], main="Dynamics \n no secondary resistance", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0,0.011), lty=1, lwd=2, type="l")
 
 capture.output(apply(Iw_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -296,7 +296,7 @@ legend("bottomleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2),
 #steady-state Iw incidence
 
 par(mfrow=c(1,1))
-plot(epsvar, Iw_ss, xlab=expression(epsilon), ylab="Iw incidence", main = "Impact of epsilon on steady state Iw incidence", type="l")
+plot(epsvar, Iw_ss, xlab=expression(epsilon), ylab="Iw incidence", main = "Impact of epsilon on steady state Iw incidence \n no secondary resistance", type="l")
 ```
 
 
@@ -304,7 +304,7 @@ plot(epsvar, Iw_ss, xlab=expression(epsilon), ylab="Iw incidence", main = "Impac
 
 par(mfrow=c(1,2))
 
-plot(t2, NewIz[,2], main="Incidence of resitant infections \n after a change in epsilon", xlab="time (steps)", ylab="Incidence Iz", ylim=c(0,0.011), lty=1, lwd=2, type="l")
+plot(t2, NewIz[,2], main="Incidence of resitant infections \n after a change in epsilon \n no secondary resistance", xlab="time (steps)", ylab="Incidence Iz", ylim=c(0,0.011), lty=1, lwd=2, type="l")
 
 capture.output(apply(NewIz, 2, linfun, t2), file='NUL')
 
@@ -312,7 +312,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 
 #zoom
 
-plot(time_zoom, Iz_zoom[,2], main="Dynamics", xlab="time (steps)", ylab="Incidence Iz", ylim=c(0,0.011), lty=1, lwd=2, type="l")
+plot(time_zoom, Iz_zoom[,2], main="Dynamics \n no secondary resistance", xlab="time (steps)", ylab="Incidence Iz", ylim=c(0,0.011), lty=1, lwd=2, type="l")
 
 capture.output(apply(Iz_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -322,7 +322,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 #steady-state Iz incidence
 
 par(mfrow=c(1,1))
-plot(epsvar, Iz_ss, xlab=expression(epsilon), ylab="Iz incidence", main = "Impact of epsilon on steady state Iz incidence", type="l")
+plot(epsvar, Iz_ss, xlab=expression(epsilon), ylab="Iz incidence", main = "Impact of epsilon on steady state Iz incidence \n no secondary resistance", type="l")
 
 ```
 
@@ -330,7 +330,7 @@ plot(epsvar, Iz_ss, xlab=expression(epsilon), ylab="Iz incidence", main = "Impac
 
 par(mfrow=c(1,2))
 
-plot(t2, Newprim[,2], main="Incidence of primary resistance \n after a change in epsilon", xlab="time (steps)", ylab="new primary Iz", ylim=c(0,0.004), lty=1, lwd=2, type="l")
+plot(t2, Newprim[,2], main="Incidence of primary resistance \n no secondary resistance", xlab="time (steps)", ylab="new primary Iz", ylim=c(0,0.004), lty=1, lwd=2, type="l")
 
 capture.output(apply(Newprim, 2, linfun, t2), file='NUL')
 
@@ -339,7 +339,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 
 #zoom
 
-plot(time_zoom, prim_zoom[,2], main="Dynamics", xlab="time (steps)", ylab="Incidence primary resistace", ylim=c(0,0.004), lty=1, lwd=2, type="l")
+plot(time_zoom, prim_zoom[,2], main="Dynamics", xlab="time (steps)", ylab="Incidence primary resistace \n no secondary resistance", ylim=c(0,0.004), lty=1, lwd=2, type="l")
 
 capture.output(apply(prim_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -349,14 +349,14 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 #steady-state primary resistance incidence
 
 par(mfrow=c(1,1))
-plot(epsvar, prim_ss, xlab=expression(epsilon), ylab="Primary resistance incidence", main = "Impact of epsilon on steady state primary resistance incidence", type="l")
+plot(epsvar, prim_ss, xlab=expression(epsilon), ylab="Primary resistance incidence", main = "Impact of epsilon on steady state primary resistance incidence \n no secondary resistance", type="l")
 ```
 
 ```{r incid_plot_sec, echo=FALSE, fig.align='center', cache=TRUE}
 par(mfrow=c(1,2))
 
 
-plot(t2, Newsec[,2], main="Incidence of secondary resistance \n after a change in epsilon", xlab="time (steps)", ylab="new secondary Iz", ylim=c(0,0.004), lty=1, lwd=2, type="l")
+plot(t2, Newsec[,2], main="Incidence of secondary resistance  \n no secondary resistance", xlab="time (steps)", ylab="new secondary Iz", ylim=c(0,0.004), lty=1, lwd=2, type="l")
 
 capture.output(apply(Newsec, 2, linfun, t2), file='NUL')
 
@@ -364,7 +364,7 @@ legend("topright" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), c
 
 #zoom
 
-plot(time_zoom, sec_zoom[,2], main="Dynamics", xlab="time (steps)", ylab="Incidence secondary resistace", ylim=c(0,0.004), lty=1, lwd=2, type="l")
+plot(time_zoom, sec_zoom[,2], main="Dynamics \n no secondary resistance", xlab="time (steps)", ylab="Incidence secondary resistace", ylim=c(0,0.004), lty=1, lwd=2, type="l")
 
 capture.output(apply(sec_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -374,14 +374,14 @@ legend("topright" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), c
 #steady-state sec resistance incidence
 
 par(mfrow=c(1,1))
-plot(epsvar, sec_ss, xlab=expression(epsilon), ylab="Secondary resistance incidence", main = "Impact of epsilon on steady state secondary resistance incidence", type="l")
+plot(epsvar, sec_ss, xlab=expression(epsilon), ylab="Secondary resistance incidence", main = "Impact of epsilon on steady state secondary resistance incidence \n no secondary resistance", type="l")
 ```
 
 ```{r incid_plot_p, echo=FALSE, fig.align='center', cache=TRUE}
 
 par(mfrow=c(1,2))
 
-plot(t2, Newp[,2], main="Estimated p after a change in epsilon", xlab="time (steps)", ylab="p", ylim=c(0,1), lty=1, lwd=2, type="l")
+plot(t2, Newp[,2], main="Estimated p after a change in epsilon \n no secondary resistance", xlab="time (steps)", ylab="p", ylim=c(0,1), lty=1, lwd=2, type="l")
 
 capture.output(apply(Newp, 2, linfun, t2), file='NUL')
 
@@ -389,7 +389,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 
 #zoom
 
-plot(time_zoom, p_zoom[,2], main="Dynamics", xlab="time (steps)", ylab="p", ylim=c(0,1), lty=1, lwd=2, type="l")
+plot(time_zoom, p_zoom[,2], main="Dynamics \n no secondary resistance", xlab="time (steps)", ylab="p", ylim=c(0,1), lty=1, lwd=2, type="l")
 
 capture.output(apply(p_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -400,14 +400,14 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 #steady-state p incidence
 
 par(mfrow=c(1,1))
-plot(epsvar, p_ss, xlab=expression(epsilon), ylab="p", main = "Impact of epsilon on steady state p", type="l")
+plot(epsvar, p_ss, xlab=expression(epsilon), ylab="p", main = "Impact of epsilon on steady state p \n no secondary resistance", type="l")
 ```
 
 ```{r incid_plot_real_p, echo=FALSE, fig.align='center'}
 
 par(mfrow=c(1,2))
 
-plot(t2, Realp[,2], main="Estimated real p after a change in epsilon", xlab="time (steps)", ylab="Real p", ylim=c(0,1), lty=1, lwd=2, type="l")
+plot(t2, Realp[,2], main="Estimated real p after a change in epsilon \n no secondary resistance", xlab="time (steps)", ylab="Real p", ylim=c(0,1), lty=1, lwd=2, type="l")
 
 capture.output(apply(Newp, 2, linfun, t2), file='NUL')
 
@@ -415,7 +415,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 
 #zoom
 
-plot(time_zoom, realp_zoom[,2], main="Dynamics", xlab="time (steps)", ylab="real p", ylim=c(0,1), lty=1, lwd=2, type="l")
+plot(time_zoom, realp_zoom[,2], main="Dynamics \n no secondary resistance", xlab="time (steps)", ylab="real p", ylim=c(0,1), lty=1, lwd=2, type="l")
 
 capture.output(apply(realp_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -426,13 +426,13 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 #steady-state real p incidence
 
 par(mfrow=c(1,1))
-plot(epsvar, realp_ss, xlab=expression(epsilon), ylab="real p", main = "Evolution of p ratio- incidence", type="l", lwd=2)
+plot(epsvar, realp_ss, xlab=expression(epsilon), ylab="real p", main = "Evolution of p ratio- incidence \n no secondary resistance", type="l", lwd=2)
 ```
 
 ```{r S_to_Iw_flow, echo=FALSE, fig.align='center'}
 par(mfrow=c(1,2))
 
-plot(t2, NewS_to_Iw[,2], main="Flow : infection of susceptibles \n after a change in epsilon", xlab="time (steps)", ylab="S to Iw", ylim=c(0,0.01), lty=1, lwd=2, type="l")
+plot(t2, NewS_to_Iw[,2], main="Flow : infection of susceptibles \n no secondary resistance", xlab="time (steps)", ylab="S to Iw", ylim=c(0,0.01), lty=1, lwd=2, type="l")
 
 capture.output(apply(NewS_to_Iw, 2, linfun, t2), file='NUL')
 
@@ -440,7 +440,7 @@ legend("bottomleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2),
 
 #zoom
 
-plot(time_zoom, S_to_Iw_zoom[,2], main="Dynamics", xlab="time (steps)", ylab="S to Iw", ylim=c(0,0.01), lty=1, lwd=2, type="l")
+plot(time_zoom, S_to_Iw_zoom[,2], main="Dynamics \n no secondary resistance", xlab="time (steps)", ylab="S to Iw", ylim=c(0,0.01), lty=1, lwd=2, type="l")
 
 capture.output(apply(S_to_Iw_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -451,7 +451,7 @@ legend("bottomleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2),
 #steady-state flow
 
 par(mfrow=c(1,1))
-plot(epsvar, S_to_Iw_ss, xlab=expression(epsilon), ylab="S to Iw flow", main = "Impact of epsilon on steady state S to Iw flow", type="l")
+plot(epsvar, S_to_Iw_ss, xlab=expression(epsilon), ylab="S to Iw flow", main = "Impact of epsilon on steady state S to Iw flow \n no secondary resistance", type="l")
 
 
 ```
@@ -459,7 +459,7 @@ plot(epsvar, S_to_Iw_ss, xlab=expression(epsilon), ylab="S to Iw flow", main = "
 ```{r S_to_Iz_flow, echo=FALSE, fig.align='center'}
 par(mfrow=c(1,2))
 
-plot(t2, NewS_to_Iz[,2], main="Flow : infection of susceptibles \n after a change in epsilon", xlab="time (steps)", ylab="S to Iz", ylim=c(0,0.005), lty=1, lwd=2, type="l")
+plot(t2, NewS_to_Iz[,2], main="Flow : infection of susceptibles \n no secondary resistance", xlab="time (steps)", ylab="S to Iz", ylim=c(0,0.005), lty=1, lwd=2, type="l")
 
 capture.output(apply(NewS_to_Iz, 2, linfun, t2), file='NUL')
 
@@ -467,7 +467,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 
 #zoom
 
-plot(time_zoom, S_to_Iz_zoom[,2], main="Dynamics", xlab="time (steps)", ylab="S to Iz", ylim=c(0,0.005), lty=1, lwd=2, type="l")
+plot(time_zoom, S_to_Iz_zoom[,2], main="Dynamics \n no secondary resistance", xlab="time (steps)", ylab="S to Iz", ylim=c(0,0.005), lty=1, lwd=2, type="l")
 
 capture.output(apply(S_to_Iz_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -478,7 +478,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 #steady-state flow
 
 par(mfrow=c(1,1))
-plot(epsvar, S_to_Iz_ss, xlab=expression(epsilon), ylab="S to Iz flow", main = "Impact of epsilon on steady state S to Iz flow", type="l", lwd=2)
+plot(epsvar, S_to_Iz_ss, xlab=expression(epsilon), ylab="S to Iz flow", main = "Impact of epsilon on steady state S to Iz flow \n no secondary resistance", type="l", lwd=2)
 
 
 ```
@@ -487,7 +487,7 @@ plot(epsvar, S_to_Iz_ss, xlab=expression(epsilon), ylab="S to Iz flow", main = "
 
 par(mfrow=c(1,2))
 
-plot(t2, NewIz_to_Iw[,2], main="Flow : infection and conversion of \n resistant cases after a change in epsilon", xlab="time (steps)", ylab="Iz to Iw flow", ylim=c(0,0.003), lty=1, lwd=2, type="l")
+plot(t2, NewIz_to_Iw[,2], main="Flow : infection and conversion of resistant cases \n no secondary resistance", xlab="time (steps)", ylab="Iz to Iw flow", ylim=c(0,0.003), lty=1, lwd=2, type="l")
 
 capture.output(apply(NewIz_to_Iw, 2, linfun, t2), file='NUL')
 
@@ -495,7 +495,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 
 #zoom
 
-plot(time_zoom, Iz_to_Iw_zoom[,2], main="Dynamics", xlab="time (steps)", ylab="Iz to Iw flow", ylim=c(0,0.003), lty=1, lwd=2, type="l")
+plot(time_zoom, Iz_to_Iw_zoom[,2], main="Dynamics \n no secondary resistance", xlab="time (steps)", ylab="Iz to Iw flow", ylim=c(0,0.003), lty=1, lwd=2, type="l")
 
 capture.output(apply(Iz_to_Iw_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -506,7 +506,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 #steady-state flow
 
 par(mfrow=c(1,1))
-plot(epsvar, Iz_to_Iw_ss, xlab=expression(epsilon), ylab="Iz to Iw flow", main = "Impact of epsilon on steady state Iz to Iw flow", ylim=c(0,0.003), type="l")
+plot(epsvar, Iz_to_Iw_ss, xlab=expression(epsilon), ylab="Iz to Iw flow", main = "Impact of epsilon on steady state Iz to Iw flow \n no secondary resistance", ylim=c(0,0.003), type="l")
 
 
 ```
@@ -515,7 +515,7 @@ plot(epsvar, Iz_to_Iw_ss, xlab=expression(epsilon), ylab="Iz to Iw flow", main =
 
 par(mfrow=c(1,2))
 
-plot(t2, NewIw_to_S[,2], main="Flow : clearance of sensitive \n cases after a change in epsilon", xlab="time (steps)", ylab="Iw to S flow", ylim=c(0,0.1), lty=1, lwd=2, type="l")
+plot(t2, NewIw_to_S[,2], main="Flow : clearance of sensitive \n no secondary resistance", xlab="time (steps)", ylab="Iw to S flow", ylim=c(0,0.1), lty=1, lwd=2, type="l")
 
 capture.output(apply(NewIw_to_S, 2, linfun, t2), file='NUL')
 
@@ -523,7 +523,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 
 #zoom
 
-plot(time_zoom, Iw_to_S_zoom[,2], main="Dynamics", xlab="time (steps)", ylab="Iw to S flow", ylim=c(0,0.1), lty=1, lwd=2, type="l")
+plot(time_zoom, Iw_to_S_zoom[,2], main="Dynamics \n no secondary resistance", xlab="time (steps)", ylab="Iw to S flow", ylim=c(0,0.1), lty=1, lwd=2, type="l")
 
 capture.output(apply(Iw_to_S_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -534,7 +534,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 #steady-state flow
 
 par(mfrow=c(1,1))
-plot(epsvar, Iw_to_S_ss, xlab=expression(epsilon), ylab="Iw to S flow", main = "Impact of epsilon on steady state Iw to S flow", ylim=c(0,0.01), type="l")
+plot(epsvar, Iw_to_S_ss, xlab=expression(epsilon), ylab="Iw to S flow", main = "Impact of epsilon on steady state Iw to S flow \n no secondary resistance", ylim=c(0,0.01), type="l")
 
 
 ```
@@ -543,7 +543,7 @@ plot(epsvar, Iw_to_S_ss, xlab=expression(epsilon), ylab="Iw to S flow", main = "
 
 par(mfrow=c(1,2))
 
-plot(t2, NewIw_to_Iz[,2], main="Flow : gaining resistance in sensitive \n cases after a change in epsilon", xlab="time (steps)", ylab="Iw to Iz flow", ylim=c(0,0.005), lty=1, lwd=2, type="l")
+plot(t2, NewIw_to_Iz[,2], main="Flow : gaining resistance in sensitive \n no secondary resistance", xlab="time (steps)", ylab="Iw to Iz flow", ylim=c(0,0.005), lty=1, lwd=2, type="l")
 
 capture.output(apply(NewIw_to_Iz, 2, linfun, t2), file='NUL')
 
@@ -551,7 +551,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 
 #zoom
 
-plot(time_zoom, Iw_to_Iz_zoom[,2], main="Dynamics", xlab="time (steps)", ylab="Iw to Iz flow", ylim=c(0,0.005), lty=1, lwd=2, type="l")
+plot(time_zoom, Iw_to_Iz_zoom[,2], main="Dynamics \n no secondary resistance", xlab="time (steps)", ylab="Iw to Iz flow", ylim=c(0,0.005), lty=1, lwd=2, type="l")
 
 capture.output(apply(Iw_to_Iz_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -562,14 +562,14 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 #steady-state flow
 
 par(mfrow=c(1,1))
-plot(epsvar, Iw_to_Iz_ss, xlab=expression(epsilon), ylab="Iw to Iz flow", main = "Impact of epsilon on steady state Iw to Iz flow", type="l")
+plot(epsvar, Iw_to_Iz_ss, xlab=expression(epsilon), ylab="Iw to Iz flow", main = "Impact of epsilon on steady state Iw to Iz flow \n no secondary resistance", type="l")
 
 
 ```
 
 ```{r comp_flows, echo=FALSE, fig.align='center'}
 
-plot(epsvar, S_to_Iw_ss, xlab=expression(epsilon), ylab="Iw to Iz flow", main = "Comparing strength and evolution \n of different flows related to Iw", type="l", lty=1, col="green", lwd=2)
+plot(epsvar, S_to_Iw_ss, xlab=expression(epsilon), ylab="Iw to Iz flow", main = "Comparing strength and evolution \n of different flows related to Iw \n no secondary resistance", type="l", lty=1, col="green", lwd=2)
 
 lines(epsvar, Iw_to_S_ss, lty=1, col="red", lwd=2)
 lines(epsvar, Iz_to_Iw_ss, lty=2, col="green", lwd=2)
@@ -582,20 +582,20 @@ legend("topright", inset=.05, c("Inflow S to Iw", "Inflow Iz to Iw", "Outflow Iw
 
 ```{r comp_steady_st, echo=FALSE, fig.align='center'}
 
-plot(epsvar, Iz_ss, xlab=expression(epsilon), ylab="Incidence", main = "Incidence of resistant cases", type="l", lwd=2)
+plot(epsvar, Iz_ss, xlab=expression(epsilon), ylab="Incidence", main = "Incidence of resistant cases \n no secondary resistance", type="l", lwd=2)
 lines(epsvar, sec_ss, lty=3, lwd=2)
 lines(epsvar, prim_ss, lty=2, lwd=2)
 
 legend("topleft", inset=.05, c("Iz", "Primary Iz", "Secondary Iz"), lty=c(1,2,3), lwd=rep(2,3))
 
-plot(epsvar, Iw_ss, xlab=expression(epsilon), ylab="Incidence", main = "Resistant vs sensitive incidence", type="l", col="green", lwd=2)
+plot(epsvar, Iw_ss, xlab=expression(epsilon), ylab="Incidence", main = "Resistant vs sensitive incidence \n no secondary resistance", type="l", col="green", lwd=2)
 lines(epsvar, Iz_ss, col="purple", lwd=2)
 legend("topright", inset=.05, c("Resistant", "Sensitive"), col=c("purple", "green"), lwd=c(2,2))
 
 
 Iwz_ss <- S_to_Iz_ss + S_to_Iw_ss
 
-plot(epsvar, Iwz_ss, xlab=expression(epsilon), ylab="Proportion flow", main = "Incidence", type="l", col="red", lwd=2, ylim=c(0,0.012))
+plot(epsvar, Iwz_ss, xlab=expression(epsilon), ylab="Proportion flow", main = "Incidence \n no secondary resistance", type="l", col="red", lwd=2, ylim=c(0,0.012))
 lines(epsvar, S_to_Iz_ss, lty=2, col="red", lwd=2)
 lines(epsvar, S_to_Iw_ss, lty=3, col="red", lwd=2)
 
@@ -604,7 +604,7 @@ legend("bottomleft", inset=.05, c("Global", "Resistant", "Sensitive"), col=c("re
 
 Clear <- Iw_to_S_ss + Iz_to_S_ss
 
-plot(epsvar, Clear, xlab=expression(epsilon), ylab="Proportion flow", main = "Clearance", type="l", col="green", lwd=2, ylim=c(0,0.012))
+plot(epsvar, Clear, xlab=expression(epsilon), ylab="Proportion flow", main = "Clearance \n no secondary resistance", type="l", col="green", lwd=2, ylim=c(0,0.012))
 lines(epsvar, Iz_to_S_ss, lty=2, col="green", lwd=2)
 lines(epsvar, Iw_to_S_ss, lty=3, col="green", lwd=2)
 
@@ -614,7 +614,7 @@ legend("bottomleft", inset=.05, c("Global", "Resistant", "Sensitive"), col=rep('
 ```{r comp_inc_flows, echo=FALSE, fig.align='center'}
 recov_ss <- Iw_to_S_ss+Iz_to_S_ss
 
-plot(epsvar, recov_ss, xlab=expression(epsilon), ylab="proportion change", main = "Comparing strength and evolution \n of different flows related to Infection", type="l", lty=1, col="green", lwd=2, ylim=c(0, 0.01))
+plot(epsvar, recov_ss, xlab=expression(epsilon), ylab="proportion change", main = "Comparing strength and evolution of different flows \n no secondary resistance", type="l", lty=1, col="green", lwd=2, ylim=c(0, 0.01))
 
 lines(epsvar, incidence_ss, lty=1, col="red", lwd=2)
 lines(epsvar, S_to_Iz_ss, lty=2, col="red", lwd=2)
@@ -626,7 +626,7 @@ lines(epsvar, Iz_to_Iw_ss, lty=3, col="orange", lwd=2)
 
 legend("topright", inset=.05, c("Incidence", "S to Iz", "S to Iw", "Recovery", "Iz to S", "Iw to S", "Iw to Iz", "Iz to Iw"), lty=c(1,2,3,1,2,3,2,3), lwd=rep(2,8), col=c(rep("red",3), rep("green",3), rep("orange",2)))
 
-plot(epsvar, S_var_ss, xlab=expression(epsilon), ylab="Steady state var", main = "Evolution of state variables \n at steady-state", type="l", lty=1, lwd=2, ylim=c(0, 1))
+plot(epsvar, S_var_ss, xlab=expression(epsilon), ylab="Steady state var", main = "Steady-states : treatment variations \n no secondary resistance", type="l", lty=1, lwd=2, ylim=c(0, 1))
 
 lines(epsvar, Iw_var_ss, lty=3, lwd=2)
 lines(epsvar, Iz_var_ss, lty=2, lwd=2)
@@ -639,7 +639,7 @@ legend("topleft", inset=.05, c("S", "Iz", "Iw"), lty=c(1,2,3), lwd=rep(2,3))
 prodSIz_ss <- S_var_ss*Iz_var_ss
 prodSIw_ss <- S_var_ss*Iw_var_ss
 
-plot(epsvar, prodSIw_ss, xlab=expression(epsilon), ylab="Mass product", main = "Evolution of mass product at steady state", type="l", lty=3, lwd=2, ylim=c(0, 0.25))
+plot(epsvar, prodSIw_ss, xlab=expression(epsilon), ylab="Mass product", main = "Evolution of mass product at steady state \n no secondary resistance", type="l", lty=3, lwd=2, ylim=c(0, 0.25))
 
 lines(epsvar, prodSIz_ss, lty=2, lwd=2)
 
@@ -654,7 +654,7 @@ p_prevalence_ss <- Iz_var_ss/(Iw_var_ss+Iz_var_ss)
 
 
 
-plot(epsvar, p_prevalence_ss, xlab=expression(epsilon), ylab="p", main = "Evolution of p ratio - prevalence", type="l", lty=1, lwd=2, ylim=c(0, 1))
+plot(epsvar, p_prevalence_ss, xlab=expression(epsilon), ylab="p", main = "Evolution of p ratio - prevalence \n no secondary resistance", type="l", lty=1, lwd=2, ylim=c(0, 1))
 
 
 ```
@@ -665,7 +665,7 @@ burden <- (Iw_var_ss+Iz_var_ss)
 
 
 
-plot(epsvar, burden, xlab=expression(epsilon), ylab="Iw+Iz", main = "Steady-state burden of infection", type="l", lty=1, lwd=2, ylim=c(0, 1))
+plot(epsvar, burden, xlab=expression(epsilon), ylab="Iw+Iz", main = "Steady-state burden of infection \n no secondary resistance", type="l", lty=1, lwd=2, ylim=c(0, 1))
 
 
 ```
@@ -676,14 +676,14 @@ new_cases <- NewS_to_Iz + NewS_to_Iw
 
 new_cases_zoom <- new_cases[1:(zooming+1),]
 
-plot(t2, new_cases[,2], main="Global incidence : dynamics", xlab="time (steps)", ylab="Iw+Iz incidence", ylim=c(0,0.01), lty=1, lwd=2, type="l")
+plot(t2, new_cases[,2], main="Global incidence : dynamics \n no secondary resistance", xlab="time (steps)", ylab="Iw+Iz incidence", ylim=c(0,0.01), lty=1, lwd=2, type="l")
 
 capture.output(apply(new_cases, 2, linfun, t2), file='NUL')
 
 legend("bottomleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
-plot(time_zoom, new_cases_zoom[,2], main="Global incidence : zoom", xlab="time (steps)", ylab="Iw+Iz incidence", ylim=c(0.0,0.01), lty=1, lwd=2, type="l")
+plot(time_zoom, new_cases_zoom[,2], main="Global incidence : zoom \n no secondary resistance", xlab="time (steps)", ylab="Iw+Iz incidence", ylim=c(0.0,0.01), lty=1, lwd=2, type="l")
 
 capture.output(apply(new_cases_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -698,7 +698,7 @@ par(mfrow=c(1,2))
 
 #zoom Iw_to_Iz
 
-plot(time_zoom, Iw_to_Iz_zoom[,2], main="Dynamics Iw to Iz", xlab="time (steps)", ylab="Iw to Iz flow", ylim=c(0,0.005), lty=1, lwd=2, type="l")
+plot(time_zoom, Iw_to_Iz_zoom[,2], main="Dynamics Iw to Iz \n no secondary resistance", xlab="time (steps)", ylab="Iw to Iz flow", ylim=c(0,0.005), lty=1, lwd=2, type="l")
 
 capture.output(apply(Iw_to_Iz_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -706,7 +706,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 
 #zoom Iz_to_Iw
 
-plot(time_zoom, Iz_to_Iw_zoom[,2], main="Dynamics Iz to Iw", xlab="time (steps)", ylab="Iz to Iw flow", ylim=c(0,0.003), lty=1, lwd=2, type="l")
+plot(time_zoom, Iz_to_Iw_zoom[,2], main="Dynamics Iz to Iw \n no secondary resistance", xlab="time (steps)", ylab="Iz to Iw flow", ylim=c(0,0.003), lty=1, lwd=2, type="l")
 
 capture.output(apply(Iz_to_Iw_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -727,7 +727,7 @@ net_Iw_Iz <- Iw_to_Iz_zoom - Iz_to_Iw_zoom
 
 #net Iw S flow
 
-plot(time_zoom, net_Iw_S[,2], main="Net flow : Iw to S", xlab="time (steps)", ylab="Iw to S", ylim=c(-0.003,0.004), lty=1, lwd=2, type="l")
+plot(time_zoom, net_Iw_S[,2], main="Net flow : Iw to S \n no secondary resistance", xlab="time (steps)", ylab="Iw to S", ylim=c(-0.003,0.004), lty=1, lwd=2, type="l")
 
 capture.output(apply(net_Iw_S, 2, linfun, time_zoom), file='NUL')
 
@@ -736,7 +736,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 #net Iz S flow
 
 
-plot(time_zoom, net_Iz_S[,2], main="Net flow : S to Iz", xlab="time (steps)", ylab="Iz to S", ylim=c(0, 0.001), lty=1, lwd=2, type="l")
+plot(time_zoom, net_Iz_S[,2], main="Net flow : S to Iz \n no secondary resistance", xlab="time (steps)", ylab="Iz to S", ylim=c(0, 0.001), lty=1, lwd=2, type="l")
 
 capture.output(apply(net_Iz_S, 2, linfun, time_zoom), file='NUL')
 
@@ -747,7 +747,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 #net Iw Iz flow
 
 
-plot(time_zoom, net_Iw_Iz[,2], main="Net flow : S to Iz", xlab="time (steps)", ylab="Iw to Iz", ylim=c(-0.002,0.003), lty=1, lwd=2, type="l")
+plot(time_zoom, net_Iw_Iz[,2], main="Net flow : S to Iz \n no secondary resistance", xlab="time (steps)", ylab="Iw to Iz", ylim=c(-0.002,0.003), lty=1, lwd=2, type="l")
 
 capture.output(apply(net_Iw_Iz, 2, linfun, time_zoom), file='NUL')
 

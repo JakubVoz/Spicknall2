@@ -147,7 +147,7 @@ lines(pepsi, steady_S_eps, lty=1, lwd=2)
 legend("topright" , inset=.05, c("Iw", "Iz", "S"), lty=c(3,2,1), lwd=c(2,2,2))
 
 
-#zoom
+#zoom : control for no interhost compet
 
 pepsi2 <- seq(0,0.20,by=0.01)
 steady_Iw_eps2 <- steady_Iw_eps[1:length(pepsi2)]
@@ -160,6 +160,22 @@ lines(pepsi2, steady_Iz_eps2, lty=2, lwd=2)
 lines(pepsi2, steady_S_eps2, lty=1, lwd=2)
 
 legend("topright" , inset=.05, c("Iw", "Iz", "S"), lty=c(3,2,1), lwd=c(2,2,2))
+
+#zoom : control for no sec resistance partial model
+
+pepsi3 <- seq(0,0.30,by=0.01)
+steady_Iw_eps3 <- steady_Iw_eps[1:length(pepsi3)]
+steady_Iz_eps3 <- steady_Iz_eps[1:length(pepsi3)]
+steady_S_eps3 <- steady_S_eps[1:length(pepsi3)]
+
+plot(pepsi3, steady_Iw_eps3, main="Steady-states : treatment variations", xlab=expression(epsilon), ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+
+lines(pepsi3, steady_Iz_eps3, lty=2, lwd=2)
+lines(pepsi3, steady_S_eps3, lty=1, lwd=2)
+
+legend("topright" , inset=.05, c("Iw", "Iz", "S"), lty=c(3,2,1), lwd=c(2,2,2))
+
+
 
 
 

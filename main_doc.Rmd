@@ -453,13 +453,15 @@ Moreover unlike in the situation where the transmission cost does exist, the glo
 When only primary resistance is preserved, that is to say $\rho=0$, we observe that the coexistence is very limited (for $\varepsilon$ between 0.27 and 0.29).
 
 ```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_prim_res_inc_files/figure-html/comp_inc_flows-2.png")
+knitr::include_graphics("./model_prim_res_inc_files/figure-html/comp_inc_flows-2.png")
+knitr::include_graphics("./final_mod_files/figure-html/steady_state_eps_plot-3.png")
 ```
 
 Although the model was started with an important subpopulation of $I_z$ (_cca_ 12%), this subpopulation has vanished at steady state, being systematically converted into $I_w$. The stability of $I_z$ subpopulation is therefore substantially dependant on the secondary resistance in long term.
 
 ```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_prim_res_inc_files/figure-html/comp_steady_st-3.png")
+knitr::include_graphics("./model_prim_res_inc_files/figure-html/comp_steady_st-3.png")
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_steady_st-3.png")
 ```
 
 Without secondary resistance, the flows between $I_w$ and $I_z$ reach equilibria when $\beta_w*(1-\varepsilon)=\beta_z*\varepsilon$, that is to say when $\varepsilon=0.73$. The emergence of stable state is therefore rather linked to the upraise of $S$ values due to enhanced treatment than to the inversion of flows between $I_z$ and $I_w$.
@@ -469,14 +471,14 @@ Without secondary resistance, the flows between $I_w$ and $I_z$ reach equilibria
 Here, the primary resistance is omitted, $i.e.$ $beta_z=0$ and the resistant strains cannot be transmitted.
 
 ```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_sec_res_inc_files/figure-html/comp_inc_flows-2.png")
+knitr::include_graphics("./model_sec_res_inc_files/figure-html/comp_inc_flows-2.png")
 ```
 
 Although the transmission of resistant strains is omitted and therefore the pool of resistant cases is fully dependant on treatment failures, the coexistence is observed for $\varepsilon$ < 25% at steady states. Not surprisingly, the resistant cases vanish at the same time as sensitive ones do.
 
 
 ```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/model_sec_res_inc_files/figure-html/comp_steady_st-3.png")
+knitr::include_graphics("./model_sec_res_inc_files/figure-html/comp_steady_st-3.png")
 ```
 
 In comparison with a simple model in which only susceptible population and sensitive strains are present, the incidence is smaller for the same $\varepsilon$. This is due to the treatment failures : in fact, the $I_z$ will represent here a dead-end for the pathogen that cannot be transmitted.
@@ -489,7 +491,7 @@ The study of hysteresis allows to know whether the same stable states can be rea
 Once the $\varepsilon$ stabilizes over 0.18, there is a point of no return, not allowing the sensitive bacteria to re-establish. This is due to the fact, that in our model there is no possibility of reversion of resistant mutants which seems to be realistic considering today's research (changing genetic background and eventual compensatory mutations will make reversion highly unlikely).
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/hysteresis_files/figure-html/incid_plot_Iw-1.png")
+knitr::include_graphics("./hysteresis_files/figure-html/incid_plot_Iw-1.png")
 ```
 
 The back and forth pathways being the same, we can say that there is no hysteresis in our model. Therefore, theoretically resistant cases can be diminished by reduced use of antibiotics. The question now is whether the changing $\varepsilon$ has the same effect within the same timespan. This brings us to the study of inertia.
@@ -502,13 +504,13 @@ The back and forth pathways being the same, we can say that there is no hysteres
 In this part, we vary rate at which the proportion of patients varies, still considering that the proportion of patients is directly linked to the $\varepsilon$. At first, we start from $\varepsilon$=0 and increase its value up to 100%.
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/inertie_study_files/figure-html/prep_plot-1.png")
+knitr::include_graphics("./inertie_study_files/figure-html/prep_plot-1.png")
 ```
 
 As the rate of change increases, the proportion of $I_z$ is more distant from its steady state value. The rate of change of $\varepsilon$ can thus have a severe impact on the detected resistance level. Presuming that all hospitals are in equilibrium can be a rough simplification.
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/inertie_study_files/figure-html/prep_plot-2.png")
+knitr::include_graphics("./inertie_study_files/figure-html/prep_plot-2.png")
 ```
 
 Delay in reaching equilibrium due to rapid increase of $\varepsilon$ can be observed for the p (defined as the ratio between $I_z$ and burden of infection) as well.
@@ -592,20 +594,20 @@ It has been shown that the mutation rate, here the rate at which resistant mutan
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/per_capita_growth_rate_files/figure-html/mutation_curve-1.png")
+knitr::include_graphics("./per_capita_growth_rate_files/figure-html/mutation_curve-1.png")
 ```
 
 As it has been mentioned above, we consider that the drug quantity has an impact on resistant mutant selection in intrahost dynamics. This impact will depend on the relative position of growth rate curves of mutant and resistant strains.
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/detailed_AMU_varying_eps_files/figure-html/plot_gr-1.png")
+knitr::include_graphics("./detailed_AMU_varying_eps_files/figure-html/plot_gr-1.png")
 ```
 
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/per_capita_growth_rate_files/figure-html/selection_coef-3.png")
+knitr::include_graphics("./per_capita_growth_rate_files/figure-html/selection_coef-3.png")
 ```
 
 
@@ -618,7 +620,7 @@ The outcome of selection will then depend on the product of selective coefficien
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/per_capita_growth_rate_files/figure-html/rho-1.png")
+knitr::include_graphics("./per_capita_growth_rate_files/figure-html/rho-1.png")
 ```
 
 For each value of DQ, the treatment failure rate $\rho$ will therefore take a different value in the model.
@@ -629,7 +631,7 @@ In order to exploit, to what extent the different combinations of $\varepsilon$ 
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/per_capita_growth_rate_files/figure-html/treated_pat-1.png")
+knitr::include_graphics("./per_capita_growth_rate_files/figure-html/treated_pat-1.png")
 ```
 
 ###Impact of possible DQ-$\varepsilon$ combinations on steady-states
@@ -638,12 +640,12 @@ For a given value of AMU (0.2), the modeling is performed for both scenarios. Th
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/per_capita_growth_rate_files/figure-html/plot_ss_iz-1.png")
+knitr::include_graphics("./per_capita_growth_rate_files/figure-html/plot_ss_iz-1.png")
 ```
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/per_capita_growth_rate_files/figure-html/plot_ss_p_real-1.png")
+knitr::include_graphics("./per_capita_growth_rate_files/figure-html/plot_ss_p_real-1.png")
 ```
 
 The combination of DQ and $\varepsilon$ has a big impact on the steady states.
@@ -658,7 +660,7 @@ Meanwhile, the impact of global burden of disease shows a very little of differe
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/per_capita_growth_rate_files/figure-html/plot_ss_burden-1.png")
+knitr::include_graphics("./per_capita_growth_rate_files/figure-html/plot_ss_burden-1.png")
 ```
 
 The burden of the disease increases with the drug quantity which is once again due to the lower recover rate of sensitive cases linked to lower values of $\varepsilon$.
@@ -669,12 +671,12 @@ In this part, exactly the same series of simulations are performed and compared 
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/detailed_AMU_varying_eps_files/figure-html/plot_ss_iz-1.png")
+knitr::include_graphics("./detailed_AMU_varying_eps_files/figure-html/plot_ss_iz-1.png")
 ```
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiProject/Spicknall Review/detailed_AMU_varying_eps_files/figure-html/plot_ss_burden-1.png")
+knitr::include_graphics("./detailed_AMU_varying_eps_files/figure-html/plot_ss_burden-1.png")
 ```
 
 VA ETRE ANALYSE PROCHAINEMENT.
