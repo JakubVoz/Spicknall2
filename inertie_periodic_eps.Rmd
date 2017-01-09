@@ -1,0 +1,295 @@
+---
+title: "inertie_periodic_eps"
+author: "Jakub"
+date: "9 ledna 2017"
+output: html_document
+---
+
+```{r param_eps, include=FALSE, cache=TRUE}
+library(deSolve)
+library(plyr)
+
+options("scipen" = 10)
+a <- 10000 #time span
+zoom <- 100 #time step
+
+max_eps <- 0.17
+min_eps <- 0.00
+rate1 <- 0.0025
+rate2 <- 0.005
+rate3 <- 0.0075
+rate4 <- 0.01
+rate5 <- 0.0125
+rate <- c(rate1, rate2, rate3, rate4, rate5) 
+
+time_int <- seq(0,a,by=1/zoom)
+
+eps_fun1 <- lapply(time_int, function(x) ((max_eps-min_eps)*sin(rate1*x)/2 + (max_eps-min_eps)/2))
+eps_fun1 <- unlist(eps_fun1)
+eps_fun2 <- lapply(time_int, function(x) ((max_eps-min_eps)*sin(rate2*x)/2 + (max_eps-min_eps)/2))
+eps_fun2 <- unlist(eps_fun2)
+eps_fun3 <- lapply(time_int, function(x) ((max_eps-min_eps)*sin(rate3*x)/2 + (max_eps-min_eps)/2))
+eps_fun3 <- unlist(eps_fun3)
+eps_fun4 <- lapply(time_int, function(x) ((max_eps-min_eps)*sin(rate4*x)/2 + (max_eps-min_eps)/2))
+eps_fun4 <- unlist(eps_fun4)
+eps_fun5 <- lapply(time_int, function(x) ((max_eps-min_eps)*sin(rate5*x)/2 + (max_eps-min_eps)/2))
+eps_fun5 <- unlist(eps_fun5)
+
+eps_fun <- cbind(eps_fun1, eps_fun2, eps_fun3, eps_fun4, eps_fun5)
+
+
+
+```
+
+```{r plot_eps, echo=FALSE, fig.align='center'}
+colglob <- colorRampPalette(c("blue", "red"))
+
+colforcol <- colglob((length(rate)))
+
+plot(time_int, eps_fun1, type="l", lwd=2, col=colforcol[1])
+lines(time_int, eps_fun2, lty=1, lwd=2, col=colforcol[2])
+lines(time_int, eps_fun3, lty=1, lwd=2, col=colforcol[3])
+lines(time_int, eps_fun4, lty=1, lwd=2, col=colforcol[4])
+lines(time_int, eps_fun5, lty=1, lwd=2, col=colforcol[5])
+
+```
+
+```{r param_model, include=FALSE}
+
+# initial state:
+N <- 1
+prop <- 0.01 #initial value of Iw and Iz
+
+
+a <- 2000 #time span for reaching initial conditions with eps=0
+m <- 1 #time step
+zoom <- 100 #after breakpoint 1/zoom step
+
+
+pepsi <- seq(min_eps,max_eps, by=0.001)
+
+
+
+# parameters
+pbeta_w <- 0.04 #transmission parameter of Iw
+pbeta_z <- 0.015 #transmission parameter of Iz
+
+pgammaa <- 0.01 #innate recovery rate
+pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
+
+
+prho <- 0.05 #probability of clinical failure
+
+#epsilon change over time
+
+peps <- (max_eps-min_eps)/2
+
+conv_crit <- 0.00001
+```
+
+
+```{r stable, include=FALSE, cache=TRUE}
+parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop)
+
+times=seq(0, a, by=m)
+
+SIS_init=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
+        
+        list(c(dS, dIw, dIz))
+       })
+}
+
+out_init=as.data.frame(
+  ode(y=state, times=times, func=SIS_init, parms=parameters)
+)
+
+```
+
+```{r auxilliary, include=FALSE}
+cbind.fill <- function(...){
+    nm <- list(...) 
+    nm <- lapply(nm, as.matrix)
+    n <- max(sapply(nm, nrow)) 
+    do.call(cbind, lapply(nm, function (x) 
+        rbind(x, matrix(, n-nrow(x), ncol(x))))) 
+}
+
+
+```
+
+```{r var_SIS, include=FALSE, cache=TRUE}
+parameters2 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, rate=rate1, zooma=1, max_epsa=max_eps, min_epsa=min_eps)
+
+state2 <- c(S=out_init$S[nrow(out_init)], Iw=out_init$Iw[nrow(out_init)], Iz=out_init$Iz[nrow(out_init)], time=0)
+
+#t=seq(0, a2, by=1/zoom)
+
+SIS_per=function(t, state2, parameters2){
+  with(as.list(c(state2,parameters2)),
+       {dtime = + zooma
+        eps = (max_epsa-min_epsa)*sin(rate*time)/2+(max_epsa-min_epsa)/2
+        dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
+        
+        list(c(dS, dIw, dIz, dtime))
+       })
+}
+
+eps_speed_fun <- function(growth_rate) {
+  parameters2[7] <- growth_rate 
+  out =as.data.frame(
+  ode(y=state2, times=time_int, func=SIS_per, parms=parameters2)
+)
+}
+
+
+```
+
+```{r calculus, include=FALSE, cache=TRUE}
+out <- do.call(cbind.fill, lapply(rate, eps_speed_fun))
+
+```
+
+```{r var_plot, include=FALSE}
+
+timecol <- seq(5, ncol(out), by=5)
+izcol <- seq(4, ncol(out), by=5)
+iwcol <- seq(3, ncol(out), by=5)
+scol <- seq(2, ncol(out), by=5)
+
+times <- out[,timecol]
+Iz <- out[,izcol]
+Iw <- out[,iwcol]
+S <- out[,scol]
+
+
+
+
+
+
+#taking only the second half : in "rotating" equilibrium
+
+times <- times[500000:nrow(times),]
+Iz <- Iz[500000:nrow(Iz),]
+Iw <- Iw[500000:nrow(Iw),]
+S <- S[500000:nrow(S),]
+
+eps_fun <- eps_fun[500000:nrow(eps_fun),]
+
+```
+
+```{r equil, include=FALSE, cache=TRUE}
+library(deSolve)
+
+parameters3 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
+
+state3 <- c(S=0.8, Iw=0.1, Iz=0.1)
+
+SIS_equil=function(t, state3, parameters3){
+  with(as.list(c(state3,parameters3)),
+       {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
+        
+        list(c(dS, dIw, dIz))
+       })
+}
+
+root_main=function(times, state, parameters){
+  dstate <- unlist(SIS_equil(times, state, parameters))
+  sum(abs(dstate)) - conv_crit
+  }
+
+exploit_param_eps=function(x) {
+  parameters[5] <- x
+  out <- lsodar(func=SIS_equil, y=state, parms=parameters, times=times, rootfunc=root_main)
+  return(tail(out, n=1))
+  }
+
+steady_eps <- do.call(rbind, lapply(pepsi, exploit_param_eps))
+steady_eps <- unlist(steady_eps)
+
+steady_time_eps <- steady_eps[,1]
+steady_S_eps <- steady_eps[,2]
+steady_Iw_eps <- steady_eps[,3]
+steady_Iz_eps <- steady_eps[,4]
+steady_p_eps <- steady_Iz_eps/(steady_Iz_eps+steady_Iw_eps)
+
+
+```
+
+
+```{r prep_plot, echo=FALSE}
+
+
+
+linfun <- function(x, t){
+  lines(t, unlist(x), lty=1, lwd=2, col=colforcol[as.numeric(parent.frame()$i)])
+}
+
+
+
+plot(eps_fun[,1], Iz[,1], xlab=expression(epsilon), ylab="AMR", main = "Evolution of Iz", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[1])
+lines(eps_fun[,2], Iz[,2], col=colforcol[2], lwd=2)
+lines(eps_fun[,3], Iz[,3], col=colforcol[3], lwd=2)
+lines(eps_fun[,4], Iz[,4], col=colforcol[4], lwd=2)
+lines(eps_fun[,5], Iz[,5], col=colforcol[5], lwd=2)
+lines(pepsi, steady_Iz_eps, col="black", lwd=2)
+
+controltag <- paste(rate[1], "~ equilibrium")
+mintag <- paste(rate[2])
+maxtag <- paste(rate[length(rate)])
+legend("topleft" , inset=.05, title='rate of change', c(controltag,mintag, maxtag), lty=c(1,1,1), lwd=c(2,2,2), col=c("black","blue", "red"))
+
+
+p_prev <- Iz/(Iz+Iw)
+
+plot(eps_fun[,1], p_prev[,1], xlab=expression(epsilon), ylab="AMR ratio", main = "Evolution of p", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[1])
+lines(eps_fun[,2], p_prev[,2], col=colforcol[2], lwd=2)
+lines(eps_fun[,3], p_prev[,3], col=colforcol[3], lwd=2)
+lines(eps_fun[,4], p_prev[,4], col=colforcol[4], lwd=2)
+lines(eps_fun[,5], p_prev[,5], col=colforcol[5], lwd=2)
+lines(pepsi, steady_p_eps, col="black", lwd=2)
+
+
+legend("topleft" , inset=.05, title='rate of change', c(controltag,mintag, maxtag), lty=c(1,1,1), lwd=c(2,2,2), col=c("black","blue", "red"))
+
+```
+
+```{r prep_plot2, echo=FALSE}
+
+
+
+plot(eps_fun[,1], Iz[,1], xlab=expression(epsilon), ylab="AMR", main = "Evolution of Iz", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[1])
+
+plot(eps_fun[,2], Iz[,2], xlab=expression(epsilon), ylab="AMR", main = "Evolution of Iz", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[2])
+
+plot(eps_fun[,3], Iz[,3], xlab=expression(epsilon), ylab="AMR", main = "Evolution of Iz", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[3])
+
+plot(eps_fun[,4], Iz[,4], xlab=expression(epsilon), ylab="AMR", main = "Evolution of Iz", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[4])
+
+plot(eps_fun[,5], Iz[,5], xlab=expression(epsilon), ylab="AMR", main = "Evolution of Iz", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[5])
+
+
+
+
+plot(eps_fun[,1], p_prev[,1], xlab=expression(epsilon), ylab="AMR", main = "Evolution of p", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[1])
+
+plot(eps_fun[,2], p_prev[,2], xlab=expression(epsilon), ylab="AMR", main = "Evolution of p", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[2])
+
+plot(eps_fun[,3], p_prev[,3], xlab=expression(epsilon), ylab="AMR", main = "Evolution of p", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[3])
+
+plot(eps_fun[,4], p_prev[,4], xlab=expression(epsilon), ylab="AMR", main = "Evolution of p", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[4])
+
+plot(eps_fun[,5], p_prev[,5], xlab=expression(epsilon), ylab="AMR", main = "Evolution of p", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[5])
+
+
+
+```
