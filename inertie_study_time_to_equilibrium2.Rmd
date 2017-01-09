@@ -122,14 +122,14 @@ diff_down_up <- time_down-time_up
 ```
 
 ```{r plotting, echo=FALSE, cache=TRUE}
-plot(peps, time_up, main="Inertia : difference between increasing \n and decreasing epsilon", xlab="proportion of treated patients", ylab="delta t", lwd=2, col='red', type='l', xlim=c(0,0.17))
+plot(peps, time_up, main="Inertia : difference between increasing \n and decreasing epsilon", xlab=expression(epsilon), ylab="delta t", lwd=2, col='red', type='l', xlim=c(0,0.17))
 lines(peps, time_down, lwd=2, col='blue', type='l')
 
 
 legend("topleft" , inset=.05, c("initial eps=0.00", "initial eps=0.17"), lwd=c(2,2), col=c('red', 'blue'))
 
 
-plot(peps, diff_down_up, main="Inertia : difference between increasing \n and decreasing epsilon", xlab="proportion of treated patients", ylab="delta t", lwd=2, col='green', type='l', xlim=c(0,0.17))
+plot(peps, diff_down_up, main="Inertia : difference between increasing \n and decreasing epsilon", xlab=expression(epsilon), ylab="delta t", lwd=2, col='green', type='l', xlim=c(0,0.17))
 abline(h=0, col='black')
 ```
 

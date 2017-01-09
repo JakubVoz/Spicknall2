@@ -375,7 +375,7 @@ capture.output(apply(iz_steady2, 2, linfun, doses, 2), file='NUL')
 legend("bottomright" , inset=.05, c('Scenario 1', 'Scenario 2', tag_min, tag_max), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
 
 
-plot(prop_treated[,1], iz_steady[,1], main="Resistant cases at steady states \n while varying epsilon", xlab="proportion of treated", ylab="Iz", ylim=c(0,0.40), xlim=c(0,eps_max), lwd=2, type="l", col='black')
+plot(prop_treated[,1], iz_steady[,1], main="Resistant cases at steady states \n while varying epsilon", xlab=expression(epsilon), ylab="Iz", ylim=c(0,0.40), xlim=c(0,eps_max), lwd=2, type="l", col='black')
 
 for (i in 1:ncol(prop_treated)) {
   lines(prop_treated[,i], iz_steady[,i], col=colforcol[i], lty=1, lwd=2)
@@ -396,7 +396,7 @@ capture.output(apply(iw_steady2, 2, linfun, doses, 2), file='NUL')
 legend("bottomright" , inset=.05, c('Scenario 1', 'Scenario 2', tag_min, tag_max), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
 
 
-plot(prop_treated[,1], iw_steady[,1], main="Sensitive cases at steady states \n while varying epsilon", xlab="proportion of treated", ylab="Iw", ylim=c(0,0.70), xlim=c(0,eps_max), lwd=2, type="l", col='black')
+plot(prop_treated[,1], iw_steady[,1], main="Sensitive cases at steady states \n while varying epsilon", xlab=expression(epsilon), ylab="Iw", ylim=c(0,0.70), xlim=c(0,eps_max), lwd=2, type="l", col='black')
 
 for (i in 1:ncol(prop_treated)) {
   lines(prop_treated[,i], iw_steady[,i], col=colforcol[i], lty=1, lwd=2)
@@ -418,7 +418,7 @@ capture.output(apply(p2, 2, linfun, doses, 2), file='NUL')
 legend("topleft" , inset=.03, c('Scenario 1', 'Scenario 2', tag_min, tag_max), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
 
 
-plot(prop_treated[,1], p[,1], main="P while varying epsilon", xlab="proportion of treated", ylab="p", ylim=c(0,1), xlim=c(0,0.3), lwd=2, type="l", col='black')
+plot(prop_treated[,1], p[,1], main="P while varying epsilon", xlab=expression(epsilon), ylab="p", ylim=c(0,1), xlim=c(0,0.3), lwd=2, type="l", col='black')
 
 for (i in 1:ncol(prop_treated)) {
   lines(prop_treated[,i], p[,i], col=colforcol[i], lty=1, lwd=2)
@@ -441,7 +441,7 @@ capture.output(apply(burden2, 2, linfun, doses, 2), file='NUL')
 
 legend("topleft" , inset=.03, c('Scenario 1', 'Scenario 2', tag_min, tag_max), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
 
-plot(prop_treated[,1], burden[,1], main="Burden while varying epsilon", xlab="proportion of treated", ylab="burden", ylim=c(0,1), xlim=c(0,0.3), lwd=2, type="l", col='black')
+plot(prop_treated[,1], burden[,1], main="Burden while varying epsilon", xlab=expression(epsilon), ylab="burden", ylim=c(0,1), xlim=c(0,0.3), lwd=2, type="l", col='black')
 
 for (i in 1:ncol(prop_treated)) {
   lines(prop_treated[,i], burden[,i], col=colforcol[i], lty=1, lwd=2)
@@ -469,7 +469,7 @@ legend("bottomleft" , inset=.05, c('Scenario 1', 'Scenario 2', tag_min, tag_max)
 
 
 
-plot(prop_treated[,1], newcase[,1], main="Global incidence while varying epsilon", xlab="proportion of treated", ylab="Incidence", ylim=c(0,0.01), xlim=c(0,eps_max), lwd=2, type="l", col='black')
+plot(prop_treated[,1], newcase[,1], main="Global incidence while varying epsilon", xlab=expression(epsilon), ylab="Incidence", ylim=c(0,0.01), xlim=c(0,eps_max), lwd=2, type="l", col='black')
 
 for (i in 1:ncol(prop_treated)) {
   lines(prop_treated[,i], newcase[,i], col=colforcol[i], lty=1, lwd=2)

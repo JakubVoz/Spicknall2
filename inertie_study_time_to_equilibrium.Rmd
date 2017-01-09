@@ -179,7 +179,7 @@ time_down <- out_down[2:nrow(out_down),1]
 
 pepsi_change <- seq(delta_eps, (0.20-delta_eps), by=delta_eps)
 
-plot(pepsi_change, time_up, main="Inertia - delta epsilon = 0.01", xlab="proportion of treated patients", ylab="time to stabilization", lwd=2, col='red', type='l', xlim=c(0,0.20))
+plot(pepsi_change, time_up, main="Inertia - delta epsilon = 0.01", xlab=expression(epsilon), ylab="time to stabilization", lwd=2, col='red', type='l', xlim=c(0,0.20))
 lines(pepsi_change, time_down, lwd=2, col='blue', type='l')
 
 legend("topleft" , inset=.05, c("Increasing eps", "Decreasing eps"), lwd=c(2,2), col=c('red', 'blue'))
@@ -370,7 +370,7 @@ time_down <- out_down[2:nrow(out_down),1]
 
 pepsi_change <- seq(delta_eps, (0.20-delta_eps), by=delta_eps)
 
-plot(pepsi_change, time_up, main="Inertia", xlab="proportion of treated patients", ylab="time to stabilization", lwd=2, col='red', type='l', xlim=c(0,0.20))
+plot(pepsi_change, time_up, main="Inertia", xlab=expression(epsilon), ylab="time to stabilization", lwd=2, col='red', type='l', xlim=c(0,0.20))
 lines(pepsi_change, time_down, lwd=2, col='blue', type='l')
 
 legend("topleft" , inset=.05, c("Increasing eps", "Decreasing eps"), lwd=c(2,2), col=c('red', 'blue'))
@@ -397,7 +397,7 @@ diff_2 <- diff_2[1:170]
 epsx2 <- seq(0.001, 0.17, by=0.001)
 
 
-plot(epsx1, diff_1, main="Inertia : difference between increasing \n and decreasing epsilon", xlab="proportion of treated patients", ylab="delta t", lwd=2, col='red', type='l', xlim=c(0,0.17))
+plot(epsx1, diff_1, main="Inertia : difference between increasing \n and decreasing epsilon", xlab=expression(epsilon), ylab="delta t", lwd=2, col='red', type='l', xlim=c(0,0.17))
 lines(epsx2, diff_2, lwd=2, col='blue', type='l')
 abline(h=0, col='black')
 
@@ -417,7 +417,7 @@ diff_2_same_metrics <- diff_2/delta_eps2
 epsx2 <- seq(0.001, 0.17, by=delta_eps2)
 
 
-plot(epsx2, diff_2_same_metrics, main="Inertia : comparison of differences between increasing \n and decreasing epsilon", xlab="proportion of treated patients", ylab="delta t/ delta eps", lwd=2, col='blue', type='l', xlim=c(0,0.17))
+plot(epsx2, diff_2_same_metrics, main="Inertia : comparison of differences between increasing \n and decreasing epsilon", xlab=expression(epsilon), ylab="delta t/ delta eps", lwd=2, col='blue', type='l', xlim=c(0,0.17))
 lines(epsx1, diff_1_same_metrics, lwd=2, col='red', type='l')
 abline(h=0, col='black')
 

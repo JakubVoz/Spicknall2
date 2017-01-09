@@ -186,7 +186,7 @@ legend("topleft" , inset=.05, c("Sc. 1", "Sc. 2"), lty=c(1,1), lwd=c(2,2), col=c
 
 
 
-plot(doses, prop_treated[,1], main="Proportion of treated patients", xlab="Drug quantity", ylab="eps", ylim=c(0 , eps_max), lwd=2, type="l", col='black')
+plot(doses, prop_treated[,1], main=expression(epsilon), xlab="Drug quantity", ylab="eps", ylim=c(0 , eps_max), lwd=2, type="l", col='black')
 
 capture.output(apply(prop_treated, 2, linfun, doses, 1), file='NUL')
 
