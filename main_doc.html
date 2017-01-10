@@ -215,41 +215,49 @@ title wherever you want to display the reference list.
 </div>
 <div id="parameters" class="section level2">
 <h2>Parameters</h2>
-<table style="width:79%;">
+<table style="width:81%;">
 <colgroup>
 <col width="8%"></col>
-<col width="70%"></col>
+<col width="58%"></col>
+<col width="13%"></col>
 </colgroup>
 <thead>
 <tr class="header">
 <th>Name of Parameter</th>
 <th>Description</th>
+<th>Default value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td><span class="math inline">\(\beta_w\)</span></td>
 <td>transmission rate of sensitive strain</td>
+<td>0.40</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\beta_z\)</span></td>
 <td>transmission rate of resistant strain</td>
+<td>0.15</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\varepsilon\)</span></td>
 <td>proportion of infected people treated with antibiotics, supposedly strongly correlated to AMU</td>
+<td>0.10</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\gamma\)</span></td>
-<td>innate recovery rate (relative to <span class="math inline">\(I_z\)</span> generally and to <span class="math inline">\(I_w\)</span></td>
+<td>innate recovery rate (relative to <span class="math inline">\(I_z\)</span> generally and to <span class="math inline">\(I_w\)</span> (not treated with antibiotics)</td>
+<td>0.01</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\gamma '\)</span></td>
 <td>recovery rate of <span class="math inline">\(I_w\)</span> when treated with antibiotics</td>
+<td>0.1</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\rho\)</span></td>
 <td>proportion of treatment failures in <span class="math inline">\(I_w\)</span> (comprehensing <em>de novo</em> mutations, outcompetition of major sensitive strain by minor resistant one and horizontal transfer)</td>
+<td>0.05</td>
 </tr>
 </tbody>
 </table>

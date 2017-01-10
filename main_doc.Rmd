@@ -57,14 +57,14 @@ $I_z$ | proportion of population that is infected with resistant strain
 
 ##Parameters
 
-Name of Parameter | Description
------|--------------------------------------------------
-$\beta_w$ | transmission rate of sensitive strain
-$\beta_z$ | transmission rate of resistant strain
-$\varepsilon$ | proportion of infected people treated with antibiotics, supposedly strongly correlated to AMU
-$\gamma$ | innate recovery rate (relative to $I_z$ generally and to $I_w$ | not treated with antibiotics)
-$\gamma '$ | recovery rate of $I_w$ when treated with antibiotics
-$\rho$ | proportion of treatment failures in $I_w$ (comprehensing _de novo_ mutations, outcompetition of major sensitive strain by minor resistant one and horizontal transfer)
+Name of Parameter | Description | Default value
+-----|-----------------------------------------|---------
+$\beta_w$ | transmission rate of sensitive strain | 0.40
+$\beta_z$ | transmission rate of resistant strain | 0.15
+$\varepsilon$ | proportion of infected people treated with antibiotics, supposedly strongly correlated to AMU | 0.10
+$\gamma$ | innate recovery rate (relative to $I_z$ generally and to $I_w$  (not treated with antibiotics) | 0.01
+$\gamma '$ | recovery rate of $I_w$ when treated with antibiotics | 0.1
+$\rho$ | proportion of treatment failures in $I_w$ (comprehensing _de novo_ mutations, outcompetition of major sensitive strain by minor resistant one and horizontal transfer) | 0.05
 
 
 
