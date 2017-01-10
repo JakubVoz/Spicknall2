@@ -326,7 +326,7 @@ incidence_ss <- Incidence[nrow(Incidence),]
 par(mfrow=c(1,2))
 
  
-plot(t2, NewVirulence[,11], main="Virulence evolution \n after a change in epsilon", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0,0.011), lty=1, lwd=2, type="l")
+plot(t2, NewVirulence[,11], main="Virulence evolution \n after a change in epsilon", xlab="time (steps)", ylab="Virulence", ylim=c(0,0.001), lty=1, lwd=2, type="l")
 
 capture.output(apply(NewVirulence, 2, linfun, t2),file='NUL') 
 
@@ -334,7 +334,7 @@ legend("bottomleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2),
 
 #zoom
 
-plot(time_zoom, virulence_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Incidence Iw", ylim=c(0,0.011), lty=1, lwd=2, type="l")
+plot(time_zoom, virulence_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="Virulence", ylim=c(0,0.001), lty=1, lwd=2, type="l")
 
 capture.output(apply(virulence_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -343,7 +343,7 @@ legend("bottomleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2),
 #steady-state Iw incidence
 
 par(mfrow=c(1,1))
-plot(epsvar, viru_ss, xlab=expression(epsilon), ylab="Iw incidence", main = "Impact of epsilon on steady state Iw incidence", type="l")
+plot(epsvar, viru_ss, xlab=expression(epsilon), ylab="virulence", main = "Impact of epsilon on steady state Virulence", ylim=c(0, 0.0008), type="l")
 ```
 
 ```{r incid_plot_Iw, echo=FALSE, fig.align='center', cache=TRUE}
