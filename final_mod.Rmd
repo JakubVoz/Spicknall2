@@ -320,3 +320,16 @@ lines(prhoi_ext, steady_S_rho2_ext, lty=1, lwd=2)
 legend("topright" , inset=.05, c("Iw", "Iz", "S" ), lty=c(3,2,1), lwd=c(2,2,2))
 
 ```
+
+```{r average_stay_within_Iw, echo=FALSE, fig.align='center'}
+epsico <- seq(0, 0.18, by=0.01)
+epsico_ext <- seq(0, 1, by=0.01)
+
+average_Iw <- 1/((1-epsico)*pgammaa + epsico*pgamma_tilt)
+average_Iw_ext <- 1/((1-epsico_ext)*pgammaa + epsico_ext*pgamma_tilt)
+
+plot(epsico, average_Iw, main="Average duration of sensitive infection", xlab=expression(epsilon), ylab="time (steps)", lty=1, lwd=2, type="l", col="green", ylim=c(0,100))
+
+plot(epsico_ext, average_Iw_ext, main="Average duration of sensitive infection", xlab=expression(epsilon), ylab="time (steps)", lty=1, lwd=2, type="l", col="green", ylim=c(0,100))
+
+```
