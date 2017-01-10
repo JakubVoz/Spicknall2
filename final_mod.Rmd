@@ -5,13 +5,6 @@ date: "25 října 2016"
 output: html_document
 ---
 
----
-title: "Supermodel"
-author: "Jakub"
-date: "18 října 2016"
-output: html_document
----
-
 ```{r param, include=FALSE}
 library(deSolve)
 
