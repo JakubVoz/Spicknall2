@@ -509,7 +509,9 @@ The back and forth pathways being the same, we can say that there is no hysteres
 
 ##Varying the speed of change of $\varepsilon$
 
-In this part, we vary rate at which the proportion of patients varies, still considering that the proportion of patients is directly linked to the $\varepsilon$. At first, we start from $\varepsilon$=0 and increase its value up to 100%.
+###Linear variations
+
+In this part, we vary rate at which the proportion of patients varies, still considering that the proportion of patients is directly linked to the AMU. At first, we start from $\varepsilon$=0 and increase its value up to 1.
 
 ```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
 knitr::include_graphics("./inertie_study_files/figure-html/prep_plot-1.png")
@@ -522,6 +524,41 @@ knitr::include_graphics("./inertie_study_files/figure-html/prep_plot-2.png")
 ```
 
 Delay in reaching equilibrium due to rapid increase of $\varepsilon$ can be observed for the p (defined as the ratio between $I_z$ and burden of infection) as well.
+
+###Sinusoidal variations
+
+Another method of grasping the inertia of a model, consists in varying $varepsilon$ periodically. $\varepsilon$ is here a sine function with a certain pulsation :
+
+$$
+\varepsilon=A*sin(\omega*t)+B \\
+$$
+Where 
+$$
+A=B=(max \varepsilon - min\varepsilon)/2
+$$
+In order to prevent effects of $I_w$ extinction due to high $\varepsilon$, we opted here for 0.00 as the minimum value of $\varepsilon$ and 0.18 as its maximum value. 
+
+The $varepsilon$ varies as follows for different values of pulsation $\omega$ (higher pulsations mean faster change in time) :
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./inertie_periodic_eps_files/figure-html/plot_eps-1.png")
+```
+
+
+We compare the steady state values of $I_z$ and p to their values while $\varepsilon$ varies periodically with different pulsations:
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./inertie_periodic_eps_files/figure-html/prep_plot-1.png")
+```
+
+
+
+```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+knitr::include_graphics("./inertie_periodic_eps_files/figure-html/prep_plot-2.png")
+```
+
+The smaller the pulsations are, and therefore the slower the variation of $\varepsilon$ is, the more the corresponding curve approaches the steady-state curve.
+
 
 The question is now whether there are the same times are required for  reaching equilibrium (TREs) while increasing or decreasing $\varepsilon$.
 
