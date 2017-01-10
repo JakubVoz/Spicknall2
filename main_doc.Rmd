@@ -296,7 +296,7 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/p_incid_as_func_Q
 
 ```
 
-##Average duration of sensitive infection
+##Average duration of sensitive infection (without resistant dynamics)
 
 In fact, as the $\varepsilon$ varies, so does the average or expected duration of sensitive infection. Increasing $\varepsilon$ will have for an effect more rapid recovery of sensitive cases. Here, we represent the average duration as a function of $\varepsilon$ following this formula :
 
