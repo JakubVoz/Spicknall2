@@ -333,3 +333,45 @@ plot(epsico, average_Iw, main="Average duration of sensitive infection", xlab=ex
 plot(epsico_ext, average_Iw_ext, main="Average duration of sensitive infection", xlab=expression(epsilon), ylab="time (steps)", lty=1, lwd=2, type="l", col="green", ylim=c(0,100))
 
 ```
+
+```{r average_stay_within_I, echo=FALSE, fig.align='center'}
+epsico <- seq(0, 0.18, by=0.01)
+epsico_ext <- seq(0, 1, by=0.01)
+
+average_Iw <- 1/((1-epsico)*pgammaa + epsico*pgamma_tilt)
+average_Iw_ext <- 1/((1-epsico_ext)*pgammaa + epsico_ext*pgamma_tilt)
+
+plot(epsico, average_Iw, main="Average duration of sensitive infection", xlab=expression(epsilon), ylab="time (steps)", lty=1, lwd=2, type="l", col="green", ylim=c(0,100))
+
+plot(epsico_ext, average_Iw_ext, main="Average duration of sensitive infection", xlab=expression(epsilon), ylab="time (steps)", lty=1, lwd=2, type="l", col="green", ylim=c(0,100))
+
+D_I <- (steady_Iz_eps*(1/pgammaa)+steady_Iw_eps*average_Iw_ext)/(steady_Iz_eps+steady_Iw_eps)
+
+plot(epsico_ext, D_I, main="Average duration of infection", xlab=expression(epsilon), ylab="time (steps)", lty=1, lwd=2, type="l", col="green", ylim=c(0,100))
+
+
+BOI <- (steady_Iz_eps+steady_Iw_eps)
+
+plot(epsico_ext, BOI, main="Infected population", xlab=expression(epsilon), ylab="ratio", lty=1, lwd=2, type="l", col="green", ylim=c(0,1))
+
+
+D_T <- (steady_Iz_eps*(1/pgammaa)+steady_Iw_eps*average_Iw_ext)
+
+plot(epsico_ext, D_T, main="Total duration", xlab=expression(epsilon), ylab="time (steps)", lty=1, lwd=2, type="l", col="green")
+```
+
+```{r fat_test, echo=FALSE, fig.align='center'}
+alpha1 <- 0.1
+alpha2 <- 0.01
+
+epsico <- seq(0, 0.18, by=0.01)
+epsico_ext <- seq(0, 1, by=0.01)
+
+steady_Iz_eps
+steady_Iw_eps
+
+fatality <- epsico_ext*steady_Iw_eps*alpha2 + (1-epsico_ext)*steady_Iw_eps*alpha1 + steady_Iz_eps*alpha1 
+
+plot(epsico_ext, fatality, main="Fatality", xlab=expression(epsilon), ylab="fatality, ratio", lty=1, lwd=2, type="l", col="green")
+
+```
