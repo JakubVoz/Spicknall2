@@ -234,4 +234,23 @@ lines(epsvar, Iw_ss, lwd=2, lty=1, col='red')
 lines(epsvar, ProdIw_S_ss, lwd=2, lty=2)
 
 legend('topleft', inset=.05, c("S", "Iw", "Iw*S"), lty=c(1,1,2), lwd=c(2,2,2), col=c("blue", "red", "black"))
+
+```
+
+```{r Iw_S_ratio_as_fn_Iw, echo=FALSE, cache=TRUE}
+Iw_pos <- seq(0, 1, by=0.01)
+
+S_pos <- 1-Iw_pos
+
+Iw_pos <- as.matrix(Iw_pos)
+S_pos <- as.matrix(S_pos)
+
+Iw_S_product <- S_pos*Iw_pos
+
+Iw_S_product <- as.matrix(Iw_S_product)
+
+plot(Iw_pos, Iw_S_product, xlab="Iw ratio", ylab="Iw S mass product", main = "Iw S mass product", lwd=2, col='blue', ylim=c(0,1))
+
+plot(S_ss, Iw_S_product, xlab="S ratio", ylab="Iw S mass product", main = "Iw S mass product", type="l", lwd=2, col='blue', ylim=c(0,1))
+
 ```
