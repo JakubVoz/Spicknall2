@@ -777,20 +777,3 @@ knitr::include_graphics("./detailed_AMU_varying_eps_files/figure-html/plot_ss_bu
 ```
 
 VA ETRE ANALYSE PROCHAINEMENT.
-
-#No transmission cost : existing optimal strategy?
-
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
-
-knitr::include_graphics("./model_no_competition_inc_files/figure-html/fat_test-1.png")
-```
-
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
-
-knitr::include_graphics("./model_no_competition_inc_intrahost_cost_preserved_files/figure-html/fat_test-1.png")
-```
-
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
-
-knitr::include_graphics("./model_no_competition_no_Iw_Iz_flux_files/figure-html/fat_test-1.png")
-```
