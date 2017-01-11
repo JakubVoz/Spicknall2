@@ -34,7 +34,7 @@ fig.width=4.24725,fig.retina=2,fig.align="center")
 
 #Definition of the basic model
 
-```{r, out.width = "200px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "200px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/Mechanistic model of AMR spread.png")
 ```
 
@@ -132,7 +132,7 @@ conv_crit <- 0.00001
 
 ```
 
-```{r trial, include=FALSE, cache=TRUE}
+```{r trial, include=FALSE}
 parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
 
 state <- c(S=1-2*prop, Iw=prop, Iz=prop, Iz_div_Inf=0.5, Iz_plus_Iw=2*prop)
@@ -167,7 +167,7 @@ out2 <- cbind(out, mutate(out, p=out$Iz/(out$Iw+out$Iz), q=out$Iw+out$Iz))
 
 ##Steady states when varying $\varepsilon$
 
-```{r ss_eps_var, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r ss_eps_var, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./final_mod_files/figure-html/steady_state_eps_plot-1.png")
 ```
 
@@ -176,7 +176,7 @@ According to our model, the proportions of different populations change for the 
 
 ##Steady states when varying $\rho$
 
-```{r ss_rho_var, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r ss_rho_var, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./final_mod_files/figure-html/steady_state_rho_plot-1.png")
 ```
 
@@ -190,7 +190,7 @@ Therefore in this model, $QA = (I_w +I_z)*\varepsilon$.
 
 The following plot represents the QA in function of $\varepsilon$. 
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_QA-6.png")
 ```
 
@@ -204,7 +204,7 @@ This means that at steady states, with nearly the same quantity of antibiotics (
 
 The steady state flows from one population to another are followed for $\varepsilon$ varying between 0 and 20%.
 
-```{r ss_flow_eps_var, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r ss_flow_eps_var, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_inc_flows-1.png")
 ```
 
@@ -218,20 +218,20 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_inc_flows-1.
 
 Therefore the net flow in our model is the following:
 
-```{r, out.width = "200px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "200px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/NetFlow.png")
 ```
 
 ##Steady state resistance ratio p and burden of resistance
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./AMU_var_prevalence_files/figure-html/plot_prev_p-2.png")
 ```
 
 Here, the p corresponds to the ratio of prevalence at steady-states. Usually, it is used in the studies of tuberculosis (WHO 2002). Its exponential growth is due to the interplay of increasing $I_z$ and decreasing $I_w$.
 
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_QA-2.png")
 ```
 
@@ -240,7 +240,7 @@ P as a function of QA shows an exponential growth with saturation, which is due 
 a) interplay of increasing $I_z$ and decreasing $I_w$ with increasing $\varepsilon$
 b) saturation part of the curve of QA=f($\varepsilon$) ([0.050, 0.06] of QA corresponds to [10%,17%] of $\varepsilon$)
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/ss_burden_of_inf-1.png")
 ```
 
@@ -249,7 +249,7 @@ Here, the burden of infection corresponds to the total proportion of infected pe
 
 
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_QA-4.png")
 ```
 
@@ -257,7 +257,7 @@ Finally, when plotting the BOI in function of QA, decreasing tendency is preserv
 
 ##Steady state incidence
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_steady_st-3.png")
 ```
@@ -268,7 +268,7 @@ The increase of global incidence for lower values of $\varepsilon$, cannot be so
 
 The global incidence then decreases to its value without antibiotic use at 14% $\varepsilon$.
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/incid_plot_sec-2.png")
 
@@ -278,7 +278,7 @@ The situation where resistance emerges in a treated patient, comprehending a hor
 
 This resistance is represented in our model as a flow from $I_w$ to $I_z$ depending on the $\varepsilon$ and probability of acquiring resistance when treated. As we can see, it reaches a peak for 10% $\varepsilon$. For higher values of $\varepsilon$, the deterioration of $I_w$ population makes the secondary resistance plummet.
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/incid_plot_real_p-2.png")
 
@@ -290,7 +290,7 @@ a) exponential increase in p=f($\varepsilon$)
 b) relative steadiness in QA=f($\varepsilon$) for higher values of $\varepsilon$ (10 - 17%)
 
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/p_incid_as_func_QA_ss-1.png")
 
@@ -301,7 +301,7 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/p_incid_as_func_Q
 In fact, as the $\varepsilon$ varies, so does the average or expected duration of sensitive infection. Increasing $\varepsilon$ will have for an effect more rapid recovery of sensitive cases. Here, we represent the average duration as a function of $\varepsilon$ following this formula :
 
 $$Duration = \frac {1}{((1-\varepsilon)*\gamma + \varepsilon*\gamma')}$$
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./final_mod_files/figure-html/average_stay_within_Iw-1.png")
 
@@ -314,7 +314,7 @@ In this part, we analyse the dynamics in our model. At time $t=0$, the steady st
 
 ##Dynamics of p after a change in $\varepsilon$
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./AMU_var_prevalence_files/figure-html/plot_prev_p-1.png")
 
@@ -324,7 +324,7 @@ Here, p corresponds to the ratio of $I_z$ and burden of infection. As the study 
 
 ##Dynamics of Incidence
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/new_cases_dynamics-2.png")
 
@@ -340,7 +340,7 @@ DESCRIPTION OF HONEY-MOON PERIOD
 
 On following pages, we will study the cause of this anti-honeymoon period, during which the incidence is strikingly higher than at equilibrium and at state prior to $\varepsilon$ reduction.
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/S_to_Iw_flow-1.png")
 
@@ -354,7 +354,7 @@ The susceptible incidence depends on mass product of $I_w$ and $S$.
 
 We consider now a simpler model with only $I_w$ and $S$ populations, related with the same relationships as in our model. Do these short-term peaks in $I_w$ incidence appear as well? If it is so, the anti-honeymoon period is due only to the interplay between $I_w$ and $S$ when the $\varepsilon$ is suddenly decreased. The second possibility is that the transient anti-honeymoon period is due to the interplay between $I_w$ and $I_z$.
 
-```{r, out.width = "800px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "800px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./simple_models_files/figure-html/model_Iw_S_plots-1.png")
 
@@ -365,7 +365,7 @@ Anti-honeymoon period does not appear in a simpler model and thus this phenomeno
 
 As the sensitive incidence, and thus the anti-honeymoon period, are directly dependent on the mass-product of $I_w$ and $S$, a change in flow between $I_z$ and $I_w$ may have a direct impact on the this mass product. In particular, the secondary resistance may be the cause of the short-term peaks as the variation of $\varepsilon$ has a huge and immediate impact on its strength : the decrease of $\varepsilon$ would decrease this flow and we would see a fast accumulation in $I_w$ population at the cost of $I_z$.
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/Iw_Iz_dynamics-1.png")
 
@@ -375,7 +375,7 @@ Concurrently to the presence of short-term peaks, the $I_w$ to $I_z$ flow, corre
 
 Finally, dynamics in recovery of infected cases may contribute as well to the anti-honeymoon period : as the $\varepsilon$ is suddenly decreased, the expectancy of duration spent in $I_w$ population should increase. This would then transiently promote the accumulation of sensitive cases and therefore the possibility of transmission.
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/recovery_flows-1.png")
 
@@ -392,7 +392,7 @@ c. As a result of the accumulation of sensitive cases, the mass product of $S$ a
 
 Finally, we represent here the net flows between the three subpopulations after a change in $\varepsilon$:
 
-```{r, out.width = "800px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "800px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/net_flows_aggregated-1.png")
 ```
 
@@ -400,13 +400,13 @@ We can notice that $I_w$ to $S$ and $I_w$ and $I_z$ net flows are discontinuous 
 
 During short-time period after a sharp decrease in $\varepsilon$, the net flows in our model are as follows:
 
-```{r, out.width = "200px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "200px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/Sharp decrease in AMU.png")
 ```
 
 At sharp increase of $\varepsilon$ the net flows in our model change as well:
 
-```{r, out.width = "200px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "200px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/Sharp increase in AMU.png")
 ```
 
@@ -431,7 +431,7 @@ Interestingly, when no ATB is used, resistant strain does not coexist with the s
 
 Paradoxically the prevalence has the lowest value for $\varepsilon$ of 10% due to indirect competition. The incidence is highest at the same time as the turnover of sensitive cases is highest (we observe a peak of $I_w$ and $S$ mass product). It returns to pre-antibiotic era as $I_z$ becomes fixed.
 
-```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "400px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./model_no_competition_inc_files/figure-html/comp_inc_flows-1.png")
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_inc_flows-1.png")
 ```
@@ -440,13 +440,13 @@ As there is no cost of resistance, the interplay between resistant and sensitive
 
 Interestingly but not surprisingly, the global flows in our model are inversed in comparison with a model including cost of resistance. This is due to the fact that $I_z$ spreads as easily as $I_w$. At the same time, patients infected with $I_w$ do recover more easily than those infected with $I_z$ as $\varepsilon$ increases. Therefore there is a stronger flow from $I_w$ to $S$ than from $I_z$, when the populations are equal.
 
-```{r, out.width = "200px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "200px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/No cost on transmission.png")
 ```
 
 In comparison with the full model, the primary resistance becomes predominant over the secondary one for lower values of $\varepsilon$, as the resistant bacteria are better transmitted (10% vs 13%). For most diseases, the secondary resistance is estimated to be more prevalent.
 
-```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "400px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./model_no_competition_inc_files/figure-html/comp_steady_st-1.png")
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_steady_st-1.png")
 ```
@@ -454,7 +454,7 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_steady_st-1.
 In general, when the transmission cost increases, $i.e.$ the $\beta_z$ decreases while $\beta_w$ remains stable, $I_z$ is fixed and becomes prevalent for higher values of $\varepsilon$.
 
 
-```{r ss_rho_var_no_cost, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r ss_rho_var_no_cost, out.width = "400px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./final_mod_files/figure-html/steady_state_rho_no_cost_plot-1.png")
 knitr::include_graphics("./final_mod_files/figure-html/steady_state_rho_plot-1.png")
 ```
@@ -468,14 +468,14 @@ Moreover unlike in the situation where the transmission cost does exist, the glo
 
 When only primary resistance is preserved, that is to say $\rho=0$, we observe that the coexistence is very limited (for $\varepsilon$ between 0.27 and 0.29).
 
-```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "400px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./model_prim_res_inc_files/figure-html/comp_inc_flows-2.png")
 knitr::include_graphics("./final_mod_files/figure-html/steady_state_eps_plot-3.png")
 ```
 
 Although the model was started with an important subpopulation of $I_z$ (_cca_ 12%), this subpopulation has vanished at steady state, being systematically converted into $I_w$. The stability of $I_z$ subpopulation is therefore substantially dependant on the secondary resistance in long term.
 
-```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "400px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./model_prim_res_inc_files/figure-html/comp_steady_st-3.png")
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_steady_st-3.png")
 ```
@@ -486,7 +486,7 @@ Without secondary resistance, the flows between $I_w$ and $I_z$ reach equilibria
 
 Here, the primary resistance is omitted, $i.e.$ $beta_z=0$ and the resistant strains cannot be transmitted.
 
-```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "400px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./model_sec_res_inc_files/figure-html/comp_inc_flows-2.png")
 knitr::include_graphics("./final_mod_files/figure-html/steady_state_eps_plot-3.png")
 ```
@@ -494,7 +494,7 @@ knitr::include_graphics("./final_mod_files/figure-html/steady_state_eps_plot-3.p
 Although the transmission of resistant strains is omitted and therefore the pool of resistant cases is fully dependant on treatment failures, the coexistence is observed for $\varepsilon$ < 25% at steady states. Not surprisingly, the resistant cases vanish at the same time as sensitive ones do.
 
 
-```{r, out.width = "400px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "400px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./model_sec_res_inc_files/figure-html/comp_steady_st-3.png")
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_steady_st-3.png")
 ```
@@ -508,7 +508,7 @@ The study of hysteresis allows to know whether the same stable states can be rea
 
 Once the $\varepsilon$ stabilizes over 0.18, there is a point of no return, not allowing the sensitive bacteria to re-establish. This is due to the fact, that in our model there is no possibility of reversion of resistant mutants which seems to be realistic considering today's research (changing genetic background and eventual compensatory mutations will make reversion highly unlikely).
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./hysteresis_files/figure-html/incid_plot_Iw-1.png")
 ```
 
@@ -523,13 +523,13 @@ The back and forth pathways being the same, we can say that there is no hysteres
 
 In this part, we vary rate at which the proportion of patients varies, still considering that the proportion of patients is directly linked to the AMU. At first, we start from $\varepsilon$=0 and increase its value up to 1.
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./inertie_study_files/figure-html/prep_plot-1.png")
 ```
 
 As the rate of change increases, the proportion of $I_z$ is more distant from its steady state value. The rate of change of $\varepsilon$ can thus have a severe impact on the detected resistance level. Presuming that all hospitals are in equilibrium can be a rough simplification.
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./inertie_study_files/figure-html/prep_plot-2.png")
 ```
 
@@ -550,20 +550,20 @@ In order to prevent effects of $I_w$ extinction due to high $\varepsilon$, we op
 
 The $varepsilon$ varies as follows for different values of pulsation $\omega$ (higher pulsations mean faster change in time) :
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./inertie_periodic_eps_files/figure-html/plot_eps-1.png")
 ```
 
 
 We compare the steady state values of $I_z$ and p to their values while $\varepsilon$ varies periodically with different pulsations:
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./inertie_periodic_eps_files/figure-html/prep_plot-1.png")
 ```
 
 
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./inertie_periodic_eps_files/figure-html/prep_plot-2.png")
 ```
 
@@ -580,7 +580,7 @@ The idea is to compare the number of steps that are required for reaching a stea
 
 The model starts at a steady state for a given value of $\varepsilon$. Then the $\varepsilon$ is increased or decreased by certain $\delta$ and the time required for reaching equilibrium (TRE), represented by a value of convergience criterion (here $c$=0.000001). The output is the following comparison of TREs for each final value of $\varepsilon$:
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/Spicknall_partial_models_data/inertie_study_time_to_equilibrium_files_crit_0.000001/figure-html/time_to_stabilization_plot-1.png")
 ```
 
@@ -590,7 +590,7 @@ As the $\varepsilon$ comes closer to the value of 0.18, the time to reach equili
 
 For smaller values of epsilon, there still exists a time lapse. The point of no return, observed in our model, cannot be responsible for this finding. Let us focus on the interval of $varepsilon$ where it does not intervene.
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/Spicknall_partial_models_data/inertie_study_time_to_equilibrium_files/figure-html/plot_dif-1.png")
 ```
 
@@ -598,7 +598,7 @@ Here, the plot represents the time lapse between reaching equilibrium while decr
 
 We can compare the differences obtained with different values of $\delta\varepsilon$ (0.01 and 0.001) while using the same metrics such as $\frac{\delta t}{\delta \varepsilon}$ :
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/Spicknall_partial_models_data/inertie_study_time_to_equilibrium_files/figure-html/plot_same_metrics-1.png")
 ```
 
@@ -606,11 +606,11 @@ Though the TRE is smaller for smaller values of $\delta\varepsilon$, when using 
 
 There is another possibility how to present this phenomena. In the following experiment, the steady states are reached for $\varepsilon$=0.00 and $\varepsilon$=0.17. Then it changes to a value between 0.01 and 0.16 and the time to reach the equilibrium is calculated as well as the difference of the times for given initial $\varepsilon$. Here, the convergence criterion is 0.0001.
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/Spicknall_partial_models_data/inertie_study_time_to_equilibrium2_files_c_0.0001/figure-html/plotting-1.png")
 ```
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("C:/Users/Jakub/Desktop/Spicknall_partial_models_data/inertie_study_time_to_equilibrium2_files_c_0.0001/figure-html/plotting-2.png")
 ```
 
@@ -620,39 +620,39 @@ Once again, when the $\varepsilon$ value is decreased, the steady state is reach
 
 ####TREs
 convergence criterion = 0.000001
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./inertie_study_time_to_equilibrium_start_files/figure-html/time_to_stabilization_plot-1.png")
 ```
 
 convergence criterion = 0.0001
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./inertie_study_time_to_equilibrium_start2_files/figure-html/time_to_stabilization_plot-1.png")
 ```
 
 ####Difference between TREs : Delay
 
 convergence criterion = 0.000001
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./inertie_study_time_to_equilibrium_start_files/figure-html/plot_dif-1.png")
 ```
 
 convergence criterion = 0.0001
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./inertie_study_time_to_equilibrium_start2_files/figure-html/plot_dif-1.png")
 ```
 
 ####Delay with same metrics
 
 convergence criterion = 0.000001
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./inertie_study_time_to_equilibrium_start_files/figure-html/plot_same_metrics-1.png")
 ```
 
 convergence criterion = 0.0001
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./inertie_study_time_to_equilibrium_start2_files/figure-html/plot_same_metrics-1.png")
 ```
 
@@ -689,20 +689,20 @@ In contrast with our first model, the AMU is not considered as directly linked t
 
 It has been shown that the mutation rate, here the rate at which resistant mutants appear, grows with increasing DQ/DC (??? source). Here we thus represent the mutation rate as a growing function of DQ.
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./per_capita_growth_rate_files/figure-html/mutation_curve-1.png")
 ```
 
 As it has been mentioned above, we consider that the drug quantity has an impact on resistant mutant selection in intrahost dynamics. This impact will depend on the relative position of growth rate curves of mutant and resistant strains.
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./detailed_AMU_varying_eps_files/figure-html/plot_gr-1.png")
 ```
 
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./per_capita_growth_rate_files/figure-html/selection_coef-3.png")
 ```
@@ -715,7 +715,7 @@ Here, we will consider two basic scenarios, anticipated by Troy Day et al. In th
 
 The outcome of selection will then depend on the product of selective coefficient and mutation rate as following :
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./per_capita_growth_rate_files/figure-html/rho-1.png")
 ```
@@ -726,7 +726,7 @@ For each value of DQ, the treatment failure rate $\rho$ will therefore take a di
 
 In order to exploit, to what extent the different combinations of $\varepsilon$ and $DQ$ can influence the model, the AMU is fixed at certain value for a given series of simulations. The AMU is fixed as well as a range of $DQ$, the $\varepsilon$ is therefore determined for each value of $DQ$:
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./per_capita_growth_rate_files/figure-html/treated_pat-1.png")
 ```
@@ -735,12 +735,12 @@ knitr::include_graphics("./per_capita_growth_rate_files/figure-html/treated_pat-
 
 For a given value of AMU (0.2), the modeling is performed for both scenarios. Then the steady states are evaluated.
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./per_capita_growth_rate_files/figure-html/plot_ss_iz-1.png")
 ```
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./per_capita_growth_rate_files/figure-html/plot_ss_p_real-1.png")
 ```
@@ -755,7 +755,7 @@ Interestingly, the same form of the curve as that of treatment failure rate is o
 
 Meanwhile, the impact of global burden of disease shows a very little of difference (around 25%) for different combinations:
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./per_capita_growth_rate_files/figure-html/plot_ss_burden-1.png")
 ```
@@ -766,12 +766,12 @@ The burden of the disease increases with the drug quantity which is once again d
 
 In this part, exactly the same series of simulations are performed and compared for increasing values of AMU.
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./detailed_AMU_varying_eps_files/figure-html/plot_ss_iz-1.png")
 ```
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./detailed_AMU_varying_eps_files/figure-html/plot_ss_burden-1.png")
 ```
@@ -780,17 +780,17 @@ VA ETRE ANALYSE PROCHAINEMENT.
 
 #No transmission cost : existing optimal strategy?
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./model_no_competition_inc_files/figure-html/fat_test-1.png")
 ```
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./model_no_competition_inc_intrahost_cost_preserved_files/figure-html/fat_test-1.png")
 ```
 
-```{r, out.width = "600px", echo=FALSE, cache=TRUE, fig.align='center'}
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./model_no_competition_no_Iw_Iz_flux_files/figure-html/fat_test-1.png")
 ```
