@@ -242,7 +242,7 @@ linfun <- function(x, t){
 
 
 
-plot(eps_fun[,1], Iz[,1], xlab=expression(epsilon), ylab="AMR", main = "Evolution of Iz", type="l", lty=1, lwd=2, ylim=c(0, 0.60), col=colforcol[1])
+plot(eps_fun[,1], Iz[,1], xlab=expression(epsilon), ylab="AMR", main = "Evolution of Iz \n no transmission cost", type="l", lty=1, lwd=2, ylim=c(0, 0.60), col=colforcol[1])
 lines(eps_fun[,2], Iz[,2], col=colforcol[2], lwd=2)
 lines(eps_fun[,3], Iz[,3], col=colforcol[3], lwd=2)
 lines(eps_fun[,4], Iz[,4], col=colforcol[4], lwd=2)
@@ -255,7 +255,7 @@ legend("topleft" , inset=.05, title='pulsation', c(controltag,mintag, maxtag), l
 
 p_prev <- Iz/(Iz+Iw)
 
-plot(eps_fun[,1], p_prev[,1], xlab=expression(epsilon), ylab="AMR ratio", main = "Evolution of p", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[1])
+plot(eps_fun[,1], p_prev[,1], xlab=expression(epsilon), ylab="AMR ratio", main = "Evolution of p \n no transmission cost", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[1])
 lines(eps_fun[,2], p_prev[,2], col=colforcol[2], lwd=2)
 lines(eps_fun[,3], p_prev[,3], col=colforcol[3], lwd=2)
 lines(eps_fun[,4], p_prev[,4], col=colforcol[4], lwd=2)
@@ -271,28 +271,28 @@ legend("topleft" , inset=.05, title='pulsation', c(controltag,mintag, maxtag), l
 
 
 
-plot(eps_fun[,1], Iz[,1], xlab=expression(epsilon), ylab="AMR", main = "Evolution of Iz", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[1])
+plot(eps_fun[,1], Iz[,1], xlab=expression(epsilon), ylab="AMR", main = "Evolution of Iz \n no transmission cost", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[1])
 
-plot(eps_fun[,2], Iz[,2], xlab=expression(epsilon), ylab="AMR", main = "Evolution of Iz", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[2])
+plot(eps_fun[,2], Iz[,2], xlab=expression(epsilon), ylab="AMR", main = "Evolution of Iz \n no transmission cost", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[2])
 
-plot(eps_fun[,3], Iz[,3], xlab=expression(epsilon), ylab="AMR", main = "Evolution of Iz", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[3])
+plot(eps_fun[,3], Iz[,3], xlab=expression(epsilon), ylab="AMR", main = "Evolution of Iz \n no transmission cost", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[3])
 
-plot(eps_fun[,4], Iz[,4], xlab=expression(epsilon), ylab="AMR", main = "Evolution of Iz", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[4])
+plot(eps_fun[,4], Iz[,4], xlab=expression(epsilon), ylab="AMR", main = "Evolution of Iz \n no transmission cost", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[4])
 
-plot(eps_fun[,5], Iz[,5], xlab=expression(epsilon), ylab="AMR", main = "Evolution of Iz", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[5])
-
-
+plot(eps_fun[,5], Iz[,5], xlab=expression(epsilon), ylab="AMR", main = "Evolution of Iz \n no transmission cost", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[5])
 
 
-plot(eps_fun[,1], p_prev[,1], xlab=expression(epsilon), ylab="AMR", main = "Evolution of p", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[1])
 
-plot(eps_fun[,2], p_prev[,2], xlab=expression(epsilon), ylab="AMR", main = "Evolution of p", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[2])
 
-plot(eps_fun[,3], p_prev[,3], xlab=expression(epsilon), ylab="AMR", main = "Evolution of p", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[3])
+plot(eps_fun[,1], p_prev[,1], xlab=expression(epsilon), ylab="AMR", main = "Evolution of p \n no transmission cost", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[1])
 
-plot(eps_fun[,4], p_prev[,4], xlab=expression(epsilon), ylab="AMR", main = "Evolution of p", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[4])
+plot(eps_fun[,2], p_prev[,2], xlab=expression(epsilon), ylab="AMR", main = "Evolution of p \n no transmission cost", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[2])
 
-plot(eps_fun[,5], p_prev[,5], xlab=expression(epsilon), ylab="AMR", main = "Evolution of p", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[5])
+plot(eps_fun[,3], p_prev[,3], xlab=expression(epsilon), ylab="AMR", main = "Evolution of p \n no transmission cost", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[3])
+
+plot(eps_fun[,4], p_prev[,4], xlab=expression(epsilon), ylab="AMR", main = "Evolution of p \n no transmission cost", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[4])
+
+plot(eps_fun[,5], p_prev[,5], xlab=expression(epsilon), ylab="AMR", main = "Evolution of p \n no transmission cost", type="l", lty=1, lwd=2, ylim=c(0, 1), col=colforcol[5])
 
 
 
