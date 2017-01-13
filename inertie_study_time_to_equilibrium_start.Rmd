@@ -148,7 +148,7 @@ time_down <- out_down[2:nrow(out_down),1]
 
 pepsi_change <- seq(0.01, 0.17, by=delta_eps)
 
-plot(pepsi_change, time_up, main="Inertia - delta epsilon = 0.01", xlab=expression(epsilon), ylab="time to stabilization", lwd=2, col='red', type='l', xlim=c(0,0.20))
+plot(pepsi_change, time_up, main="Inertia - delta epsilon = 0.01", xlab=expression(epsilon), ylab="time to stabilization", lwd=2, col='red', type='l', xlim=c(0,0.17))
 lines(pepsi_change, time_down, lwd=2, col='blue', type='l')
 
 legend("topleft" , inset=.05, c("Increasing eps", "Decreasing eps"), lwd=c(2,2), col=c('red', 'blue'))
