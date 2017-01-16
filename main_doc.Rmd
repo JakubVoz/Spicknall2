@@ -61,7 +61,7 @@ Name of Parameter | Description | Default value
 -----|-----------------------------------------|---------
 $\beta_w$ | transmission rate of sensitive strain | 0.40
 $\beta_z$ | transmission rate of resistant strain | 0.15
-$\varepsilon$ | proportion of infected people treated with antibiotics, supposedly strongly correlated to AMU | 0.10
+$\varepsilon$ | proportion of infected people treated with antibiotics, supposedly strongly correlated to $AMU$ | 0.10
 $\gamma$ | innate recovery rate (relative to $I_z$ generally and to $I_w$  (not treated with antibiotics) | 0.01
 $\gamma '$ | recovery rate of $I_w$ when treated with antibiotics | 0.1
 $\rho$ | proportion of treatment failures in $I_w$ (comprehensing _de novo_ mutations, outcompetition of major sensitive strain by minor resistant one and horizontal transfer) | 0.05
@@ -180,23 +180,23 @@ According to our model, the proportions of different populations change for the 
 knitr::include_graphics("./final_mod_files/figure-html/steady_state_rho_plot-1.png")
 ```
 
-Based on literature, the proportion of treatment failures is between 4 and 8% (add a quote) for tuberculosis. It has a significant impact on the proportion of $I_w$ and $I_z$. When it increases the prevalence of $I_z$ increases at the expense of $I_w$, while the global burden of the disease decreases. Interestingly, when there is no treatment failure, there is no stable coexistence of sensitive and resistant strains in our model.
+Based on literature, the proportion of treatment failures is between 4 and 8% (add a quote) for tuberculosis. It has a significant impact on the proportion of $I_w$ and $I_z$. When it increases, the prevalence of $I_z$ increases at the expense of $I_w$, while the global burden of the disease decreases. Interestingly, when there is no treatment failure, there is no stable coexistence of sensitive and resistant strains in our model.
 
-##Steady state QA when varying $\varepsilon$
+##Steady state Q when varying $\varepsilon$
 
 We consider Quantity of antibiotics as being the burden of infection multiplied by the proportion of treated patients. In fact, usage of ATB in patients infected with resistant strains does not have any impact on patient's recovery in our model. Though, here we consider that the ATB are consumed in this subpopulation as well and at the same rate, which may be due to poor or late resistance detection in hospitals or to self-medication in population.
 
-Therefore in this model, $QA = (I_w +I_z)*\varepsilon$.
+Therefore in this model, $Q = (I_w +I_z)*\varepsilon$.
 
-The following plot represents the QA in function of $\varepsilon$. 
+The following plot represents the Q in function of $\varepsilon$. 
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
-knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_QA-6.png")
+knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_Q-6.png")
 ```
 
-The first part of the graph results from a multiplication of a decreasing linear function ($I_w + I_z$) and an increasing linear function ($\varepsilon$). For extreme values of $\varepsilon$, there is a linear relation between QA and $\varepsilon$ as $I_w + I_z$ reaches stability.
+The first part of the graph results from a multiplication of a decreasing linear function ($I_w + I_z$) and an increasing linear function ($\varepsilon$). For extreme values of $\varepsilon$, there is a linear relation between Q and $\varepsilon$ as $I_w + I_z$ reaches stability.
 
-This means that at steady states, with nearly the same quantity of antibiotics (0.050 and 0.06) nearly a double proportion of patients can be treated (10% and 17%).
+This means that at steady states, with nearly the same quantity of antibiotics (0.05 and 0.06) nearly a double proportion of patients can be treated (10% and 17%).
 
 
 
@@ -222,23 +222,23 @@ Therefore the net flow in our model is the following:
 knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/NetFlow.png")
 ```
 
-##Steady state resistance ratio p and burden of resistance
+##Steady state resistance ratio P and burden of resistance
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./AMU_var_prevalence_files/figure-html/plot_prev_p-2.png")
 ```
 
-Here, the p corresponds to the ratio of prevalence at steady-states. Usually, it is used in the studies of tuberculosis (WHO 2002). Its exponential growth is due to the interplay of increasing $I_z$ and decreasing $I_w$.
+Here, the P corresponds to the ratio of resistant prevalence at steady-states. Usually, it is used in the studies of tuberculosis (WHO 2002). Its exponential growth is due to the interplay of increasing $I_z$ and decreasing $I_w$.
 
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
-knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_QA-2.png")
+knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_Q-2.png")
 ```
 
-P as a function of QA shows an exponential growth with saturation, which is due to :
+P, the ratio of resistant prevalence, as a function of Q shows an exponential growth with saturation, which is due to :
 
 a) interplay of increasing $I_z$ and decreasing $I_w$ with increasing $\varepsilon$
-b) saturation part of the curve of QA=f($\varepsilon$) ([0.050, 0.06] of QA corresponds to [10%,17%] of $\varepsilon$)
+b) saturation part of the curve of Q=f($\varepsilon$) ([0.050, 0.06] of Q corresponds to [10%,17%] of $\varepsilon$)
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./AMU_var_incidence_files/figure-html/ss_burden_of_inf-1.png")
@@ -250,10 +250,10 @@ Here, the burden of infection corresponds to the total proportion of infected pe
 
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
-knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_QA-4.png")
+knitr::include_graphics("./AMU_var_prevalence_files/figure-html/steady_state_Q-4.png")
 ```
 
-Finally, when plotting the BOI in function of QA, decreasing tendency is preserved. Before reaching a stability, there is a fastening decrease of BOI, which is once again due to the saturation tendancy in QA=f($\varepsilon$).
+Finally, when plotting the BOI in function of Q, decreasing tendency is preserved. Before reaching a stability, there is a fastening decrease of BOI, which is once again due to the saturation tendancy in Q=f($\varepsilon$).
 
 ##Steady state incidence
 
@@ -284,15 +284,15 @@ knitr::include_graphics("./AMU_var_incidence_files/figure-html/incid_plot_real_p
 
 ```
 
-When relating p and QA, the proportion of resistant cases among new cases increases very steeply at higher values (0.050 ti 0.060) of QA. This is once again due to:
+When relating I and Q, the proportion of resistant cases among new cases increases very steeply at higher values (0.050 ti 0.060) of Q. This is once again due to:
 
 a) exponential increase in p=f($\varepsilon$)
-b) relative steadiness in QA=f($\varepsilon$) for higher values of $\varepsilon$ (10 - 17%)
+b) relative steadiness in Q=f($\varepsilon$) for higher values of $\varepsilon$ (10 - 17%)
 
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
-knitr::include_graphics("./AMU_var_incidence_files/figure-html/p_incid_as_func_QA_ss-1.png")
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/p_incid_as_func_Q_ss-1.png")
 
 ```
 
@@ -312,7 +312,7 @@ knitr::include_graphics("./final_mod_files/figure-html/average_stay_within_Iw-1.
 
 In this part, we analyse the dynamics in our model. At time $t=0$, the steady state for $\varepsilon=10%$ was reached. Afterwards, the $\varepsilon$ changes to values between 0% and 20%.
 
-##Dynamics of p after a change in $\varepsilon$
+##Dynamics of P after a change in $\varepsilon$
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
@@ -320,7 +320,7 @@ knitr::include_graphics("./AMU_var_prevalence_files/figure-html/plot_prev_p-1.pn
 
 ```
 
-Here, p corresponds to the ratio of $I_z$ and burden of infection. As the study of its dynamics show, it changes following $\varepsilon$.
+Here, P corresponds to the ratio of resistant prevalence and burden of infection. As the study of its dynamics show, it changes following $\varepsilon$.
 
 ##Dynamics of Incidence
 
@@ -338,7 +338,7 @@ There is therefore a transient period, that follows a decrease in $\varepsilon$,
 
 DESCRIPTION OF HONEY-MOON PERIOD
 
-On following pages, we will study the cause of this anti-honeymoon period, during which the incidence is strikingly higher than at equilibrium and at state prior to $\varepsilon$ reduction.
+On following pages, we will study the cause of this anti-honeymoon period, during which the incidence is strikingly higher than at equilibrium or at the state prior to $\varepsilon$ reduction.
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
@@ -363,7 +363,7 @@ knitr::include_graphics("./simple_models_files/figure-html/model_Iw_S_plots-1.pn
 
 Anti-honeymoon period does not appear in a simpler model and thus this phenomenon emerges due to the presence of $I_z$.
 
-As the sensitive incidence, and thus the anti-honeymoon period, are directly dependent on the mass-product of $I_w$ and $S$, a change in flow between $I_z$ and $I_w$ may have a direct impact on the this mass product. In particular, the secondary resistance may be the cause of the short-term peaks as the variation of $\varepsilon$ has a huge and immediate impact on its strength : the decrease of $\varepsilon$ would decrease this flow and we would see a fast accumulation in $I_w$ population at the cost of $I_z$.
+As the sensitive incidence, and thus the anti-honeymoon period, are directly dependent on the mass-product of $I_w$ and $S$, a change in flow between $I_z$ and $I_w$ may have a direct impact on the mass product. In particular, the secondary resistance may be the cause of the short-term peaks as the variation of $\varepsilon$ has a huge and immediate impact on its strength : the decrease of $\varepsilon$ would decrease this flow and we would see a fast accumulation in $I_w$ population at the cost of $I_z$.
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
@@ -385,7 +385,7 @@ As we can see, the recovery dynamics of sensitive cases after a sudden decrease 
 
 The anti-honeymoon effect, following an abrupt drop in $\varepsilon$, is a consequence of several phenomena:
 
-a. The flow from $I_w$ to $I_z$ is suddenly cut, while the flow in opposite direction slows slowly, resulting in a redistribution of infected cases.
+a. The flow from $I_w$ to $I_z$ is suddenly cut, while the flow in opposite direction slows down progressively, resulting in a redistribution of infected cases.
 b. The average duration of sensitive infection becomes longer, resulting in accumulation of sensitive cases.
 c. As a result of the accumulation of sensitive cases, the mass product of $S$ and $I_w$ increases. In consequence, the $S$ is transiently drawn by $I_w$.
 
@@ -415,7 +415,7 @@ knitr::include_graphics("C:/Users/Jakub/Desktop/Figures/Sharp increase in AMU.pn
 
 ##Inhibition of interhost competition
 
-To inhibit the interhost competition in our model, $\beta_z$ takes the value of $0.4$ that is to say becomes equal to $\beta_w$.
+To inhibit the interhost competition in our model, $\beta_z$ takes the value of $0.4$ that is to say becomes equal to $\beta_w$. The intrahost competition remains, although it depends on $\beta_z$ $via$ the probability of superinfection.
 
 The steady state values of state variables are the following:
 
@@ -425,7 +425,7 @@ knitr::include_graphics("./model_no_competition_inc_files/figure-html/comp_inc_f
 knitr::include_graphics("./final_mod_files/figure-html/steady_state_eps_plot-2.png")
 ```
 
-We observe therefore coexistence of the strains for values of $\varepsilon$ between approximately 0 and 15%. When $I_z$ is fixed, it has the same value as $I_z$ prevalence during prebiotic era.
+We observe thus coexistence of the strains for values of $\varepsilon$ between approximately 0 and 15%. When $I_z$ is fixed, it has the same value as $I_z$ prevalence during prebiotic era.
 
 Interestingly, when no ATB is used, resistant strain does not coexist with the sensitive one due to indirect cost linked to co-infections. Although no direct cost of resistance is included in this particular model, when resistant cases are reinfected with sensitive strains, the sensitive strain prevails.
 
@@ -477,14 +477,14 @@ Although the model was started with an important subpopulation of $I_z$ (_cca_ 1
 
 ```{r, out.width = "400px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./model_prim_res_inc_files/figure-html/comp_steady_st-3.png")
-knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_steady_st-3.png")
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_steady_st-4.png")
 ```
 
 Without secondary resistance, the flows between $I_w$ and $I_z$ reach equilibria when $\beta_w*(1-\varepsilon)=\beta_z*\varepsilon$, that is to say when $\varepsilon=0.73$. The emergence of stable state is therefore rather linked to the upraise of $S$ values due to enhanced treatment than to the inversion of flows between $I_z$ and $I_w$.
 
 ##Inhibition of primary resistance
 
-Here, the primary resistance is omitted, $i.e.$ $beta_z=0$ and the resistant strains cannot be transmitted.
+Here, the primary resistance is omitted, $i.e.$ $\beta_z=0$ and the resistant strains cannot be transmitted.
 
 ```{r, out.width = "400px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./model_sec_res_inc_files/figure-html/comp_inc_flows-2.png")
@@ -496,7 +496,7 @@ Although the transmission of resistant strains is omitted and therefore the pool
 
 ```{r, out.width = "400px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./model_sec_res_inc_files/figure-html/comp_steady_st-3.png")
-knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_steady_st-3.png")
+knitr::include_graphics("./AMU_var_incidence_files/figure-html/comp_steady_st-4.png")
 ```
 
 In comparison with a simple model in which only susceptible population and sensitive strains are present, the incidence is smaller for the same $\varepsilon$. This is due to the treatment failures : in fact, the $I_z$ will represent here a dead-end for the pathogen that cannot be transmitted.
@@ -504,9 +504,9 @@ In comparison with a simple model in which only susceptible population and sensi
 
 #Study of hysteresis
 
-The study of hysteresis allows to know whether the same stable states can be reached while increasing proportion of treated patients from a low state ($\varepsilon=0.00$) or decreasing it from a high state ($\varepsilon=0.18$). We opt to consider only the stable states in a relatively short interval of $\varepsilon$ ([0, 0.18]) so to prevent $I_w$ from reaching irrescuable 0 (there is no possibility to re-establish $I_w$ population).
+The study of hysteresis allows to know whether the same stable states can be reached while increasing proportion of treated patients from a low state ($\varepsilon=0.00$) or decreasing it from a high state ($\varepsilon=0.18$). We opt to consider only the stable states in a relatively short interval of $\varepsilon$ ([0, 0.18]) so to prevent $I_w$ from reaching irrescuable 0 (there is no possibility to re-establish $I_w$ population in our model).
 
-Once the $\varepsilon$ stabilizes over 0.18, there is a point of no return, not allowing the sensitive bacteria to re-establish. This is due to the fact, that in our model there is no possibility of reversion of resistant mutants which seems to be realistic considering today's research (changing genetic background and eventual compensatory mutations will make reversion highly unlikely).
+Once the $\varepsilon$ stabilizes over 0.18, there is a point of no return, not allowing the sensitive bacteria to re-establish. This is due to the fact, that in our model there is no possibility of reversion of resistant mutants which seems to be realistic considering today's research (changing genetic background and eventual compensatory mutations will make reversion highly unlikely due to accumulation of compensatory mutations).
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./hysteresis_files/figure-html/incid_plot_Iw-1.png")
@@ -521,7 +521,7 @@ The back and forth pathways being the same, we can say that there is no hysteres
 
 ###Linear variations
 
-In this part, we vary rate at which the proportion of patients varies, still considering that the proportion of patients is directly linked to the AMU. At first, we start from $\varepsilon$=0 and increase its value up to 1.
+In this part, we vary rate at which the proportion of patients varies, still considering that the proportion of patients is directly linked to the $AMU$. At first, we start from $\varepsilon$=0 and increase its value up to 1.
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./inertie_study_files/figure-html/prep_plot-1.png")
@@ -533,11 +533,11 @@ As the rate of change increases, the proportion of $I_z$ is more distant from it
 knitr::include_graphics("./inertie_study_files/figure-html/prep_plot-2.png")
 ```
 
-Delay in reaching equilibrium due to rapid increase of $\varepsilon$ can be observed for the p (defined as the ratio between $I_z$ and burden of infection) as well.
+Delay in reaching equilibrium due to rapid increase of $\varepsilon$ can be observed for the P (defined as the ratio between $I_z$ and burden of infection) as well.
 
 ###Sinusoidal variations
 
-Another method of grasping the inertia of a model, consists in varying $varepsilon$ periodically. $\varepsilon$ is here a sine function with a certain pulsation :
+Another method of grasping the inertia of a model, consists in varying $\varepsilon$ periodically. $\varepsilon$ is here a sine function with a certain pulsation :
 
 $$
 \varepsilon=A*sin(\omega*t)+B \\
@@ -548,14 +548,14 @@ A=B=(max \varepsilon - min\varepsilon)/2
 $$
 In order to prevent effects of $I_w$ extinction due to high $\varepsilon$, we opted here for 0.00 as the minimum value of $\varepsilon$ and 0.18 as its maximum value. 
 
-The $varepsilon$ varies as follows for different values of pulsation $\omega$ (higher pulsations mean faster change in time) :
+The $\varepsilon$ varies as follows for different values of pulsation $\omega$ (higher pulsations mean faster change in time) :
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./inertie_periodic_eps_files/figure-html/plot_eps-1.png")
 ```
 
 
-We compare the steady state values of $I_z$ and p to their values while $\varepsilon$ varies periodically with different pulsations:
+We compare the steady state values of $I_z$ and P to their values while $\varepsilon$ varies periodically with different pulsations:
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./inertie_periodic_eps_files/figure-html/prep_plot-1.png")
@@ -570,11 +570,11 @@ knitr::include_graphics("./inertie_periodic_eps_files/figure-html/prep_plot-2.pn
 The smaller the pulsations are, and therefore the slower the variation of $\varepsilon$ is, the more the corresponding curve approaches the steady-state curve.
 
 
-The question is now whether there are the same times are required for  reaching equilibrium (TREs) while increasing or decreasing $\varepsilon$.
+The question is now whether the same times are required for  reaching equilibrium (TREs) while increasing or decreasing $\varepsilon$.
 
 ##Time to reach equilibrium while increasing or decreasing $\varepsilon$
 
-###Comparing TREs for the same start value of $varepsilon$
+###Comparing TREs for the same start value of $\varepsilon$
 
 The idea is to compare the number of steps that are required for reaching a steady state while either increasing or decreasing the value of $\varepsilon$.
 
@@ -586,14 +586,14 @@ knitr::include_graphics("./inertie_study_time_to_equilibrium_start_files/figure-
 
 For higher values of $\varepsilon$, when the proportion of treated patients changes, it takes longer time to reach the steady states. The TREs are longer when $\varepsilon$ is increased and the difference between TREs related to increasing and to decreasing $\varepsilon$, increases with initial value of $\varepsilon$.
 
-We consider here only the interval of $\varepsilon$ where both lineages coexist at considerable values.
+We consider here only the interval of $\varepsilon$ where both lineages coexist at considerable values, $i.e.$ $I_w$ does not reach an irrescuable 0.
 
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 knitr::include_graphics("./inertie_study_time_to_equilibrium_start_files/figure-html/plot_dif-1.png")
 ```
 
-Here, the plot represents the time lapse between reaching equilibrium while decreasing and increasing $\varepsilon$, either with a large or small $\delta$ (0.01 and 0.001). For each value of $\delta$, the time lapse is strictly positive and increases exponential with the initial value of $\varepsilon$. Therefore, in general the steady states are reached with a bigger delay while the proportion of treated patients is increased than when it is decreased by the same value.
+Here, the plot represents the time lapse between reaching equilibrium while decreasing and increasing $\varepsilon$, either with a large or small $\delta$ (0.01 and 0.001). For each value of $\delta$, the time lapse is strictly positive and increases exponentially with the initial value of $\varepsilon$. Therefore, in general the steady states are reached with a bigger delay when the proportion of treated patients is increased than when it is decreased by the same value.
 
 Interestingly, the difference between TREs is the same although the value of $\delta$ differs. 
 
@@ -605,28 +605,17 @@ knitr::include_graphics("./inertie_study_time_to_equilibrium_start_files/figure-
 
 Presumably, when considering the same metrics, the difference between TREs is $circa$ ten times lower when $\delta$ is bigger.
 
-There is another possibility how to represent this phenomena. In the following experiment, the steady states are reached for $\varepsilon$=0.00 and $\varepsilon$=0.17. Then it changes to a value between 0.01 and 0.16 and the time to reach the equilibrium is calculated as well as the difference of the times for given initial $\varepsilon$. Here, the convergence criterion is 0.0001.
-
-```{r, out.width = "600px", echo=FALSE, fig.align='center'}
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiInternship/Spicknall_partial_models_data/inertie_study_time_to_equilibrium2_files_c_0.0001/figure-html/plotting-1.png")
-```
-
-```{r, out.width = "600px", echo=FALSE, fig.align='center'}
-knitr::include_graphics("C:/Users/Jakub/Desktop/HanoiInternship/Spicknall_partial_models_data/inertie_study_time_to_equilibrium2_files_c_0.0001/figure-html/plotting-2.png")
-```
-
-Once again, when the $\varepsilon$ value is decreased, the steady state is reached with a delay for most of its final values.
 
 
 
 
-#Detailing AMU
+#Detailing $AMU$
 
-##Definitions, understanding DDD
+##Definitions, understanding $DDD$
 
-In the previous parts, the AMU in the model was assimilated to the proportion of treated patients. In reality, the AMU is reported as defined daily doses (DDD) per patient/occupied bed per day. Therefore it is a combination of the treatment duration, concentration of daily doses and the number or proportion of patients.
+In the previous parts, the $AMU$ in the model was assimilated to the proportion of treated patients. In reality, the $AMU$ is reported as defined daily doses ($DDD$) per patient/occupied bed per day. Therefore it is a combination of the treatment duration, concentration of daily doses and the number or proportion of patients.
 
-$DDD/pt/d = \varepsilon*DC*t$
+$DDD/pt/d = \varepsilon*C*t$
 
 In fact, each of these three components may have an impact on the emergence and spread of resistance. 
 
@@ -634,23 +623,25 @@ $\varepsilon$ intervenes in the recovery of patients, in the secondary resistanc
 
 Concentration intervenes in the mutation rate enabling resistant mutants to appear and in the selection of the mutant. Several recent papers showed that the outcome of mutant selection depends on the relative position of growth rate curves as the function of drug concentration. The difference between the growth rates of a wild type and mutant strains represents selective coefficient. Its value influences the outcome of selection.
 
-Time of treatment can intervene in the mutation selection. It has been shown that short and long drug administrations have the same efficiency, while with the length of drug administration, the probability of secondary resistance increases.
+Time of treatment can intervene in the mutation selection. It has been shown that short and long drug administrations have the same efficiency in clearance of sensitive pathogen, while with the length of drug administration, the probability of secondary resistance increases.
 
-In the following parts, we will try to implement a more detailed version of the AMU in the model in order to see the possible impacts of an intrinsic bias linked to the aggregated AMU reports.
+We neglige other phenomena that may intervene, such as the heterogeneity in the total pathogen population when drug administration is started (and possible success of "hit hard and early" strategy) or the drug consumption in treatment of other diseases.
 
-For the sake of clarity, we opt to use at first the Drug quantity per patient (DQ), and consider that it has the same impact as the drug concentration on the selection outcome. Therefore we have:
+In the following parts, we will try to implement a more detailed version of the $AMU$ in the model in order to see the possible impacts of an intrinsic bias linked to the aggregated $AMU$ reports.
 
-$DQ = DC*t$
+For the sake of clarity, we opt to use at first the Drug quantity per patient ($D$), and consider that it has the same impact as the drug concentration on the outcome of selection. Therefore we have:
+
+$D = C*t$
 
 The drug quantity used per patient will then have an impact on the mutation rate and the selective coefficient.
 
-##Model with a detailed version of AMU
+##Model with a detailed version of $AMU$
 
-###Impact of DQ on mutation rate and selective coefficient
+###Impact of $D$ on mutation rate and selective coefficient
 
-In contrast with our first model, the AMU is not considered as directly linked to the proportion of treated patients, but as a product of proportion of treated patients and the drug quantity used per patient.
+In contrast with our first model, the $AMU$ is not considered as directly linked to the proportion of treated patients, but as a product of proportion of treated patients ($\varepsilon$) and the drug quantity used per patient ($D$).
 
-It has been shown that the mutation rate, here the rate at which resistant mutants appear, grows with increasing DQ/DC (??? source). Here we thus represent the mutation rate as a growing function of DQ.
+It has been shown that the mutation rate, here the rate at which resistant mutants appear, grows with increasing $D$/$C$ (??? source). Here we thus represent the mutation rate as a growing function of $D$.
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
@@ -671,7 +662,7 @@ knitr::include_graphics("./per_capita_growth_rate_files/figure-html/selection_co
 ```
 
 
-Here, we will consider two basic scenarios, anticipated by Troy Day et al. In the first one, the selective coefficient is lowest for the lowest used drug concentration, i.e. the optimal strategy for preventing resistant selection corresponds to the lowest drug concentration (or drug quantity in our simplified model). In the second one it is the oposite : the selective coefficient is lowest for the highest value of drug concentration in the selection window.
+Here, we will consider two basic scenarios, anticipated by $Troy Day et al.$ In the first one, the selective coefficient is lowest for the lowest used drug concentration, i.e. the optimal strategy for preventing resistant selection corresponds to the lowest drug concentration (or drug quantity in our simplified model). In the second one it is the oposite : the selective coefficient is lowest for the highest value of drug concentration in the selection window.
 
 
 ###The outcome of selection
@@ -683,20 +674,20 @@ The outcome of selection will then depend on the product of selective coefficien
 knitr::include_graphics("./per_capita_growth_rate_files/figure-html/rho-1.png")
 ```
 
-For each value of DQ, the treatment failure rate $\rho$ will therefore take a different value in the model.
+For each value of $D$, the treatment failure rate $\rho$ will therefore take a different value in the model.
 
 ###The proportion of treated patients
 
-In order to exploit, to what extent the different combinations of $\varepsilon$ and $DQ$ can influence the model, the AMU is fixed at certain value for a given series of simulations. The AMU is fixed as well as a range of $DQ$, the $\varepsilon$ is therefore determined for each value of $DQ$:
+In order to exploit, to what extent the different combinations of $\varepsilon$ and $D$ can influence the model, the $AMU$ is fixed at certain value for a given series of simulations. The $AMU$ is fixed as well as a range of $D$, the $\varepsilon$ is therefore determined for each value of $D$:
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
 knitr::include_graphics("./per_capita_growth_rate_files/figure-html/treated_pat-1.png")
 ```
 
-###Impact of possible DQ-$\varepsilon$ combinations on steady-states
+###Impact of possible D-$\varepsilon$ combinations on steady-states
 
-For a given value of AMU (0.2), the modeling is performed for both scenarios. Then the steady states are evaluated.
+For a given value of $AMU$ (0.2), the modeling is performed for both scenarios. Then the steady states are evaluated.
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
@@ -708,13 +699,13 @@ knitr::include_graphics("./per_capita_growth_rate_files/figure-html/plot_ss_iz-1
 knitr::include_graphics("./per_capita_growth_rate_files/figure-html/plot_ss_p_real-1.png")
 ```
 
-The combination of DQ and $\varepsilon$ has a big impact on the steady states.
+The combination of $D$ and $\varepsilon$ has a big impact on the steady states.
 
-In the first scenario, the maximum reached $I_z$ at steady state is twice as high as the minimum, while in the second one 5 times. Similar behaviour is observed for the reported p ratio.
+In the first scenario, the maximum reached $I_z$ at steady state is twice as high as the minimum, while in the second one 5 times.
 
-The impact is even bigger on the reported resistant ratio $p$ (2.5 fold and 7 fold difference).
+The impact is even bigger on the reported resistant ratio $P$ (2.5 fold and 7 fold difference).
 
-Interestingly, the same form of the curve as that of treatment failure rate is observed in both plots, though the maximum are switched to the left (A analyser plus tard). For increased values of DQ the values of p are lower, which can be linked to the $\varepsilon$ that is decreasing with increasing drug combination and therefore the susceptible cases are cleansed at lower rate.
+Interestingly, the same form of the curve as that of treatment failure rate is observed in both plots, though the maximum are switched to the left (A analyser plus tard). For increased values of $D$ the values of $P$ are lower, which can be linked to the $\varepsilon$ that is decreasing with increasing drug combination and therefore the susceptible cases are cleansed at lower rate.
 
 Meanwhile, the impact of global burden of disease shows a very little of difference (around 25%) for different combinations:
 
@@ -725,9 +716,9 @@ knitr::include_graphics("./per_capita_growth_rate_files/figure-html/plot_ss_burd
 
 The burden of the disease increases with the drug quantity which is once again due to the lower recover rate of sensitive cases linked to lower values of $\varepsilon$.
 
-###Varying AMU
+###Varying $AMU$
 
-In this part, exactly the same series of simulations are performed and compared for increasing values of AMU.
+In this part, exactly the same series of simulations are performed and compared for increasing values of $AMU$.
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
