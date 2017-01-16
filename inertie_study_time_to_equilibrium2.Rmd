@@ -43,7 +43,7 @@ maxeps <- 0.17
 
 peps <- seq(mineps+delta_eps, maxeps-delta_eps,  by=delta_eps)
 
-conv_crit <- 0.0001
+conv_crit <- 0.000001
 
 ```
 
