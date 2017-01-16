@@ -257,7 +257,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 #plotting p
 Ratio <- as.matrix(Iz)/(as.matrix(Iz)+as.matrix(Iw))
 
-plot(t, Ratio[,11], main="Evolution of p ratio - prevalence", xlab="time (steps)", ylab="p", ylim=c(0,1), lty=1, lwd=2, type="l")
+plot(t, Ratio[,11], main="Evolution of P ratio - prevalence", xlab="time (steps)", ylab="P", ylim=c(0,1), lty=1, lwd=2, type="l")
 
 capture.output(apply(Ratio, 2, linfun, t), file='NUL')
 
@@ -268,7 +268,7 @@ epsvar <- seq(0, 0.2, by=0.01)
 
 p_steady <- Ratio[nrow(Ratio),]
 
-plot(epsvar, p_steady, main="Evolution of p ratio - prevalence", xlab=expression(epsilon), ylab="p", ylim=c(0,1), lty=1, lwd=2, type="l")
+plot(epsvar, p_steady, main="Evolution of P ratio - prevalence", xlab=expression(epsilon), ylab="P", ylim=c(0,1), lty=1, lwd=2, type="l")
 
 
 ```
@@ -319,33 +319,33 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 
 ```
 
-```{r steady_state_QA, echo=FALSE, fig.align='center', cache=TRUE, warning = FALSE}
+```{r steady_state_Q, echo=FALSE, fig.align='center', cache=TRUE, warning = FALSE}
 
 Iz_ss <- Iz[nrow(Iz),]
 Iw_ss <- Iw[nrow(Iw),]
-QA_ss_Iw <- Iw_ss*epsvar
-QA_ss_Iw_Iz <- (Iw_ss+Iz_ss)*epsvar
+Q_ss_Iw <- Iw_ss*epsvar
+Q_ss_Iw_Iz <- (Iw_ss+Iz_ss)*epsvar
 
-QA_ss_Iw <- as.matrix(QA_ss_Iw)
-QA_ss_Iw_Iz <- as.matrix(QA_ss_Iw_Iz)
+Q_ss_Iw <- as.matrix(Q_ss_Iw)
+Q_ss_Iw_Iz <- as.matrix(Q_ss_Iw_Iz)
 
-plot(QA_ss_Iw, p_steady, main="Evolution of p ratio - prevalence, Iw treated", xlab="QA", ylab="p", ylim=c(0,1), col='red', type = 'l', lty=1, lwd=2)
+plot(Q_ss_Iw, p_steady, main="Evolution of P ratio - prevalence, Iw treated", xlab="Q", ylab="P", ylim=c(0,1), col='red', type = 'l', lty=1, lwd=2)
 
 
-plot(QA_ss_Iw_Iz, p_steady, main="Evolution of p ratio - prevalence, all treated", xlab="QA", ylab="p", ylim=c(0,1), lwd=2, col='red', lty=1, type = 'l')
+plot(Q_ss_Iw_Iz, p_steady, main="Evolution of P ratio - prevalence, all treated", xlab="Q", ylab="P", ylim=c(0,1), lwd=2, col='red', lty=1, type = 'l')
 
 #burden of infection
 
 burd <- Iw_ss+Iz_ss
 
-plot(QA_ss_Iw, burd, main="Evolution of burden of infection - Iw treated", xlab="QA", ylab="Burden of Infection", ylim=c(0,1), col='red', type = 'l', lty=1, lwd=2)
+plot(Q_ss_Iw, burd, main="Evolution of burden of infection - Iw treated", xlab="Q", ylab="Burden of Infection", ylim=c(0,1), col='red', type = 'l', lty=1, lwd=2)
 
-plot(QA_ss_Iw_Iz, burd, main="Evolution of burden of infection - all treated", xlab="QA", ylab="Burden of Infection", ylim=c(0,1), col='red', type = 'l', lty=1, lwd=2)
+plot(Q_ss_Iw_Iz, burd, main="Evolution of burden of infection - all treated", xlab="Q", ylab="Burden of Infection", ylim=c(0,1), col='red', type = 'l', lty=1, lwd=2)
 
-#QA as fn of epsilon
+#Q as fn of epsilon
 
-plot(epsvar, QA_ss_Iw, main="Evolution of QA, Iw treated", xlab=expression(epsilon), ylab="QA", ylim=c(0,0.1), lwd=2, col='red', lty=1, type = 'l')
+plot(epsvar, Q_ss_Iw, main="Evolution of Q, Iw treated", xlab=expression(epsilon), ylab="Q", ylim=c(0,0.1), lwd=2, col='red', lty=1, type = 'l')
 
-plot(epsvar, QA_ss_Iw_Iz, main="Evolution of QA, all treated", xlab=expression(epsilon), ylab="QA", ylim=c(0,0.1), lwd=2, col='red', lty=1, type = 'l')
+plot(epsvar, Q_ss_Iw_Iz, main="Evolution of Q, all treated", xlab=expression(epsilon), ylab="Q", ylim=c(0,0.1), lwd=2, col='red', lty=1, type = 'l')
 
 ```
