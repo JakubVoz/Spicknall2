@@ -430,14 +430,14 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 #steady-state p incidence
 
 par(mfrow=c(1,1))
-plot(epsvar, p_ss, xlab=expression(epsilon), ylab="p", main = "Impact of epsilon on steady state p", type="l")
+plot(epsvar, p_ss, xlab=expression(epsilon), ylab="I", main = "Impact of epsilon on steady state I", type="l")
 ```
 
 ```{r incid_plot_real_p, echo=FALSE, fig.align='center'}
 
 par(mfrow=c(1,2))
 
-plot(t2, Realp[,11], main="Estimated real p after a change in epsilon", xlab="time (steps)", ylab="Real p", ylim=c(0,1), lty=1, lwd=2, type="l")
+plot(t2, Realp[,11], main="Estimated I after a change in epsilon", xlab="time (steps)", ylab="I ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
 
 capture.output(apply(Newp, 2, linfun, t2), file='NUL')
 
@@ -445,7 +445,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 
 #zoom
 
-plot(time_zoom, realp_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="real p", ylim=c(0,1), lty=1, lwd=2, type="l")
+plot(time_zoom, realp_zoom[,11], main="Dynamics", xlab="time (steps)", ylab="I", ylim=c(0,1), lty=1, lwd=2, type="l")
 
 capture.output(apply(realp_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -456,7 +456,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 #steady-state real p incidence
 
 par(mfrow=c(1,1))
-plot(epsvar, realp_ss, xlab=expression(epsilon), ylab="real p", main = "Evolution of p ratio- incidence", type="l", lwd=2)
+plot(epsvar, realp_ss, xlab=expression(epsilon), ylab="I ratio", main = "Evolution of I ratio - incidence", type="l", lwd=2)
 ```
 
 ```{r S_to_Iw_flow, echo=FALSE, fig.align='center'}
@@ -648,11 +648,19 @@ legend("topright", inset=.05, c("Resistant", "Sensitive"), col=c("purple", "gree
 
 Iwz_ss <- S_to_Iz_ss + S_to_Iw_ss
 
+plot(epsvar, Iwz_ss, xlab=expression(epsilon), ylab="Proportion flow", main = "Incidence", type="l", col="red", lwd=2, ylim=c(0,0.012), xlim=c(0,0.2))
+lines(epsvar, S_to_Iz_ss, lty=2, col="red", lwd=2)
+lines(epsvar, S_to_Iw_ss, lty=3, col="red", lwd=2)
+
+legend("bottomleft", inset=.05, c("Global", "Resistant", "Sensitive"), col=c("red","red", "red"), lwd=c(2,2,2), lty=c(1,2,3))
+
+
 plot(epsvar, Iwz_ss, xlab=expression(epsilon), ylab="Proportion flow", main = "Incidence", type="l", col="red", lwd=2, ylim=c(0,0.012), xlim=c(0,0.3))
 lines(epsvar, S_to_Iz_ss, lty=2, col="red", lwd=2)
 lines(epsvar, S_to_Iw_ss, lty=3, col="red", lwd=2)
 
 legend("bottomleft", inset=.05, c("Global", "Resistant", "Sensitive"), col=c("red","red", "red"), lwd=c(2,2,2), lty=c(1,2,3))
+
 
 
 Clear <- Iw_to_S_ss + Iz_to_S_ss
@@ -849,7 +857,7 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 
 
 
-```{r QA_as_func_t_and_vareps, echo=FALSE, fig.align='center'}
+```{r Q_as_func_t_and_vareps, echo=FALSE, fig.align='center'}
 
 
 
@@ -858,15 +866,15 @@ par(mfrow=c(1,1))
 Iw <- Iw[seq(1, nrow(Iw), length.out = length(t2)),]
 Iz <- Iz[seq(1, nrow(Iz), length.out = length(t2)),]
 
-QA_Iw <- Iw
+Q_Iw <- Iw
 for (i in 1:length(pepsi)) {
-  QA_Iw[,i] <- QA_Iw[,i]*pepsi[i]
+  Q_Iw[,i] <- Q_Iw[,i]*pepsi[i]
 }
 
-QA_Iw_Iz <- Iw + Iz
+Q_Iw_Iz <- Iw + Iz
 
 for (i in 1:length(pepsi)) {
-  QA_Iw_Iz[,i] <- QA_Iw_Iz[,i]*pepsi[i]
+  Q_Iw_Iz[,i] <- Q_Iw_Iz[,i]*pepsi[i]
 }
 
 
@@ -874,46 +882,46 @@ vrai_Iz_zoom <- Iz[1:(zooming+1),]
 vrai_Iw_zoom <- Iw[1:(zooming+1),]
 #zoom
 
-QA_Iw_zoom <- vrai_Iw_zoom
+Q_Iw_zoom <- vrai_Iw_zoom
 
 for (i in 1:length(pepsi)) {
-  QA_Iw_zoom[,i] <- QA_Iw_zoom[,i]*pepsi[i]
+  Q_Iw_zoom[,i] <- Q_Iw_zoom[,i]*pepsi[i]
 }
 
-QA_Iw_Iz_zoom <- vrai_Iw_zoom + vrai_Iz_zoom
+Q_Iw_Iz_zoom <- vrai_Iw_zoom + vrai_Iz_zoom
 
 for (i in 1:length(pepsi)) {
-  QA_Iw_Iz_zoom[,i] <- QA_Iw_Iz_zoom[,i]*pepsi[i]
+  Q_Iw_Iz_zoom[,i] <- Q_Iw_Iz_zoom[,i]*pepsi[i]
 }
 
 
 
-plot(t2, QA_Iw[,11], main="QA in time, Iw treated", xlab="time (steps)", ylab="QA", ylim=c(0,0.1), lty=1, lwd=2, type="l")
+plot(t2, Q_Iw[,11], main="Q in time, Iw treated", xlab="time (steps)", ylab="Q", ylim=c(0,0.1), lty=1, lwd=2, type="l")
 
-capture.output(apply(QA_Iw, 2, linfun, t2), file='NUL')
+capture.output(apply(Q_Iw, 2, linfun, t2), file='NUL')
 
 legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
-plot(t2, QA_Iw_Iz[,11], main="QA in time, all treated", xlab="time (steps)", ylab="QA", ylim=c(0,0.1), lty=1, lwd=2, type="l")
+plot(t2, Q_Iw_Iz[,11], main="Q in time, all treated", xlab="time (steps)", ylab="Q", ylim=c(0,0.1), lty=1, lwd=2, type="l")
 
-capture.output(apply(QA_Iw_Iz, 2, linfun, t2), file='NUL')
+capture.output(apply(Q_Iw_Iz, 2, linfun, t2), file='NUL')
 
 legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
 
 #zoom plot
-plot(time_zoom, QA_Iw_zoom[,11], main="QA in time, Iw treated", xlab="time (steps)", ylab="QA", ylim=c(0,0.1), lty=1, lwd=2, type="l")
+plot(time_zoom, Q_Iw_zoom[,11], main="Q in time, Iw treated", xlab="time (steps)", ylab="Q", ylim=c(0,0.1), lty=1, lwd=2, type="l")
 
-capture.output(apply(QA_Iw_zoom, 2, linfun, time_zoom), file='NUL')
+capture.output(apply(Q_Iw_zoom, 2, linfun, time_zoom), file='NUL')
 
 legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
-plot(time_zoom, QA_Iw_Iz_zoom[,11], main="QA in time, all treated", xlab="time (steps)", ylab="QA", ylim=c(0,0.1), lty=1, lwd=2, type="l")
+plot(time_zoom, Q_Iw_Iz_zoom[,11], main="Q in time, all treated", xlab="time (steps)", ylab="Q", ylim=c(0,0.1), lty=1, lwd=2, type="l")
 
-capture.output(apply(QA_Iw_Iz_zoom, 2, linfun, time_zoom), file='NUL')
+capture.output(apply(Q_Iw_Iz_zoom, 2, linfun, time_zoom), file='NUL')
 
 legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
@@ -921,14 +929,14 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 
 
 
-```{r p_incid_as_func_QA_ss, echo=FALSE, fig.align='center'}
+```{r p_incid_as_func_Q_ss, echo=FALSE, fig.align='center'}
 
-QA_var_ss <- burden*epsvar
+Q_var_ss <- burden*epsvar
 
-QA_var_ss <- data.matrix(QA_var_ss)
+Q_var_ss <- data.matrix(Q_var_ss)
 realp_ss <- data.matrix(realp_ss)
 
-plot(QA_var_ss, realp_ss, main="P incidence, all treated", xlab="QA", ylab="real p", ylim=c(0,1), lty=1, lwd=2, type="l")
+plot(Q_var_ss, realp_ss, main="I ratio, all treated", xlab="Q", ylab="I ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
 
 
 ```
