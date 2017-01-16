@@ -43,6 +43,7 @@ maxeps <- 0.17
 
 peps <- seq(mineps+delta_eps, maxeps-delta_eps,  by=delta_eps)
 
+
 conv_crit <- 0.000001
 
 ```
@@ -132,4 +133,8 @@ legend("topleft" , inset=.05, c("initial eps=0.00", "initial eps=0.17"), lwd=c(2
 plot(peps, diff_down_up, main="Inertia : difference between increasing \n and decreasing epsilon", xlab=expression(epsilon), ylab="delta t", lwd=2, col='green', type='l', xlim=c(0,0.17))
 abline(h=0, col='black')
 ```
+```{r same_metrics, echo=FALSE, cache=TRUE}
+up <- seq(0.01,0.16,by=0.01)
 
+down <- seq(0.16,0.01,by=-0.01)
+```

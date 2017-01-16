@@ -93,6 +93,7 @@ steady_Iz_eps <- steady_eps[,4]
 steady_p_eps <- steady_eps[,4]/(steady_eps[,4]+steady_eps[,3])
 
 table_ss <- cbind(steady_S_eps, steady_Iw_eps, steady_Iz_eps, seq(0.01, 0.17, by=delta_eps))
+table_ss2 <- table_ss
 ```
 
 
@@ -108,6 +109,9 @@ legend("topleft" , inset=.05, c("S", "Iz", "Iw", "p"), lty=c(1,2,3,1), lwd=c(2,2
 
 
 ```{r time_to_stabilization, echo=FALSE, cache=TRUE}
+what_up1 <- 0
+what_down1 <- 0
+
 
 out_up <- rep(0,4)
 
@@ -118,19 +122,21 @@ for (i in 1:nrow(table_ss)) {
   state[1] <- table_ss[i,1]
   state[2] <- table_ss[i,2]
   state[3] <- table_ss[i,3]
+  what_up1 <- c(what_up1, parameters[5])
   out <- lsodar(func=SIS, y=state, parms=parameters, times=times, rootfunc=root_main)
   out_up <- rbind(out_up, tail(out,1))
 }
 
 out_down <- rep(0,4)
 
-for (i in 1:nrow(table_ss)) {
+for (i in 1:nrow(table_ss2)) {
   parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
   state <- c(S=1-2*prop, Iw=prop, Iz=prop)
-  parameters[5] <- table_ss[i,4] - 0.01
-  state[1] <- table_ss[i,1]
-  state[2] <- table_ss[i,2]
-  state[3] <- table_ss[i,3]
+  parameters[5] <- table_ss2[i,4] - 0.01
+  state[1] <- table_ss2[i,1]
+  state[2] <- table_ss2[i,2]
+  state[3] <- table_ss2[i,3]
+  what_down1 <- c(what_down1, parameters[5]) 
   out <- lsodar(func=SIS, y=state, parms=parameters, times=times, rootfunc=root_main)
   out_down <- rbind(out_down, tail(out,1))
 }
@@ -254,6 +260,7 @@ steady_Iz_eps <- steady_eps[,4]
 steady_p_eps <- steady_eps[,4]/(steady_eps[,4]+steady_eps[,3])
 
 table_ss <- cbind(steady_S_eps, steady_Iw_eps, steady_Iz_eps, seq(0.01,0.17,by=delta_eps))
+table_ss2 <- table_ss
 ```
 
 
@@ -270,6 +277,10 @@ legend("topleft" , inset=.05, c("S", "Iz", "Iw", "p"), lty=c(1,2,3,1), lwd=c(2,2
 
 ```{r time_to_stabilization2, echo=FALSE, cache=TRUE}
 
+what_up2 <- 0
+what_down2 <- 0
+
+
 out_up <- rep(0,4)
 
 for (i in 1:nrow(table_ss)) {
@@ -279,19 +290,21 @@ for (i in 1:nrow(table_ss)) {
   state[1] <- table_ss[i,1]
   state[2] <- table_ss[i,2]
   state[3] <- table_ss[i,3]
+  what_up2 <- c(what_up2, parameters[5])
   out <- lsodar(func=SIS, y=state, parms=parameters, times=times, rootfunc=root_main)
   out_up <- rbind(out_up, tail(out,1))
 }
 
 out_down <- rep(0,4)
 
-for (i in 1:nrow(table_ss)) {
+for (i in 1:nrow(table_ss2)) {
   parameters <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho)
   state <- c(S=1-2*prop, Iw=prop, Iz=prop)
-  parameters[5] <- table_ss[i,4] - 0.01
-  state[1] <- table_ss[i,1]
-  state[2] <- table_ss[i,2]
-  state[3] <- table_ss[i,3]
+  parameters[5] <- table_ss2[i,4] - 0.01
+  state[1] <- table_ss2[i,1]
+  state[2] <- table_ss2[i,2]
+  state[3] <- table_ss2[i,3]
+  what_down2 <- c(what_down2, parameters[5])
   out <- lsodar(func=SIS, y=state, parms=parameters, times=times, rootfunc=root_main)
   out_down <- rbind(out_down, tail(out,1))
 }
