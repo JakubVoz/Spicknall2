@@ -434,7 +434,7 @@ legend("topleft" , inset=.05, c('Scenario 1', 'Scenario 2', tag_min, tag_max), l
 
 
 ```{r plot_ss_burden, echo=FALSE}
-plot(doses, burden[,1], main="Burden while varying c*t", xlab="Drug quantity", ylab="burden", ylim=c(0,1), lwd=2, type="l", col='black')
+plot(doses, burden[,1], main="Burden while varying Q", xlab="Drug quantity", ylab="burden", ylim=c(0,1), lwd=2, type="l", col='black')
 
 capture.output(apply(burden, 2, linfun, doses, 1), file='NUL')
 capture.output(apply(burden2, 2, linfun, doses, 2), file='NUL')

@@ -313,7 +313,7 @@ newiw_ss2 <- NewIw2[nrow(NewIw2),]
 
 
 ```{r plot_ss_iz, echo=FALSE}
-plot(doses, iz_steady, main="Resistant cases at steady states \n while varying c*t", xlab="Drug quantity", ylab="Iz", ylim=c(0,0.30), lwd=2, type="l", col='black')
+plot(doses, iz_steady, main="Resistant cases at steady states \n while varying Q", xlab="Drug quantity", ylab="Iz", ylim=c(0,0.30), lwd=2, type="l", col='black')
 
 lines(doses, iz_steady2, type='l', col='red', lwd=2)
 
@@ -328,7 +328,7 @@ legend("topleft" , inset=.05, c("Scenario 1", "Scenario 2"), lty=c(1,1), lwd=c(2
 ```
 
 ```{r plot_ss_p, echo=FALSE}
-plot(doses, p, main="P while varying c*t", xlab="Drug quantity", ylab="p", ylim=c(0,1), lwd=2, type="l", col='black')
+plot(doses, p, main="P while varying Q", xlab="Drug quantity", ylab="p", ylim=c(0,1), lwd=2, type="l", col='black')
 
 lines(doses, p2, type='l', col='red', lwd=2)
 
@@ -340,7 +340,7 @@ lines(prop_treated, p2, type='l', col='red', lwd=2)
 ```
 
 ```{r plot_ss_burden, echo=FALSE}
-plot(doses, burden, main="Burden while varying c*t", xlab="Drug quantity", ylab="burden", ylim=c(0,1), lwd=2, type="l", col='black')
+plot(doses, burden, main="Burden while varying Q", xlab="Drug quantity", ylab="burden", ylim=c(0,1), lwd=2, type="l", col='black')
 
 lines(doses, burden2, type='l', col='red', lwd=2)
 
@@ -358,7 +358,7 @@ newcase <- newiw_ss+newiz_ss
 newcase2 <- newiw_ss2+newiz_ss2
 
 
-plot(doses, newcase, main="Global incidence while varying c*t", xlab="Drug quantity", ylab="Incidence", ylim=c(0,0.01), lwd=2, type="l", col='black')
+plot(doses, newcase, main="Global incidence while varying Q", xlab="Drug quantity", ylab="Incidence", ylim=c(0,0.01), lwd=2, type="l", col='black')
 
 lines(doses, newcase2, type='l', col='red', lwd=2)
 
