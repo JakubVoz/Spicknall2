@@ -896,14 +896,14 @@ for (i in 1:length(pepsi)) {
 
 
 
-plot(t2, Q_Iw[,11], main="Q in time, Iw treated", xlab="time (steps)", ylab="Q", ylim=c(0,0.1), lty=1, lwd=2, type="l")
+plot(t2, Q_Iw[,11], main="Q in time, Iw treated", xlab="time (steps)", ylab="E", ylim=c(0,0.1), lty=1, lwd=2, type="l")
 
 capture.output(apply(Q_Iw, 2, linfun, t2), file='NUL')
 
 legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
-plot(t2, Q_Iw_Iz[,11], main="Q in time, all treated", xlab="time (steps)", ylab="Q", ylim=c(0,0.1), lty=1, lwd=2, type="l")
+plot(t2, Q_Iw_Iz[,11], main="Q in time, all treated", xlab="time (steps)", ylab="E", ylim=c(0,0.1), lty=1, lwd=2, type="l")
 
 capture.output(apply(Q_Iw_Iz, 2, linfun, t2), file='NUL')
 
@@ -912,14 +912,14 @@ legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), co
 
 
 #zoom plot
-plot(time_zoom, Q_Iw_zoom[,11], main="Q in time, Iw treated", xlab="time (steps)", ylab="Q", ylim=c(0,0.1), lty=1, lwd=2, type="l")
+plot(time_zoom, Q_Iw_zoom[,11], main="Q in time, Iw treated", xlab="time (steps)", ylab="E", ylim=c(0,0.1), lty=1, lwd=2, type="l")
 
 capture.output(apply(Q_Iw_zoom, 2, linfun, time_zoom), file='NUL')
 
 legend("topleft" , inset=.05, c("eps=0.20", "eps=0"), lty=c(1,1), lwd=c(2,2), col=c("red", "blue"))
 
 
-plot(time_zoom, Q_Iw_Iz_zoom[,11], main="Q in time, all treated", xlab="time (steps)", ylab="Q", ylim=c(0,0.1), lty=1, lwd=2, type="l")
+plot(time_zoom, Q_Iw_Iz_zoom[,11], main="Q in time, all treated", xlab="time (steps)", ylab="E", ylim=c(0,0.1), lty=1, lwd=2, type="l")
 
 capture.output(apply(Q_Iw_Iz_zoom, 2, linfun, time_zoom), file='NUL')
 
@@ -936,7 +936,7 @@ Q_var_ss <- burden*epsvar
 Q_var_ss <- data.matrix(Q_var_ss)
 realp_ss <- data.matrix(realp_ss)
 
-plot(Q_var_ss, realp_ss, main="I ratio, all treated", xlab="Q", ylab="I ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
+plot(Q_var_ss, realp_ss, main="I ratio, all treated", xlab="E", ylab="I ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
 
 
 ```
