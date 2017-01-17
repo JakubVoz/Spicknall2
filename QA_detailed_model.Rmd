@@ -73,6 +73,7 @@ highbound=cu*100+1
 
 
 
+
 x <- seq(0,1,by=0.01)
 zoom <- 1
 ```
@@ -245,6 +246,8 @@ prate_beta_w <- 0.01 #rate at which beta_w decreases with E
 prate_beta_z <- 0.01 #rate at which beta_z increases with E
 prate_rho_prim <- 0.001 #rate at which rho_prim increases with E
 
+pr <- 1 # 1-r is the efficiency of AMR detection
+pA <- 0 #use of ATB  agriculture
 
 ```
 
@@ -255,7 +258,7 @@ varying_par <- cbind(prop_treated, rho1, doses)
 varying_par2 <- cbind(prop_treated, rho2, doses)
 
 
-parameters <- c(beta_w_basic=pbeta_w_basic, beta_z_basic=pbeta_z_basic, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=0, rho=0, rate_beta_w=prate_beta_w, rate_beta_z=prate_beta_z, rate_rho_prim=prate_rho_prim, Q=0 )
+parameters <- c(beta_w_basic=pbeta_w_basic, beta_z_basic=pbeta_z_basic, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=0, rho=0, rate_beta_w=prate_beta_w, rate_beta_z=prate_beta_z, rate_rho_prim=prate_rho_prim, Q=0, A=pA, r=pr )
 
 state <- c(S=1-2*prop, Iw=prop, Iz=prop, new_Iz=0, new_Iw=0)
 
@@ -264,7 +267,7 @@ times=seq(0, a, by=m)
 SIS=function(times, state, parameters){
   with(as.list(c(state,parameters)),
        {
-         E = eps*Q*(Iw+Iz)
+         E = eps*Q*(Iw+r*Iz)+A
          beta_w = beta_w_basic - E*rate_beta_w
          beta_z = beta_z_basic + E*rate_beta_z
          rho_prim = E*rate_rho_prim
@@ -493,5 +496,45 @@ for (i in 1:ncol(prop_treated)) {
 }
 
 legend("bottomleft" , inset=.05, c('Scenario 1', 'Scenario 2', tag_min, tag_max), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+```
+
+
+```{r plot_AMU_Iz, echo=FALSE}
+par(mfrow=c(1,2))
+
+AMU_xlabel <- do.call(cbind, lapply(AMU, function (x) rep(x, 31)))
+
+plot(AMU_xlabel[,1], iz_steady[,1], main="Scenario 1 : Iz at steady states \n while varying AMU", xlab="AMU", ylab="Iz", ylim=c(0,1), xlim=c(0,max(AMU)), lwd=2, type="l", col='black')
+for (i in 1:ncol(AMU_xlabel)) {
+  lines(AMU_xlabel[,i], iz_steady[,i], col=colforcol[i], lty=1, lwd=2)
+}
+legend("topleft" , inset=.05, c(tag_min, tag_max), lty=c(1,1), lwd=c(2,2), col=c("blue", "red"))
+
+plot(AMU_xlabel[,1], iz_steady2[,1], main="Scenario 2 : Iz at steady states \n while varying AMU", xlab="AMU", ylab="Iz", ylim=c(0,1), xlim=c(0,max(AMU)), lwd=2, type="l", col='black')
+for (i in 1:ncol(AMU_xlabel)) {
+  lines(AMU_xlabel[,i], iz_steady2[,i], col=colforcol[i], lty=1, lwd=2)
+}
+legend("topleft" , inset=.05, c(tag_min, tag_max), lty=c(1,1), lwd=c(2,2), col=c("blue", "red"))
+
+
+```
+
+```{r plot_AMU_P, echo=FALSE}
+
+par(mfrow=c(1,2))
+
+plot(AMU_xlabel[,1], p[,1], main="Scenario 1 : P at steady states \n while varying AMU", xlab="AMU", ylab="P", ylim=c(0,1), xlim=c(0,max(AMU)), lwd=2, type="l", col='black')
+for (i in 1:ncol(AMU_xlabel)) {
+  lines(AMU_xlabel[,i], p[,i], col=colforcol[i], lty=1, lwd=2)
+}
+legend("topleft" , inset=.05, c(tag_min, tag_max), lty=c(1,1), lwd=c(2,2), col=c("blue", "red"))
+
+plot(AMU_xlabel[,1], p2[,1], main="Scenario 2 : P at steady states \n while varying AMU", xlab="AMU", ylab="P", ylim=c(0,1), xlim=c(0,max(AMU)), lwd=2, type="l", col='black')
+for (i in 1:ncol(AMU_xlabel)) {
+  lines(AMU_xlabel[,i], p2[,i], col=colforcol[i], lty=1, lwd=2)
+}
+legend("topleft" , inset=.05, c(tag_min, tag_max), lty=c(1,1), lwd=c(2,2), col=c("blue", "red"))
+
 
 ```
