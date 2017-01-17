@@ -100,7 +100,7 @@ MICres2 <- sum(gr_res2>0)/length(gr_res2)
 ```{r plot_gr, echo=FALSE, cache=TRUE}
 par(mfrow=c(1,2))
 
-plot(x, gr_sens, main="Growth rate : Scenario 1", xlab="Drug quantity", ylab="Growth rate", ylim=c(-0.2,1), lwd=2, type="l", col='blue')
+plot(x, gr_sens, main="Growth rate : Scenario 1", xlab="Q", ylab="Growth rate", ylim=c(-0.2,1), lwd=2, type="l", col='blue')
 
 lines(x, gr_res, type='l', col='red', lwd=2)
 
@@ -108,7 +108,7 @@ lines(x, rep(0, length(x)), type='l', col='black', lwd=1, lty=2)
 abline(v=MIC, col='green')
 
 
-plot(x, gr_sens, main="Growth rate : Scenario 2", xlab="Drug quantity", ylab="Growth rate", ylim=c(-0.2,1), lwd=2, type="l", col='blue')
+plot(x, gr_sens, main="Growth rate : Scenario 2", xlab="Q", ylab="Growth rate", ylim=c(-0.2,1), lwd=2, type="l", col='blue')
 
 lines(x, gr_res2, type='l', col='red', lwd=2)
 
@@ -133,16 +133,16 @@ sel_coef2[which(sel_coef2<0)] <- 0
 
 minSC <- sum(sel_coef==0)/length(sel_coef)
 
-plot(x, sel_coef, main="Selective coefficient evolution : first scenario", xlab="Drug quantity", ylab="Selective coefficient", ylim=c(0,1), lwd=2, type="l", col='black')
+plot(x, sel_coef, main="Selective coefficient evolution : first scenario", xlab="Q", ylab="Selective coefficient", ylim=c(0,1), lwd=2, type="l", col='black')
 abline(v=cl, col='green', lw=2)
 abline(v=cu, col='green', lw=2)
 
-plot(x, sel_coef2, main="Selective coefficient evolution : second scenario", xlab="Drug quantity", ylab="Selective coefficient", ylim=c(0,1), lwd=2, type="l", col='black')
+plot(x, sel_coef2, main="Selective coefficient evolution : second scenario", xlab="Q", ylab="Selective coefficient", ylim=c(0,1), lwd=2, type="l", col='black')
 abline(v=cl, col='green', lw=2)
 abline(v=cu, col='green', lw=2)
 
 
-plot(x, sel_coef, main="Selective coefficient evolution", xlab="Drug quantity", ylab="Selective coefficient", ylim=c(0,1), lwd=2, type="l", col='black')
+plot(x, sel_coef, main="Selective coefficient evolution", xlab="Q", ylab="Selective coefficient", ylim=c(0,1), lwd=2, type="l", col='black')
 lines(x, sel_coef2, col='red', lwd=2)
 
 abline(v=cl, col='green', lw=2)
@@ -157,7 +157,7 @@ legend("topleft" , inset=.05, c("Scenario 1", "Scenario 2", "DQ clinical limits"
 mu_prob <- seq(min_mu, max_mu, length.out = n_values)
 doses <- seq(cl, cu, length.out = n_values)
 
-plot(doses, mu_prob, main="Probability of resistant mutant apparition", xlab="Drug quantity", ylab="mu", ylim=c(0,0.15), lwd=2, type="l", col='black')
+plot(doses, mu_prob, main="Probability of resistant mutant apparition", xlab="Q", ylab="mu", ylim=c(0,0.15), lwd=2, type="l", col='black')
 
 ```
 
@@ -168,7 +168,7 @@ sel_sel_coef2 <- sel_coef2[lowbound:highbound]
 rho1 <- sel_sel_coef*mu_prob
 rho2 <- sel_sel_coef2*mu_prob
 
-plot(doses, rho1, main="Treatment failure rate", xlab="Drug quantity", ylab="rho", lwd=2, type="l", col='black', ylim=c(0, 0.10))
+plot(doses, rho1, main="Treatment failure rate", xlab="Q", ylab="rho", lwd=2, type="l", col='black', ylim=c(0, 0.10))
 
 lines(doses, rho2, type='l', col='red', lwd=2)
 
@@ -177,7 +177,7 @@ legend("topleft" , inset=.05, c("Scenario 1", "Scenario 2"), lty=c(1,1), lwd=c(2
 
 ```{r treated_pat, echo=FALSE, cache=TRUE}
 
-plot(doses, prop_treated, main="Proportion of treated patients", xlab="Drug quantity", ylab="eps", ylim=c(0,0.15), lwd=2, type="l", col='black')
+plot(doses, prop_treated, main="Proportion of treated patients", xlab="Q", ylab="eps", ylim=c(0,0.15), lwd=2, type="l", col='black')
 
 ```
 
@@ -185,7 +185,7 @@ plot(doses, prop_treated, main="Proportion of treated patients", xlab="Drug quan
 treat_fail <- rho1*prop_treated
 treat_fail2 <- rho2*prop_treated
 
-plot(doses, treat_fail, main="Treatment failure", xlab="Drug quantity", ylab="rho*eps", lwd=2, type="l", col='black', ylim=c(0, 0.01))
+plot(doses, treat_fail, main="Treatment failure", xlab="Q", ylab="rho*eps", lwd=2, type="l", col='black', ylim=c(0, 0.01))
 
 lines(doses, treat_fail2, type='l', col='red', lwd=2)
 
@@ -313,7 +313,7 @@ newiw_ss2 <- NewIw2[nrow(NewIw2),]
 
 
 ```{r plot_ss_iz, echo=FALSE}
-plot(doses, iz_steady, main="Resistant cases at steady states \n while varying Q", xlab="Drug quantity", ylab="Iz", ylim=c(0,0.30), lwd=2, type="l", col='black')
+plot(doses, iz_steady, main="Resistant cases at steady states \n while varying Q", xlab="Q", ylab="Iz", ylim=c(0,0.30), lwd=2, type="l", col='black')
 
 lines(doses, iz_steady2, type='l', col='red', lwd=2)
 
@@ -328,7 +328,7 @@ legend("topleft" , inset=.05, c("Scenario 1", "Scenario 2"), lty=c(1,1), lwd=c(2
 ```
 
 ```{r plot_ss_p, echo=FALSE}
-plot(doses, p, main="P while varying Q", xlab="Drug quantity", ylab="p", ylim=c(0,1), lwd=2, type="l", col='black')
+plot(doses, p, main="P while varying Q", xlab="Q", ylab="p", ylim=c(0,1), lwd=2, type="l", col='black')
 
 lines(doses, p2, type='l', col='red', lwd=2)
 
@@ -340,7 +340,7 @@ lines(prop_treated, p2, type='l', col='red', lwd=2)
 ```
 
 ```{r plot_ss_burden, echo=FALSE}
-plot(doses, burden, main="Burden while varying Q", xlab="Drug quantity", ylab="burden", ylim=c(0,1), lwd=2, type="l", col='black')
+plot(doses, burden, main="Burden while varying Q", xlab="Q", ylab="burden", ylim=c(0,1), lwd=2, type="l", col='black')
 
 lines(doses, burden2, type='l', col='red', lwd=2)
 
@@ -358,7 +358,7 @@ newcase <- newiw_ss+newiz_ss
 newcase2 <- newiw_ss2+newiz_ss2
 
 
-plot(doses, newcase, main="Global incidence while varying Q", xlab="Drug quantity", ylab="Incidence", ylim=c(0,0.01), lwd=2, type="l", col='black')
+plot(doses, newcase, main="Global incidence while varying Q", xlab="Q", ylab="Incidence", ylim=c(0,0.01), lwd=2, type="l", col='black')
 
 lines(doses, newcase2, type='l', col='red', lwd=2)
 
@@ -376,7 +376,7 @@ p_real <- newiz_ss/(newiw_ss+newiz_ss)
 p_real2 <- newiz_ss2/(newiw_ss2+newiz_ss2)
 
 
-plot(doses, p_real, main="Reported resistant ratio", xlab="Drug quantity", ylab="p", ylim=c(0,0.2), lwd=2, type="l", col='black')
+plot(doses, p_real, main="Reported resistant ratio", xlab="Q", ylab="p", ylim=c(0,0.2), lwd=2, type="l", col='black')
 
 lines(doses, p_real2, type='l', col='red', lwd=2)
 
