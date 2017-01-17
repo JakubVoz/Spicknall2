@@ -749,6 +749,78 @@ knitr::include_graphics("./detailed_AMU_varying_eps_files/figure-html/plot_ss_bu
 
 VA ETRE ANALYSE PROCHAINEMENT.
 
+#Model with an impact of E
+
+In this part, we consider that the absolute quantity of consumed antibiotics, E, has an impact on epidemiological dynamics through passive consumption via water and thus passive immunization. The new model is defined by following equations:
+
+$$
+\begin{aligned}
+\frac{dS}{dt} &=- \beta_w I_wS - \beta_z I_z S + \gamma  I_z + \gamma(1 - \epsilon)I_w + \gamma `  \epsilon  I_w \\
+\frac{dI_w}{dt} &=\beta_w I_wS + (1-\epsilon)\beta_wI_wI_z - \gamma(1 - \epsilon)I_w - \gamma `  \epsilon  I_w - \epsilon\beta_zI_zI_w - \rho\epsilon I_w - \rho'I_w \\
+\frac{dI_z}{dt} &=\beta_z I_zS + \epsilon\beta_zI_zI_w + \rho\epsilon I_w + \rho'I_w - \gamma  I_z - (1-\epsilon)\beta_wI_wI_z \\
+\end{aligned}
+$$
+ 
+ where :
+$$ 
+\begin{aligned}
+\beta_w &= \beta_{w_0} - a*E\\
+\beta_z &= \beta_{z_0} + b*E\\
+\rho' &= c*E\\
+\end{aligned}
+$$
+
+$\beta_w$ decreases with $E$ : this relationship is based on these assumptions:
+
+a. as $E$ increases, antibiotics spread into environment and people will consume them passively (antibiotics are for exemple diluted in water)
+b. the more people consume antibitics passively, the less probable will be an infectious contact, due to the fact that the body of susceptible person will be passively immunized and less prone to infection
+
+##Parameters
+
+Name of Parameter | Description | Default value
+-----|-----------------------------------------|---------
+$a$ | rate at which $\beta_w$ decreases with E | 0.01
+$b$ | rate at which $\beta_z$ decreases with E | 0.01
+$c$ | rate at which $\rho'$ increases with E | 0.001
+
+
+There are different scenarios considering E that depend on the efficiency of AMR detection :
+
+E expression | Scenario
+------------------|-------------------------------------
+$E = I_w*Q*\varepsilon$ | Ideal AMR detection
+$E = (I_w+I_z)*Q*\varepsilon$ | No AMR detection
+$E = I_w*Q*\varepsilon + ENV$ | Environmental use + Ideal AMR detection
+$E = (I_w+I_z)*Q*\varepsilon + ENV$ | Environmental use + No AMR detection
+$E = (I_w+a*I_z)*Q*\varepsilon + ENV$ | General expression
+
+
+##Basic model without detailed AMU
+
+First, we consider that $Q$=1, $i.e.$ we do not detail $AMU$ as in the previous section. The following steady-states correspond to the "No AMR detection" scenario.
+
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
+
+knitr::include_graphics("./QA_basic_model_files/figure-html/steady_state_eps_plot-4.png")
+```
+
+##Model with detailed AMU
+
+In this model we consider that $AMU = Q*\varepsilon$. As in the previous section, we consider that the intrahost selection and mutation rate depend on the quantity of consumed ATB ($Q$).
+
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
+
+knitr::include_graphics("./QA_detailed_model_files/figure-html/plot_ss_iz-1.png")
+knitr::include_graphics("./QA_detailed_model_files/figure-html/plot_ss_iz-2.png")
+knitr::include_graphics("./QA_detailed_model_files/figure-html/plot_ss_iw-1.png")
+knitr::include_graphics("./QA_detailed_model_files/figure-html/plot_ss_iw-2.png")
+```
+
+
+
+
+
+
 #No transmission cost : existing optimal strategy?
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
