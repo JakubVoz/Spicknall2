@@ -91,10 +91,10 @@ times <- seq(0, a, by=m)
 SIS_no_detection=function(times, state, parameters){
   with(as.list(c(state,parameters)),
        { 
-         Q = eps*(Iw+Iz)
-         beta_w = beta_w_basic - Q*rate_beta_w
-         beta_z = beta_z_basic + Q*rate_beta_z
-         rho_prim = Q*rate_rho_prim
+         E = eps*(Iw+Iz)
+         beta_w = beta_w_basic - E*rate_beta_w
+         beta_z = beta_z_basic + E*rate_beta_z
+         rho_prim = E*rate_rho_prim
          dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
         dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw - rho_prim*Iw
         dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz + rho_prim*Iw

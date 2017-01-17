@@ -804,6 +804,10 @@ First, we consider that $Q$=1, $i.e.$ we do not detail $AMU$ as in the previous 
 knitr::include_graphics("./QA_basic_model_files/figure-html/steady_state_eps_plot-4.png")
 ```
 
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
+knitr::include_graphics("./final_mod_files/figure-html/steady_state_eps_plot-1.png")
+```
+
 ##Model with detailed AMU
 
 In this model we consider that $AMU = Q*\varepsilon$. As in the previous section, we consider that the intrahost selection and mutation rate depend on the quantity of consumed ATB ($Q$).
@@ -814,6 +818,8 @@ knitr::include_graphics("./QA_detailed_model_files/figure-html/plot_ss_iz-1.png"
 knitr::include_graphics("./QA_detailed_model_files/figure-html/plot_ss_iz-2.png")
 knitr::include_graphics("./QA_detailed_model_files/figure-html/plot_ss_iw-1.png")
 knitr::include_graphics("./QA_detailed_model_files/figure-html/plot_ss_iw-2.png")
+knitr::include_graphics("./QA_detailed_model_files/figure-html/plot_ss_p-1.png")
+knitr::include_graphics("./QA_detailed_model_files/figure-html/plot_ss_p-2.png")
 ```
 
 
