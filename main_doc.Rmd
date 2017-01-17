@@ -747,11 +747,20 @@ knitr::include_graphics("./detailed_AMU_varying_eps_files/figure-html/plot_ss_iz
 knitr::include_graphics("./detailed_AMU_varying_eps_files/figure-html/plot_ss_burden-1.png")
 ```
 
-VA ETRE ANALYSE PROCHAINEMENT.
+
+In consequence, the span of $I_z$ and $P$ for can be very large for higher values of $AMU$ :
+
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
+
+knitr::include_graphics("./detailed_AMU_varying_eps_files/figure-html/plot_AMU_Iz-1.png")
+
+knitr::include_graphics("./detailed_AMU_varying_eps_files/figure-html/plot_AMU_P-1.png")
+```
+
 
 #Model with an impact of E
 
-In this part, we consider that the absolute quantity of consumed antibiotics, E, has an impact on epidemiological dynamics through passive consumption via water and thus passive immunization. The new model is defined by following equations:
+In this part, we consider that the absolute quantity of consumed antibiotics, $E$, has an impact on epidemiological dynamics through passive consumption via water and thus passive immunization. The new model is defined by following equations:
 
 $$
 \begin{aligned}
@@ -784,7 +793,7 @@ $b$ | rate at which $\beta_z$ decreases with E | 0.01
 $c$ | rate at which $\rho'$ increases with E | 0.001
 
 
-There are different scenarios considering E that depend on the efficiency of AMR detection :
+There are different scenarios considering $E$ that depend on the efficiency of AMR detection :
 
 E expression | Scenario
 ------------------|-------------------------------------
@@ -822,24 +831,13 @@ knitr::include_graphics("./QA_detailed_model_files/figure-html/plot_ss_p-1.png")
 knitr::include_graphics("./QA_detailed_model_files/figure-html/plot_ss_p-2.png")
 ```
 
-
-
-
-
-
-#No transmission cost : existing optimal strategy?
+In consequence, the span of $I_z$ and $P$ for can be very large for higher values of $AMU$ :
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
-knitr::include_graphics("./model_no_competition_inc_files/figure-html/fat_test-1.png")
+knitr::include_graphics("./QA_detailed_model_files/figure-html/plot_AMU_Iz-1.png")
+
+knitr::include_graphics("./QA_detailed_model_files/figure-html/plot_AMU_P-1.png")
+
 ```
 
-```{r, out.width = "600px", echo=FALSE, fig.align='center'}
-
-knitr::include_graphics("./model_no_competition_inc_intrahost_cost_preserved_files/figure-html/fat_test-1.png")
-```
-
-```{r, out.width = "600px", echo=FALSE, fig.align='center'}
-
-knitr::include_graphics("./model_no_competition_no_Iw_Iz_flux_files/figure-html/fat_test-1.png")
-```
