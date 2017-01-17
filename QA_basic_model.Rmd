@@ -31,6 +31,8 @@ prho_prim <- 0
 peps <- 0.10 #initial value of the ratio of treated patients
 peps_test <- 0.10 #initial value of the ratio of treated patients
 
+pr <- 1 # 1-r is the efficiency of AMR detection
+pA <- 0 #use of ATB  agriculture
 
 
 
@@ -77,12 +79,12 @@ E expression | Scenario
 ------------------|-------------------------------------
 $E = I_w*Q*\varepsilon$ | Ideal detection
 $E = (I_w+I_z)*Q*\varepsilon$ | No detection
-$E = I_w*Q*\varepsilon + ENV$ | Environmental use + Ideal detection
-$E = (I_w+I_z)*Q*\varepsilon + ENV$ | Environmental use + No detection
-$E = (I_w+a*I_z)*Q*\varepsilon + ENV$ | General expression
+$E = I_w*Q*\varepsilon + A$ | Environmental use + Ideal detection
+$E = (I_w+I_z)*Q*\varepsilon + A$ | Environmental use + No detection
+$E = (I_w+r*I_z)*Q*\varepsilon + A$ | General expression
 
 ```{r trial, include=FALSE, cache=TRUE}
-parameters <- c(beta_w_basic=pbeta_w_basic, beta_z_basic=pbeta_z_basic, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, rate_beta_w=prate_beta_w, rate_beta_z=prate_beta_z, rate_rho_prim=prate_rho_prim )
+parameters <- c(beta_w_basic=pbeta_w_basic, beta_z_basic=pbeta_z_basic, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, rate_beta_w=prate_beta_w, rate_beta_z=prate_beta_z, rate_rho_prim=prate_rho_prim, A=pA, r=pr )
 
 state <- c(S=0.1, Iw=0.1, Iz=0.8)
 
@@ -91,7 +93,7 @@ times <- seq(0, a, by=m)
 SIS_no_detection=function(times, state, parameters){
   with(as.list(c(state,parameters)),
        { 
-         E = eps*(Iw+Iz)
+         E = eps*(Iw+r*Iz)+A
          beta_w = beta_w_basic - E*rate_beta_w
          beta_z = beta_z_basic + E*rate_beta_z
          rho_prim = E*rate_rho_prim
@@ -120,7 +122,7 @@ legend("topright" , inset=.05, c("Iw", "Iz", "S" ), lty=c(3,2,1), lwd=c(2,2,2))
 
 ``` {r steady_state_eps, include=FALSE, cache=TRUE}
 
-parameters <- c(beta_w_basic=pbeta_w_basic, beta_z_basic=pbeta_z_basic, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, rate_beta_w=prate_beta_w, rate_beta_z=prate_beta_z, rate_rho_prim=prate_rho_prim )
+parameters <- c(beta_w_basic=pbeta_w_basic, beta_z_basic=pbeta_z_basic, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, rate_beta_w=prate_beta_w, rate_beta_z=prate_beta_z, rate_rho_prim=prate_rho_prim, A=pA, r=pr )
 
 state <- c(S=1-2*prop, Iw=prop, Iz=prop)
 
