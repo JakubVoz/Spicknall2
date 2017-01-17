@@ -17,9 +17,9 @@ m <- 1 #time step
 pbeta_w_basic <- 0.04 #transmission parameter of Iw
 pbeta_z_basic <- 0.015 #transmission parameter of Iz
 
-prate_beta_w <- 0.1
-prate_beta_z <- 0.01
-prate_rho_prim <- 0.01
+prate_beta_w <- 0.01 #rate at which beta_w decreases with E
+prate_beta_z <- 0.01 #rate at which beta_z increases with E
+prate_rho_prim <- 0.001 #rate at which rho_prim increases with E
 
 pgammaa <- 0.01 #innate recovery rate
 pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
@@ -66,21 +66,22 @@ conv_crit <- 0.00001
  where :
  
 \begin{aligned}
-\beta_w &= \beta_{w_0} - a*QA\\
-\beta_z &= \beta_{z_0} + b*QA\\
-\rho' &= c*QA\\
+\beta_w &= \beta_{w_0} - a*E\\
+\beta_z &= \beta_{z_0} + b*E\\
+\rho' &= c*E\\
 \end{aligned}
 
-There are different scenarios how to grasp QA depending on the efficiency of AMR detection :
+There are different scenarios how to grasp E depending on the efficiency of AMR detection :
 
-QA expression | Scenario
+E expression | Scenario
 ------------------|-------------------------------------
-$QA = I_w*\varepsilon$ | Ideal detection
-$QA = (I_w+I_z)*\varepsilon$ | No detection
-$QA = I_w*\varepsilon + ENV$ | Environmental use + Ideal detection
-$QA = (I_w+I_z)*\varepsilon + ENV$ | Environmental use + No detection
+$E = I_w*Q*\varepsilon$ | Ideal detection
+$E = (I_w+I_z)*Q*\varepsilon$ | No detection
+$E = I_w*Q*\varepsilon + ENV$ | Environmental use + Ideal detection
+$E = (I_w+I_z)*Q*\varepsilon + ENV$ | Environmental use + No detection
+$E = (I_w+a*I_z)*Q*\varepsilon + ENV$ | General expression
 
-```{r trial, include=FALSE}
+```{r trial, include=FALSE, cache=TRUE}
 parameters <- c(beta_w_basic=pbeta_w_basic, beta_z_basic=pbeta_z_basic, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, rate_beta_w=prate_beta_w, rate_beta_z=prate_beta_z, rate_rho_prim=prate_rho_prim )
 
 state <- c(S=0.1, Iw=0.1, Iz=0.8)
@@ -95,8 +96,8 @@ SIS_no_detection=function(times, state, parameters){
          beta_z = beta_z_basic + Q*rate_beta_z
          rho_prim = Q*rate_rho_prim
          dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
-        dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
-        dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
+        dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw - rho_prim*Iw
+        dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz + rho_prim*Iw
         
         list(c(dS, dIw, dIz))
        })
@@ -108,7 +109,7 @@ out=as.data.frame(
 
 ```
 
-```{r main_trial, echo=FALSE, fig.align='center'}
+```{r main_trial, echo=FALSE, fig.align='center', cache=TRUE}
 
 plot(times, out$S, main="Trial", xlab="time (steps)", ylab="ratio", ylim=c(0,1), lty=1, lwd=2, type="l")
 lines(times, out$Iw, lty=3, lwd=2)
@@ -117,7 +118,7 @@ lines(times, out$Iz, lty=2, lwd=2)
 legend("topright" , inset=.05, c("Iw", "Iz", "S" ), lty=c(3,2,1), lwd=c(2,2,2))
 ```
 
-``` {r steady_state_eps, include=FALSE}
+``` {r steady_state_eps, include=FALSE, cache=TRUE}
 
 parameters <- c(beta_w_basic=pbeta_w_basic, beta_z_basic=pbeta_z_basic, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=peps, rho=prho, rate_beta_w=prate_beta_w, rate_beta_z=prate_beta_z, rate_rho_prim=prate_rho_prim )
 
@@ -149,7 +150,7 @@ steady_QA_Iw_Iz_eps <- (steady_Iw_eps+steady_Iz_eps)*pepsi
 
 ```
 
-```{r steady_state_eps_plot, echo=FALSE, fig.align='center'}
+```{r steady_state_eps_plot, echo=FALSE, fig.align='center', cache=TRUE}
 
 plot(pepsi, steady_Iw_eps, main="Steady-states : treatment variations", xlab=expression(epsilon), ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
 
