@@ -1,0 +1,572 @@
+---
+title: "AMU_var_dynamics"
+author: "Jakub"
+date: "19 ledna 2017"
+output: html_document
+---
+
+
+
+
+```{r param_def, include=FALSE}
+library(plyr)
+
+#per capita maximum growth rate of sensitive bact
+max_sens_gr <- 1 
+max_sens_gr2 <- 1 
+#per capita maximum growth rate of resistant bact
+max_res_gr <- 0.8
+max_res_gr2 <- 0.8
+#per capita minimum growth rate of sensitive bact
+min_sens_gr <- -0.2
+min_sens_gr2 <- -0.2
+#per capita minimum growth rate of res bact
+min_res_gr <- -0.2
+min_res_gr2 <- -0.2
+#minimum inhibitory concentration of sen bact
+
+mic_sens <- 0.35
+mic_sens2 <- 0.35
+#minimum inhibitory concentration of res bact
+
+mic_res <- 0.65
+mic_res2 <- 0.5
+#slope for sens bact
+kappa_sens <- 10
+kappa_sens2 <- 10
+#slope for res bact  
+
+kappa_res <- 10
+kappa_res2 <- 10
+
+param_sens <- c(max_sens_gr, min_sens_gr, mic_sens, kappa_sens)
+param_sens2 <- c(max_sens_gr2, min_sens_gr2, mic_sens2, kappa_sens2)
+
+param_res <- c(max_res_gr, min_res_gr, mic_res, kappa_res)
+param_res2 <- c(max_res_gr2, min_res_gr2, mic_res2, kappa_res2)
+
+#mutant emergence probability : we consider that if the amount of applied atb increases, the probability of resistant mutant apparition increases linearly
+max_mu <- 0.13
+min_mu <- 0.08
+max_dot <- 10
+min_dot <- 1
+
+#range of intervention - cl=lowest clinically effective dose, cu maximum tolerable dose (toxicity)
+cl=0.40
+cu=0.70
+n_values=(cu-cl)*100+1
+
+drug_quantities <- seq(cl, cu, length.out = n_values )
+
+AMU = c(0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.10)
+
+prop_treated <- do.call(cbind, lapply(AMU, function (x) x/drug_quantities))
+
+eps_max <- max(prop_treated)
+
+#selection of corresponding borders in sel_coef vector
+
+lowbound=cl*100+1
+highbound=cu*100+1
+
+
+
+x <- seq(0,1,by=0.01)
+zoom <- 1
+```
+
+
+```{r func_gr_def, include=FALSE, cache=TRUE}
+
+
+
+growth = function(x, maxv, minv, micv, slopev) {
+  y <- maxv - ((maxv - minv)*(x/micv)^slopev)/((x/micv)^slopev - maxv/minv)
+  return(y)
+}
+
+
+
+colglob <- colorRampPalette(c("blue", "red"))
+
+colforcol <- colglob(length(AMU))
+
+
+linfun <- function(x, t, ltype){
+  lines(t, unlist(x), lty=ltype, lwd=2, col=colforcol[as.numeric(parent.frame()$i)])
+}
+
+```
+
+```{r calc_gr, include=FALSE, cache=TRUE}
+
+
+gr_sens <- lapply(x, growth, max_sens_gr, min_sens_gr, mic_sens, kappa_sens)
+
+gr_res <- lapply(x, growth, max_res_gr, min_res_gr, mic_res, kappa_res)
+
+gr_sens2 <- lapply(x, growth, max_sens_gr2, min_sens_gr2, mic_sens2, kappa_sens2)
+
+gr_res2 <- lapply(x, growth, max_res_gr2, min_res_gr2, mic_res2, kappa_res2)
+
+MIC <- sum(gr_sens>0)/length(gr_sens)
+MICres <- sum(gr_res>0)/length(gr_res)
+MICres2 <- sum(gr_res2>0)/length(gr_res2)
+```
+
+
+
+```{r plot_gr, echo=FALSE, cache=TRUE}
+par(mfrow=c(1,2))
+
+plot(x, gr_sens, main="Sensitive and resistant strain growth rate", xlab="Q", ylab="Growth rate", ylim=c(-0.2,1), lwd=2, type="l", col='blue')
+
+lines(x, gr_res, type='l', col='red', lwd=2)
+
+lines(x, rep(0, length(x)), type='l', col='black', lwd=1, lty=2)
+abline(v=MIC, col='green')
+
+
+plot(x, gr_sens2, main="Sensitive and resistant strain growth rate", xlab="Q", ylab="Growth rate", ylim=c(-0.2,1), lwd=2, type="l", col='blue')
+
+lines(x, gr_res2, type='l', col='red', lwd=2)
+
+lines(x, rep(0, length(x)), type='l', col='black', lwd=1, lty=2)
+abline(v=MIC, col='green')
+
+```
+
+
+
+```{r selection_coef, echo=FALSE, cache=TRUE}
+gr_sens <- unlist(gr_sens)
+gr_sens2 <- unlist(gr_sens2)
+gr_res <- unlist(gr_res)
+gr_res2 <- unlist(gr_res2)
+
+sel_coef <- gr_res - gr_sens
+sel_coef2 <- gr_res2 - gr_sens2
+
+sel_coef[which(sel_coef<0)] <- 0
+sel_coef2[which(sel_coef2<0)] <- 0
+
+
+minSC <- sum(sel_coef==0)/length(sel_coef)
+
+plot(x, sel_coef, main="Selective coefficient evolution : first scenario", xlab="Q", ylab="Selective coefficient", ylim=c(0,1), lwd=2, type="l", col='black')
+abline(v=cl, col='green', lw=2)
+abline(v=cu, col='green', lw=2)
+
+plot(x, sel_coef2, main="Selective coefficient evolution : second scenario", xlab="Q", ylab="Selective coefficient", ylim=c(0,1), lwd=2, type="l", col='black')
+abline(v=cl, col='green', lw=2)
+abline(v=cu, col='green', lw=2)
+```
+
+```{r mutation_curve, echo=FALSE, cache=TRUE}
+mu_prob <- seq(min_mu, max_mu, length.out = n_values)
+doses <- seq(cl, cu, length.out = n_values)
+
+plot(doses, mu_prob, main="Probability of resistant mutant apparition", xlab="Q", ylab="mu", ylim=c(0,0.15), lwd=2, type="l", col='black')
+
+```
+
+```{r rho, echo=FALSE, cache=TRUE}
+sel_sel_coef <- sel_coef[lowbound:highbound]
+sel_sel_coef2 <- sel_coef2[lowbound:highbound]
+
+rho1 <- sel_sel_coef*mu_prob
+rho2 <- sel_sel_coef2*mu_prob
+
+plot(doses, rho1, main="Treatment failure rate", xlab="Q", ylab="rho", lwd=2, type="l", col='black', ylim=c(0, 0.10))
+
+lines(doses, rho2, type='l', col='red', lwd=2)
+
+legend("topleft" , inset=.05, c("Sc. 1", "Sc. 2"), lty=c(1,1), lwd=c(2,2), col=c("black", "red"))
+
+```
+
+```{r treated_pat, echo=FALSE, cache=TRUE}
+
+
+
+plot(doses, prop_treated[,1], main="Proportion of treated patients", xlab="Q", ylab="eps", ylim=c(0 , eps_max), lwd=2, type="l", col='black')
+
+capture.output(apply(prop_treated, 2, linfun, doses, 1), file='NUL')
+
+tag_min <- paste('AMU =', AMU[1])
+tag_max <- paste('AMU =', AMU[length(AMU)])
+
+legend("topright" , inset=.05, c(tag_min, tag_max), lty=c(1,1), lwd=c(2,2), col=c("blue", "red"))
+
+```
+
+```{r treatment_fail, echo=FALSE, cache=TRUE}
+
+
+treat_fail <- do.call(cbind, lapply(prop_treated, function (x) x*rho1))
+treat_fail2 <- do.call(cbind, lapply(prop_treated, function (x) x*rho2))
+
+plot(doses, treat_fail[,1], main="Treatment failure", xlab="Q", ylab="rho*eps", lwd=2, type="l", col='black', ylim=c(0, 0.005))
+
+capture.output(apply(treat_fail, 2, linfun, doses, 1), file='NUL')
+capture.output(apply(treat_fail2, 2, linfun, doses, 2), file='NUL')
+
+legend("topleft" , inset=.05, c('Scenario 1', 'Scenario 2', tag_min, tag_max), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+
+```
+```{r model_param, echo=FALSE, cache=TRUE}
+
+library(deSolve)
+
+
+options("scipen" = 10)
+
+# initial state:
+N <- 1
+prop <- 0.01 #initial value of Iw and Iz
+
+# time:
+a <- 4000 #time span
+m <- 1 #time step
+
+# parameters
+pbeta_w <- 0.04 #transmission parameter of Iw
+pbeta_z <- 0.015 #transmission parameter of Iz
+
+pgammaa <- 0.01 #innate recovery rate
+pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
+
+epsi_span <- c(0.12, 0.10, 0.08, 0.06)
+Q_span <- c(0.40, 0.50, 0.60, 0.70)
+mu_span <- c(mu_prob[1], mu_prob[11], mu_prob[21], mu_prob[31])
+rho1_span <- c(rho1[1], rho1[11], rho1[21], rho1[31])
+rho2_span <- c(rho2[1], rho2[11], rho2[21], rho2[31])
+AMU_span <- Q_span[2]*epsi_span
+```
+
+
+```{r model_def, echo=FALSE, cache=TRUE}
+
+parameters_init1 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=epsi_span[2], rho=rho1_span[2])
+
+parameters_init2 <- c(beta_w=pbeta_w, beta_z=pbeta_z, gamma=pgammaa, gamma_prim=pgamma_tilt, eps=epsi_span[2], rho=rho2_span[2])
+
+state <- c(S=1-2*prop, Iw=prop, Iz=prop, new_Iz=0, new_Iw=0)
+
+times=seq(0, a, by=m)
+
+SIS=function(times, state, parameters){
+  with(as.list(c(state,parameters)),
+       {dS = - beta_w*Iw*S - beta_z*Iz*S + gamma*(1-eps)*Iw + gamma_prim*eps*Iw + gamma*Iz
+        dIw = beta_w*Iw*S + (1-eps)*beta_w*Iw*Iz - eps*beta_z*Iz*Iw - rho*eps*Iw - gamma*(1-eps)*Iw - gamma_prim*eps*Iw
+        dIz = beta_z*Iz*S + eps*beta_z*Iz*Iw + rho*eps*Iw - (1-eps)*beta_w*Iw*Iz - gamma*Iz
+        dnewIw = beta_w*Iw*S
+        dnewIz = beta_z*Iz*S
+        list(c(dS, dIw, dIz, dnewIw, dnewIz))
+       })
+}
+
+
+
+
+
+```
+
+```{r steady_state, echo=FALSE, cache=TRUE}
+
+out_init1=as.data.frame(
+  ode(y=state, times=times, func=SIS, parms=parameters_init1)
+)
+
+initial_states1 <- unlist(out_init1[nrow(out_init1), 2:4])
+
+out_init2=as.data.frame(
+  ode(y=state, times=times, func=SIS, parms=parameters_init2)
+)
+
+initial_states2 <- unlist(out_init2[nrow(out_init2), 2:4])
+
+var1_Qs <- data.frame(colnames=c(LETTERS[1:5]), a=c(epsi_span,0), b=rep(rho1_span[2],5), c=rep(initial_states1[1],5), d=rep(initial_states1[2],5), e=rep(initial_states1[3],5))
+
+var2_Qs <- data.frame(colnames=c(LETTERS[1:5]), a=c(epsi_span,0), b=rep(rho2_span[2],5), c=rep(initial_states2[1],5), d=rep(initial_states2[2],5), e=rep(initial_states2[3],5))
+
+var1_epss <- data.frame(colnames=c(LETTERS[1:5]), a=rep(epsi_span[2],5), b=c(rho1_span,0), c=rep(initial_states1[1],5), d=rep(initial_states1[2],5), e=rep(initial_states1[3],5))
+
+var2_epss <- data.frame(colnames=c(LETTERS[1:5]), a=rep(epsi_span[2],5), b=c(rho2_span,0), c=rep(initial_states2[1],5), d=rep(initial_states2[2],5), e=rep(initial_states2[3],5))
+
+var1_Qs <- var1_Qs[1:4,2:6]
+var2_Qs <- var2_Qs[1:4,2:6]
+var1_epss <- var1_epss[1:4,2:6]
+var2_epss <- var2_epss[1:4,2:6]
+```
+
+```{r AMU_variation_Q_stable, echo=FALSE, cache=TRUE}
+parameters <- parameters_init1
+
+
+var_fun = function(x) {
+  parameters[5] <- x[1]
+  parameters[6] <- x[2]
+  state[1] <- x[3]
+  state[2] <- x[4]
+  state[3] <- x[5]
+  out=as.data.frame(
+  ode(y=state, times=times, func=SIS, parms=parameters))
+  return(out)
+}
+
+out_Q_s1 <- do.call(cbind, apply(var1_Qs, 1, var_fun))
+out_Q_s2 <- do.call(cbind, apply(var2_Qs, 1, var_fun))
+
+out_eps_s1 <- do.call(cbind, apply(var1_epss, 1, var_fun))
+out_eps_s2 <- do.call(cbind, apply(var2_epss, 1, var_fun))
+
+#treatment will be done on the whole set, once treated, the data will be sorted out before plotting
+
+whole_out <- cbind(out_Q_s1, out_Q_s2, out_eps_s1, out_eps_s2)
+
+whole_out <- whole_out[1:1001,]
+
+```
+
+```{r data_prep, echo=FALSE, cache=TRUE}
+
+time2 <- seq(0, 1000, by=1)
+
+
+colforcol_span <- colforcol[4:7]
+
+linfun_var <- function(x, t, ltype){
+  lines(t, unlist(x), lty=ltype, lwd=2, col=colforcol_span[as.numeric(parent.frame()$i)])
+}
+
+# col nums
+ns <- seq(2, ncol(whole_out), by=6)
+niz <- seq(4, ncol(whole_out), by=6)
+niw <- seq(3, ncol(whole_out), by=6)
+ninciw <- seq(5, ncol(whole_out), by=6)
+ninciz <- seq(6, ncol(whole_out), by=6)
+
+# col sep
+
+S_dyn <- whole_out[,ns]
+Iw_dyn <- whole_out[,niw]
+Iz_dyn <- whole_out[,niz]
+inc_Iw <- whole_out[,ninciw]
+inc_Iz <- whole_out[,ninciz]
+
+# state var separation
+
+S_Qs1 <- S_dyn[,1:length(epsi_span)]
+S_Qs2 <- S_dyn[,(length(epsi_span)+1):(2*length(epsi_span))]
+S_epss1 <- S_dyn[,(2*length(epsi_span)+1):(3*length(epsi_span))]
+S_epss2 <- S_dyn[,(3*length(epsi_span)+1):(4*length(epsi_span))]
+
+Iw_Qs1 <- Iw_dyn[,1:length(epsi_span)]
+Iw_Qs2 <- Iw_dyn[,(length(epsi_span)+1):(2*length(epsi_span))]
+Iw_epss1 <- Iw_dyn[,(2*length(epsi_span)+1):(3*length(epsi_span))]
+Iw_epss2 <- Iw_dyn[,(3*length(epsi_span)+1):(4*length(epsi_span))]
+
+Iz_Qs1 <- Iz_dyn[,1:length(epsi_span)]
+Iz_Qs2 <- Iz_dyn[,(length(epsi_span)+1):(2*length(epsi_span))]
+Iz_epss1 <- Iz_dyn[,(2*length(epsi_span)+1):(3*length(epsi_span))]
+Iz_epss2 <- Iz_dyn[,(3*length(epsi_span)+1):(4*length(epsi_span))]
+
+```
+
+```{r state_var_plot_S, echo=FALSE}
+# S
+
+par(mfrow=c(1,2))
+
+plot(time2, S_Qs1[,1], main="Dynamics of S : Scenario 1", xlab="time", ylab="S", ylim=c(0,1), lwd=2, lty=1, type="l", col='black')
+
+capture.output(apply(S_Qs1, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(S_epss1, 2, linfun_var, time2, 2), file='NUL')
+
+tag_min <- paste('AMU =', AMU[1])
+tag_max <- paste('AMU =', AMU[length(AMU)])
+
+tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
+tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
+
+legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+plot(time2, S_Qs2[,1], main="Dynamics of S : Scenario 2", xlab="time", ylab="S", ylim=c(0,1), lwd=2, lty=1, type="l", col='black')
+
+capture.output(apply(S_Qs2, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(S_epss2, 2, linfun_var, time2, 2), file='NUL')
+
+tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
+tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
+
+legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+```
+
+```{r state_var_plot_Iz, echo=FALSE}
+
+# I_z
+
+par(mfrow=c(1,2))
+
+plot(time2, Iz_Qs1[,1], main="Dynamics of Iz : Scenario 1", xlab="time", ylab="Iz", ylim=c(0,1), lwd=2, lty=1, type="l", col='black')
+
+capture.output(apply(Iz_Qs1, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(Iz_epss1, 2, linfun_var, time2, 2), file='NUL')
+
+
+tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
+tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
+
+legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+plot(time2, Iz_Qs2[,1], main="Dynamics of Iz : Scenario 2", xlab="time", ylab="Iz", ylim=c(0,1), lwd=2, lty=1, type="l", col='black')
+
+capture.output(apply(Iz_Qs2, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(Iz_epss2, 2, linfun_var, time2, 2), file='NUL')
+
+tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
+tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
+
+legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+```
+
+```{r state_var_plot_Iw, echo=FALSE}
+
+# I_w
+
+par(mfrow=c(1,2))
+
+plot(time2, Iw_Qs1[,1], main="Dynamics of Iw : Scenario 1", xlab="time", ylab="Iw", ylim=c(0,1), lwd=2, lty=1, type="l", col='black')
+
+capture.output(apply(Iw_Qs1, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(Iw_epss1, 2, linfun_var, time2, 2), file='NUL')
+
+
+tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
+tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
+
+legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+plot(time2, Iw_Qs2[,1], main="Dynamics of Iw : Scenario 2", xlab="time", ylab="Iw", ylim=c(0,1), lwd=2, lty=1, type="l", col='black')
+
+capture.output(apply(Iw_Qs2, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(Iw_epss2, 2, linfun_var, time2, 2), file='NUL')
+
+tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
+tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
+
+legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+```
+
+```{r state_var_plot_P, echo=FALSE}
+
+P_Qs1 <- Iz_Qs1/(Iz_Qs1+Iw_Qs1)
+P_Qs2 <- Iz_Qs2/(Iz_Qs2+Iw_Qs2)
+P_epss1 <- Iz_epss1/(Iz_epss1+Iw_epss1)
+P_epss2 <- Iz_epss2/(Iz_epss2+Iw_epss2)
+# P
+
+par(mfrow=c(1,2))
+
+plot(time2, P_Qs1[,1], main="Dynamics of P : Scenario 1", xlab="time", ylab="P", ylim=c(0,1), lwd=2, lty=1, type="l", col='black')
+
+capture.output(apply(P_Qs1, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(P_epss1, 2, linfun_var, time2, 2), file='NUL')
+
+tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
+tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
+
+legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+plot(time2, P_Qs2[,1], main="Dynamics of P : Scenario 2", xlab="time", ylab="P", ylim=c(0,1), lwd=2, lty=1, type="l", col='black')
+
+capture.output(apply(P_Qs2, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(P_epss2, 2, linfun_var, time2, 2), file='NUL')
+
+tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
+tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
+
+legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+```
+
+```{r incid_plot_prep, echo=FALSE, cache=TRUE}
+incid = function(x) {
+  der <- rep(0, length(x))
+  for (i in 2:length(x)) {
+    der[i] <- x[i]-x[i-1]
+  }
+  return(der)
+}
+
+NewIz <- apply(inc_Iz, 2, incid)
+NewIw <- apply(inc_Iw, 2, incid)
+
+NIz_Qs1 <- NewIz[,1:length(epsi_span)]
+NIz_Qs2 <- NewIz[,(length(epsi_span)+1):(2*length(epsi_span))]
+NIz_epss1 <- NewIz[,(2*length(epsi_span)+1):(3*length(epsi_span))]
+NIz_epss2 <- NewIz[,(3*length(epsi_span)+1):(4*length(epsi_span))]
+
+NIw_Qs1 <- NewIw[,1:length(epsi_span)]
+NIw_Qs2 <- NewIw[,(length(epsi_span)+1):(2*length(epsi_span))]
+NIw_epss1 <- NewIw[,(2*length(epsi_span)+1):(3*length(epsi_span))]
+NIw_epss2 <- NewIw[,(3*length(epsi_span)+1):(4*length(epsi_span))]
+
+
+```
+
+```{r incid_var_plot_Iw, echo=FALSE}
+
+par(mfrow=c(1,2))
+
+plot(time2, NIw_Qs1[,1], main="Dynamics of Iw incidence \n Scenario 1", xlab="time", ylab="Iw incidence", ylim=c(0,0.01), lwd=2, lty=1, type="l", col='black')
+
+capture.output(apply(NIw_Qs1, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(NIw_epss1, 2, linfun_var, time2, 2), file='NUL')
+
+tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
+tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
+
+legend("bottomright" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+plot(time2, NIw_Qs2[,1], main="Dynamics of Iw incidence \n Scenario 2", xlab="time", ylab="Iw incidence", ylim=c(0,0.01), lwd=2, lty=1, type="l", col='black')
+
+capture.output(apply(NIw_Qs2, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(NIw_epss2, 2, linfun_var, time2, 2), file='NUL')
+
+tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
+tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
+
+legend("bottomright" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+```
+
+```{r incid_var_plot_Iz, echo=FALSE}
+
+par(mfrow=c(1,2))
+
+plot(time2, NIz_Qs1[,1], main="Dynamics of Iz incidence \n Scenario 1", xlab="time", ylab="Iz incidence", ylim=c(0,0.002), lwd=2, lty=1, type="l", col='black')
+
+capture.output(apply(NIz_Qs1, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(NIz_epss1, 2, linfun_var, time2, 2), file='NUL')
+
+tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
+tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
+
+legend("bottomright" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+plot(time2, NIz_Qs2[,1], main="Dynamics of Iz incidence \n Scenario 2", xlab="time", ylab="Iz incidence", ylim=c(0,0.002), lwd=2, lty=1, type="l", col='black')
+
+capture.output(apply(NIz_Qs2, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(NIz_epss2, 2, linfun_var, time2, 2), file='NUL')
+
+tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
+tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
+
+legend("bottomright" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+
+```
