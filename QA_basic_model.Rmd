@@ -31,8 +31,8 @@ prho_prim <- 0
 peps <- 0.10 #initial value of the ratio of treated patients
 peps_test <- 0.10 #initial value of the ratio of treated patients
 
-pr <- 1 # 1-r is the efficiency of AMR detection
-pA <- 0 #use of ATB  agriculture
+pr <- 0.5 # 1-r is the efficiency of AMR detection
+pA <- 0.5 #use of ATB  agriculture
 
 
 

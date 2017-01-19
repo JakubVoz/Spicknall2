@@ -246,8 +246,8 @@ prate_beta_w <- 0.01 #rate at which beta_w decreases with E
 prate_beta_z <- 0.01 #rate at which beta_z increases with E
 prate_rho_prim <- 0.001 #rate at which rho_prim increases with E
 
-pr <- 1 # 1-r is the efficiency of AMR detection
-pA <- 0 #use of ATB  agriculture
+pr <- 0.5 # 1-r is the efficiency of AMR detection
+pA <- 0.5 #use of ATB  agriculture
 
 ```
 
