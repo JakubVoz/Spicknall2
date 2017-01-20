@@ -237,7 +237,7 @@ pbeta_z <- 0.015 #transmission parameter of Iz
 pgammaa <- 0.01 #innate recovery rate
 pgamma_tilt <- 0.1 #recovery rate of Iw when treated by antibiotics
 
-epsi_span <- c(0.12, 0.10, 0.08, 0.06)
+epsi_span <- c(0.12, 0.10, 0.08, 0.06, 0.04, 0.02, 0)
 Q_span <- c(0.40, 0.50, 0.60, 0.70)
 mu_span <- c(mu_prob[1], mu_prob[11], mu_prob[21], mu_prob[31])
 rho1_span <- c(rho1[1], rho1[11], rho1[21], rho1[31])
@@ -287,18 +287,14 @@ out_init2=as.data.frame(
 
 initial_states2 <- unlist(out_init2[nrow(out_init2), 2:4])
 
-var1_Qs <- data.frame(colnames=c(LETTERS[1:5]), a=c(epsi_span,0), b=rep(rho1_span[2],5), c=rep(initial_states1[1],5), d=rep(initial_states1[2],5), e=rep(initial_states1[3],5))
+var1_Qs <- cbind(epsi_span, rep(rho1_span[2],7), rep(initial_states1[1],7), rep(initial_states1[2],7), rep(initial_states1[3],7))
 
-var2_Qs <- data.frame(colnames=c(LETTERS[1:5]), a=c(epsi_span,0), b=rep(rho2_span[2],5), c=rep(initial_states2[1],5), d=rep(initial_states2[2],5), e=rep(initial_states2[3],5))
+var2_Qs <- cbind( epsi_span, rep(rho2_span[2],7), rep(initial_states2[1],7), rep(initial_states2[2],7), rep(initial_states2[3],7))
 
-var1_epss <- data.frame(colnames=c(LETTERS[1:5]), a=rep(epsi_span[2],5), b=c(rho1_span,0), c=rep(initial_states1[1],5), d=rep(initial_states1[2],5), e=rep(initial_states1[3],5))
+var1_epss <- cbind(rep(epsi_span[2],4), rho1_span, rep(initial_states1[1],4), rep(initial_states1[2],4), rep(initial_states1[3],4))
 
-var2_epss <- data.frame(colnames=c(LETTERS[1:5]), a=rep(epsi_span[2],5), b=c(rho2_span,0), c=rep(initial_states2[1],5), d=rep(initial_states2[2],5), e=rep(initial_states2[3],5))
+var2_epss <- cbind( rep(epsi_span[2],4), rho2_span, rep(initial_states2[1],4), rep(initial_states2[2],4), rep(initial_states2[3],4))
 
-var1_Qs <- var1_Qs[1:4,2:6]
-var2_Qs <- var2_Qs[1:4,2:6]
-var1_epss <- var1_epss[1:4,2:6]
-var2_epss <- var2_epss[1:4,2:6]
 ```
 
 ```{r AMU_variation_Q_stable, echo=FALSE, cache=TRUE}
@@ -336,9 +332,14 @@ time2 <- seq(0, 1000, by=1)
 
 
 colforcol_span <- colforcol[4:7]
+colforcol_span2 <- colforcol[7:1]
 
 linfun_var <- function(x, t, ltype){
   lines(t, unlist(x), lty=ltype, lwd=2, col=colforcol_span[as.numeric(parent.frame()$i)])
+}
+
+linfun_var2 <- function(x, t, ltype){
+  lines(t, unlist(x), lty=ltype, lwd=2, col=colforcol_span2[as.numeric(parent.frame()$i)])
 }
 
 # col nums
@@ -358,31 +359,32 @@ inc_Iz <- whole_out[,ninciz]
 
 # state var separation
 
-S_Qs1 <- S_dyn[,1:length(epsi_span)]
-S_Qs2 <- S_dyn[,(length(epsi_span)+1):(2*length(epsi_span))]
-S_epss1 <- S_dyn[,(2*length(epsi_span)+1):(3*length(epsi_span))]
-S_epss2 <- S_dyn[,(3*length(epsi_span)+1):(4*length(epsi_span))]
+S_Qs1 <- S_dyn[,1:7]
+S_Qs2 <- S_dyn[,8:14]
+S_epss1 <- S_dyn[,15:18]
+S_epss2 <- S_dyn[,19:22]
 
-Iw_Qs1 <- Iw_dyn[,1:length(epsi_span)]
-Iw_Qs2 <- Iw_dyn[,(length(epsi_span)+1):(2*length(epsi_span))]
-Iw_epss1 <- Iw_dyn[,(2*length(epsi_span)+1):(3*length(epsi_span))]
-Iw_epss2 <- Iw_dyn[,(3*length(epsi_span)+1):(4*length(epsi_span))]
+Iw_Qs1 <- Iw_dyn[,1:7]
+Iw_Qs2 <- Iw_dyn[,8:14]
+Iw_epss1 <- Iw_dyn[,15:18]
+Iw_epss2 <- Iw_dyn[,19:22]
 
-Iz_Qs1 <- Iz_dyn[,1:length(epsi_span)]
-Iz_Qs2 <- Iz_dyn[,(length(epsi_span)+1):(2*length(epsi_span))]
-Iz_epss1 <- Iz_dyn[,(2*length(epsi_span)+1):(3*length(epsi_span))]
-Iz_epss2 <- Iz_dyn[,(3*length(epsi_span)+1):(4*length(epsi_span))]
+Iz_Qs1 <- Iz_dyn[,1:7]
+Iz_Qs2 <- Iz_dyn[,8:14]
+Iz_epss1 <- Iz_dyn[,15:18]
+Iz_epss2 <- Iz_dyn[,19:22]
 
 ```
 
 ```{r state_var_plot_S, echo=FALSE}
 # S
 
+
 par(mfrow=c(1,2))
 
 plot(time2, S_Qs1[,1], main="Dynamics of S : Scenario 1", xlab="time", ylab="S", ylim=c(0,1), lwd=2, lty=1, type="l", col='black')
 
-capture.output(apply(S_Qs1, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(S_Qs1, 2, linfun_var2, time2, 1), file='NUL')
 capture.output(apply(S_epss1, 2, linfun_var, time2, 2), file='NUL')
 
 tag_min <- paste('AMU =', AMU[1])
@@ -395,13 +397,13 @@ legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag
 
 plot(time2, S_Qs2[,1], main="Dynamics of S : Scenario 2", xlab="time", ylab="S", ylim=c(0,1), lwd=2, lty=1, type="l", col='black')
 
-capture.output(apply(S_Qs2, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(S_Qs2, 2, linfun_var2, time2, 1), file='NUL')
 capture.output(apply(S_epss2, 2, linfun_var, time2, 2), file='NUL')
 
 tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
 tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
 
-legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", colforcol_span2[7], colforcol_span2[1]))
 ```
 
 ```{r state_var_plot_Iz, echo=FALSE}
@@ -412,24 +414,24 @@ par(mfrow=c(1,2))
 
 plot(time2, Iz_Qs1[,1], main="Dynamics of Iz : Scenario 1", xlab="time", ylab="Iz", ylim=c(0,1), lwd=2, lty=1, type="l", col='black')
 
-capture.output(apply(Iz_Qs1, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(Iz_Qs1, 2, linfun_var2, time2, 1), file='NUL')
 capture.output(apply(Iz_epss1, 2, linfun_var, time2, 2), file='NUL')
 
 
 tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
 tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
 
-legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", colforcol_span2[7], colforcol_span2[1]))
 
 plot(time2, Iz_Qs2[,1], main="Dynamics of Iz : Scenario 2", xlab="time", ylab="Iz", ylim=c(0,1), lwd=2, lty=1, type="l", col='black')
 
-capture.output(apply(Iz_Qs2, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(Iz_Qs2, 2, linfun_var2, time2, 1), file='NUL')
 capture.output(apply(Iz_epss2, 2, linfun_var, time2, 2), file='NUL')
 
 tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
 tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
 
-legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", colforcol_span2[7], colforcol_span2[1]))
 
 ```
 
@@ -441,24 +443,24 @@ par(mfrow=c(1,2))
 
 plot(time2, Iw_Qs1[,1], main="Dynamics of Iw : Scenario 1", xlab="time", ylab="Iw", ylim=c(0,1), lwd=2, lty=1, type="l", col='black')
 
-capture.output(apply(Iw_Qs1, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(Iw_Qs1, 2, linfun_var2, time2, 1), file='NUL')
 capture.output(apply(Iw_epss1, 2, linfun_var, time2, 2), file='NUL')
 
 
 tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
 tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
 
-legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", colforcol_span2[7], colforcol_span2[1]))
 
 plot(time2, Iw_Qs2[,1], main="Dynamics of Iw : Scenario 2", xlab="time", ylab="Iw", ylim=c(0,1), lwd=2, lty=1, type="l", col='black')
 
-capture.output(apply(Iw_Qs2, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(Iw_Qs2, 2, linfun_var2, time2, 1), file='NUL')
 capture.output(apply(Iw_epss2, 2, linfun_var, time2, 2), file='NUL')
 
 tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
 tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
 
-legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", colforcol_span2[7], colforcol_span2[1]))
 
 ```
 
@@ -474,23 +476,23 @@ par(mfrow=c(1,2))
 
 plot(time2, P_Qs1[,1], main="Dynamics of P : Scenario 1", xlab="time", ylab="P", ylim=c(0,1), lwd=2, lty=1, type="l", col='black')
 
-capture.output(apply(P_Qs1, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(P_Qs1, 2, linfun_var2, time2, 1), file='NUL')
 capture.output(apply(P_epss1, 2, linfun_var, time2, 2), file='NUL')
 
 tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
 tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
 
-legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", colforcol_span2[7], colforcol_span2[1]))
 
 plot(time2, P_Qs2[,1], main="Dynamics of P : Scenario 2", xlab="time", ylab="P", ylim=c(0,1), lwd=2, lty=1, type="l", col='black')
 
-capture.output(apply(P_Qs2, 2, linfun_var, time2, 1), file='NUL')
+capture.output(apply(P_Qs2, 2, linfun_var2, time2, 1), file='NUL')
 capture.output(apply(P_epss2, 2, linfun_var, time2, 2), file='NUL')
 
 tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
 tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
 
-legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+legend("topleft" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", colforcol_span2[7], colforcol_span2[1]))
 
 ```
 
@@ -506,42 +508,43 @@ incid = function(x) {
 NewIz <- apply(inc_Iz, 2, incid)
 NewIw <- apply(inc_Iw, 2, incid)
 
-NIz_Qs1 <- NewIz[,1:length(epsi_span)]
-NIz_Qs2 <- NewIz[,(length(epsi_span)+1):(2*length(epsi_span))]
-NIz_epss1 <- NewIz[,(2*length(epsi_span)+1):(3*length(epsi_span))]
-NIz_epss2 <- NewIz[,(3*length(epsi_span)+1):(4*length(epsi_span))]
+NIz_Qs1 <- NewIz[2:nrow(NewIz),1:length(epsi_span)]
+NIz_Qs2 <- NewIz[2:nrow(NewIz),(length(epsi_span)+1):(2*length(epsi_span))]
+NIz_epss1 <- NewIz[2:nrow(NewIz),(2*length(epsi_span)+1):(2*length(epsi_span)+length(Q_span))]
+NIz_epss2 <- NewIz[2:nrow(NewIz),(2*length(epsi_span)+length(Q_span)+1):ncol(NewIz)]
 
-NIw_Qs1 <- NewIw[,1:length(epsi_span)]
-NIw_Qs2 <- NewIw[,(length(epsi_span)+1):(2*length(epsi_span))]
-NIw_epss1 <- NewIw[,(2*length(epsi_span)+1):(3*length(epsi_span))]
-NIw_epss2 <- NewIw[,(3*length(epsi_span)+1):(4*length(epsi_span))]
+NIw_Qs1 <- NewIw[2:nrow(NewIz),1:length(epsi_span)]
+NIw_Qs2 <- NewIw[2:nrow(NewIz),(length(epsi_span)+1):(2*length(epsi_span))]
+NIw_epss1 <- NewIw[2:nrow(NewIz),(2*length(epsi_span)+1):(2*length(epsi_span)+length(Q_span))]
+NIw_epss2 <- NewIw[2:nrow(NewIz),(2*length(epsi_span)+length(Q_span)+1):ncol(NewIw)]
 
 
 ```
 
 ```{r incid_var_plot_Iw, echo=FALSE}
+time3 <- seq(1, 1000, by=1)
 
 par(mfrow=c(1,2))
 
-plot(time2, NIw_Qs1[,1], main="Dynamics of Iw incidence \n Scenario 1", xlab="time", ylab="Iw incidence", ylim=c(0,0.01), lwd=2, lty=1, type="l", col='black')
+plot(time3, NIw_Qs1[,1], main="Dynamics of Iw incidence \n Scenario 1", xlab="time", ylab="Iw incidence", ylim=c(0,0.01), lwd=2, lty=1, type="l", col='black')
 
-capture.output(apply(NIw_Qs1, 2, linfun_var, time2, 1), file='NUL')
-capture.output(apply(NIw_epss1, 2, linfun_var, time2, 2), file='NUL')
-
-tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
-tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
-
-legend("bottomright" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
-
-plot(time2, NIw_Qs2[,1], main="Dynamics of Iw incidence \n Scenario 2", xlab="time", ylab="Iw incidence", ylim=c(0,0.01), lwd=2, lty=1, type="l", col='black')
-
-capture.output(apply(NIw_Qs2, 2, linfun_var, time2, 1), file='NUL')
-capture.output(apply(NIw_epss2, 2, linfun_var, time2, 2), file='NUL')
+capture.output(apply(NIw_Qs1, 2, linfun_var2, time3, 1), file='NUL')
+capture.output(apply(NIw_epss1, 2, linfun_var, time3, 2), file='NUL')
 
 tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
 tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
 
-legend("bottomright" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+legend("bottomright" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", colforcol_span2[7], colforcol_span2[1]))
+
+plot(time3, NIw_Qs2[,1], main="Dynamics of Iw incidence \n Scenario 2", xlab="time", ylab="Iw incidence", ylim=c(0,0.01), lwd=2, lty=1, type="l", col='black')
+
+capture.output(apply(NIw_Qs2, 2, linfun_var2, time3, 1), file='NUL')
+capture.output(apply(NIw_epss2, 2, linfun_var, time3, 2), file='NUL')
+
+tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
+tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
+
+legend("bottomright" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", colforcol_span2[7], colforcol_span2[1]))
 
 ```
 
@@ -549,24 +552,24 @@ legend("bottomright" , inset=.05, c('eps variation', 'Q variation', tag_min_var,
 
 par(mfrow=c(1,2))
 
-plot(time2, NIz_Qs1[,1], main="Dynamics of Iz incidence \n Scenario 1", xlab="time", ylab="Iz incidence", ylim=c(0,0.002), lwd=2, lty=1, type="l", col='black')
+plot(time3, NIz_Qs1[,1], main="Dynamics of Iz incidence \n Scenario 1", xlab="time", ylab="Iz incidence", ylim=c(0,0.002), lwd=2, lty=1, type="l", col='black')
 
-capture.output(apply(NIz_Qs1, 2, linfun_var, time2, 1), file='NUL')
-capture.output(apply(NIz_epss1, 2, linfun_var, time2, 2), file='NUL')
-
-tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
-tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
-
-legend("bottomright" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
-
-plot(time2, NIz_Qs2[,1], main="Dynamics of Iz incidence \n Scenario 2", xlab="time", ylab="Iz incidence", ylim=c(0,0.002), lwd=2, lty=1, type="l", col='black')
-
-capture.output(apply(NIz_Qs2, 2, linfun_var, time2, 1), file='NUL')
-capture.output(apply(NIz_epss2, 2, linfun_var, time2, 2), file='NUL')
+capture.output(apply(NIz_Qs1, 2, linfun_var2, time3, 1), file='NUL')
+capture.output(apply(NIz_epss1, 2, linfun_var, time3, 2), file='NUL')
 
 tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
 tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
 
-legend("bottomright" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
+legend("bottomright" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", colforcol_span2[7], colforcol_span2[1]))
+
+plot(time3, NIz_Qs2[,1], main="Dynamics of Iz incidence \n Scenario 2", xlab="time", ylab="Iz incidence", ylim=c(0,0.002), lwd=2, lty=1, type="l", col='black')
+
+capture.output(apply(NIz_Qs2, 2, linfun_var2, time3, 1), file='NUL')
+capture.output(apply(NIz_epss2, 2, linfun_var, time3, 2), file='NUL')
+
+tag_min_var <- paste('AMU =', epsi_span[2]*Q_span[4])
+tag_max_var <- paste('AMU =', epsi_span[2]*Q_span[1])
+
+legend("bottomright" , inset=.05, c('eps variation', 'Q variation', tag_min_var, tag_max_var), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", colforcol_span2[7], colforcol_span2[1]))
 
 ```
