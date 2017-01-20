@@ -353,7 +353,7 @@ Here, we see that in short-term dynamics, the incidence depends strongly on $\va
 
 There is therefore a transient period, that follows a decrease in $\varepsilon$, during which the incidence is higher not only than at the prior state but than at equilibrium as well.
 
-DESCRIPTION OF HONEY-MOON PERIOD
+DESCRIPTION OF HONEYMOON PERIOD
 
 On following paragraphs, we will study the cause of this anti-honeymoon period, during which the incidence is strikingly higher than at equilibrium or at the state prior to $\varepsilon$ reduction.
 
@@ -757,6 +757,15 @@ knitr::include_graphics("./detailed_AMU_varying_eps_files/figure-html/plot_AMU_I
 knitr::include_graphics("./detailed_AMU_varying_eps_files/figure-html/plot_AMU_P-1.png")
 ```
 
+###Variations of AMU and Anti-honeymoon period
+
+We then perform an analysis of the dynamics of the model following an abrupt change in one of the components of AMU ($\varepsilon$ or $Q$), the other one remaining stable. Once again, an anti-honeymoon period over 100 steps is observed when suddenly decreasing $\varepsilon$. We can therefore conclude, in cohesion with precedent observations, that $\varepsilon$ is responsible for this phenomenon while changing abruptly and not $Q$.
+
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
+
+knitr::include_graphics("./detailed_AMU_var_dynamics_files/figure-html/incid_var_plot_Iw-1.png")
+
+```
 
 #Model with an impact of E
 
