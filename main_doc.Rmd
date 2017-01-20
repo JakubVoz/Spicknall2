@@ -850,3 +850,14 @@ knitr::include_graphics("./QA_detailed_model_files/figure-html/plot_AMU_P-1.png"
 
 ```
 
+A very large span of $I_z$ and $P$ values can correspond to the same $AMU$. Though our model is very general, it demonstrates that the $AMU$ measure cannot be therefore suitable for statistical studies of $AMR$.
+
+###Variations of AMU and Anti-honeymoon period
+
+Once again, the anti-honeymoon period can be observed when decrasing abruptly $\varepsilon$.
+
+```{r, out.width = "600px", echo=FALSE, fig.align='center'}
+
+knitr::include_graphics("./QA_AMU_var_dynamics_files/figure-html/incid_var_plot_Iw-1.png")
+
+```
