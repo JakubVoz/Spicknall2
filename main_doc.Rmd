@@ -355,7 +355,7 @@ There is therefore a transient period, that follows a decrease in $\varepsilon$,
 
 DESCRIPTION OF HONEY-MOON PERIOD
 
-On following pages, we will study the cause of this anti-honeymoon period, during which the incidence is strikingly higher than at equilibrium or at the state prior to $\varepsilon$ reduction.
+On following paragraphs, we will study the cause of this anti-honeymoon period, during which the incidence is strikingly higher than at equilibrium or at the state prior to $\varepsilon$ reduction.
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
 
