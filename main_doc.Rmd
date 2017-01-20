@@ -861,3 +861,27 @@ Once again, the anti-honeymoon period can be observed when decrasing abruptly $\
 knitr::include_graphics("./QA_AMU_var_dynamics_files/figure-html/incid_var_plot_Iw-1.png")
 
 ```
+
+#Conclusion
+
+We have used SI models in order to inspect what kind of problems one may face while relating $AMR$ with $AMU$. In order to keep our conclusions general, the model is general as well and parameters that would be specific to one disease are not implemented. Although the values of parameters are arbitrary and therefore it does not include a simple time dimension (the 'steps' can though be assimilated to one to several days), our models remain realistic as only realistic relationships between state variables are taken into account.
+
+This study shows three important arguments, for which relating $AMR$ with $AMU$ is not optimal and may lead to false conclusions :
+
+a. Inertia
+
+When relating $AMU$ to $AMR$ the basic assumption is that all the reporting hospitals are at a steady state. Yet such a premise is difficult to justify as the patterns in consumption may change seasonally (!!see about that). In our simplest model, we have demonstrated that a change, and its speed, in proportion of treated patients may have a serious impact on $AMR$ and the relationship may become over- or underestimated. Furthermore, in contrast with some previous studies, our model showed, that the steady-states are reached sooner when decreasing $AMU$ than while increasing it (which might be due to a lack of evolutive component of resistant strain in our model).
+
+b. Anti-honeymoon period
+
+While decreasing suddenly the proportion of treated patients, an outburst of new sensitive cases can take place. The steady state for the given parameters is a way lower under the vaues reached during the outburst. This phenomenon arises from an interplay of infected cases' redistribution towards sensitive ones, prolongation of average duration of disease and consequent accumulation of sensitive cases.
+
+Such a phenomenon, called here anti-honeymoon period in reference to honeymoon period described in post-vaccination dynamics, may cause an underestimation in incidence-based report on resistance.
+
+
+c. Syntheticity of $AMU$
+
+The $AMU$ reported as defined-daily-doses per patient or per occupied bed is therefore a product of the proportion of treated patients between all patients $\varepsilon$ and the quantity of drug or number of doses per patient per day $Q$.
+
+We have considered two scenarios with two hypothetical optimal strategies to prevent the therapeutic failure causing an emergence of $AMR$ (described by $Day$ $et$ $al.$) while the clearance is considered stable. First scenario's optimal strategy being the lowest $Q$ and the second one's being the highest $Q$ in safety window, both showed a large span of $AMR$ and $P$ within the same $AMU$.
+
