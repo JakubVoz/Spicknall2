@@ -329,23 +329,23 @@ Q_ss_Iw_Iz <- (Iw_ss+Iz_ss)*epsvar
 Q_ss_Iw <- as.matrix(Q_ss_Iw)
 Q_ss_Iw_Iz <- as.matrix(Q_ss_Iw_Iz)
 
-plot(Q_ss_Iw, p_steady, main="Evolution of P ratio - prevalence, Iw treated", xlab="Q", ylab="P", ylim=c(0,1), col='red', type = 'l', lty=1, lwd=2)
+plot(Q_ss_Iw, p_steady, main="Evolution of P ratio - prevalence, Iw treated", xlab="E", ylab="P", ylim=c(0,1), col='red', type = 'l', lty=1, lwd=2)
 
 
-plot(Q_ss_Iw_Iz, p_steady, main="Evolution of P ratio - prevalence, all treated", xlab="Q", ylab="P", ylim=c(0,1), lwd=2, col='red', lty=1, type = 'l')
+plot(Q_ss_Iw_Iz, p_steady, main="Evolution of P ratio - prevalence, all treated", xlab="E", ylab="P", ylim=c(0,1), lwd=2, col='red', lty=1, type = 'l')
 
 #burden of infection
 
 burd <- Iw_ss+Iz_ss
 
-plot(Q_ss_Iw, burd, main="Evolution of burden of infection - Iw treated", xlab="Q", ylab="Burden of Infection", ylim=c(0,1), col='red', type = 'l', lty=1, lwd=2)
+plot(Q_ss_Iw, burd, main="Evolution of burden of infection - Iw treated", xlab="E", ylab="Burden of Infection", ylim=c(0,1), col='red', type = 'l', lty=1, lwd=2)
 
-plot(Q_ss_Iw_Iz, burd, main="Evolution of burden of infection - all treated", xlab="Q", ylab="Burden of Infection", ylim=c(0,1), col='red', type = 'l', lty=1, lwd=2)
+plot(Q_ss_Iw_Iz, burd, main="Evolution of burden of infection - all treated", xlab="E", ylab="Burden of Infection", ylim=c(0,1), col='red', type = 'l', lty=1, lwd=2)
 
 #Q as fn of epsilon
 
-plot(epsvar, Q_ss_Iw, main="Evolution of Q, Iw treated", xlab=expression(epsilon), ylab="Q", ylim=c(0,0.1), lwd=2, col='red', lty=1, type = 'l')
+plot(epsvar, Q_ss_Iw, main="Evolution of E, Iw treated", xlab=expression(epsilon), ylab="E", ylim=c(0,0.1), lwd=2, col='red', lty=1, type = 'l')
 
-plot(epsvar, Q_ss_Iw_Iz, main="Evolution of Q, all treated", xlab=expression(epsilon), ylab="Q", ylim=c(0,0.1), lwd=2, col='red', lty=1, type = 'l')
+plot(epsvar, Q_ss_Iw_Iz, main="Evolution of E, all treated", xlab=expression(epsilon), ylab="E", ylim=c(0,0.1), lwd=2, col='red', lty=1, type = 'l')
 
 ```
