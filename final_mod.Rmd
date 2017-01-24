@@ -375,3 +375,27 @@ fatality <- epsico_ext*steady_Iw_eps*alpha2 + (1-epsico_ext)*steady_Iw_eps*alpha
 plot(epsico_ext, fatality, main="Fatality", xlab=expression(epsilon), ylab="fatality, ratio", lty=1, lwd=2, type="l", col="green")
 
 ```
+
+
+```{r plot_showing_default_val, echo=FALSE, fig.align='center'}
+
+plot(pepsi, steady_Iw_eps, main="Steady-states : treatment variations", xlab=expression(epsilon), ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+
+lines(pepsi, steady_Iz_eps, lty=2, lwd=2)
+lines(pepsi, steady_S_eps, lty=1, lwd=2)
+abline(v=0.10, col='green')
+
+legend("topleft", inset=.05, c("S", "Iz", "Iw"), lty=c(1,2,3), lwd=rep(2,3))
+
+
+
+plot(prhoi_ext, steady_Iw_rho_ext, main="Steady-states : treatment failure variations", xlab=expression(rho), ylab="ratio", ylim=c(0,1), lty=3, lwd=2, type="l")
+
+lines(prhoi_ext, steady_Iz_rho_ext, lty=2, lwd=2)
+lines(prhoi_ext, steady_S_rho_ext, lty=1, lwd=2)
+abline(v=0.05, col='green')
+
+legend("topright" , inset=.05, c("Iw", "Iz", "S" ), lty=c(3,2,1), lwd=c(2,2,2))
+
+
+```
