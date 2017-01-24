@@ -384,7 +384,7 @@ burden2 <- iz_steady2+iw_steady2
 
 
 ```{r plot_ss_iz, echo=FALSE}
-plot(doses, iz_steady[,1], main="Iz at steady states \n while varying Q", xlab="Q", ylab="Iz", ylim=c(0,0.40), lwd=2, lty=1, type="l", col='black')
+plot(doses, iz_steady[,1], main="Iz at steady states \n while varying Q", xlab="Q", ylab="Iz", ylim=c(0,max(max(iz_steady), max(iz_steady2))), lwd=2, lty=1, type="l", col='black')
 
 capture.output(apply(iz_steady, 2, linfun, doses, 1), file='NUL')
 capture.output(apply(iz_steady2, 2, linfun, doses, 2), file='NUL')
@@ -392,7 +392,7 @@ capture.output(apply(iz_steady2, 2, linfun, doses, 2), file='NUL')
 legend("bottomright" , inset=.05, c('Scenario 1', 'Scenario 2', tag_min, tag_max), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
 
 
-plot(prop_treated[,1], iz_steady[,1], main="Iz at steady states \n while varying epsilon", xlab=expression(epsilon), ylab="Iz", ylim=c(0,0.40), xlim=c(0,eps_max), lwd=2, type="l", col='black')
+plot(prop_treated[,1], iz_steady[,1], main="Iz at steady states \n while varying epsilon", xlab=expression(epsilon), ylab="Iz", ylim=c(0,max(max(iz_steady), max(iz_steady2))), xlim=c(0,eps_max), lwd=2, type="l", col='black')
 
 for (i in 1:ncol(prop_treated)) {
   lines(prop_treated[,i], iz_steady[,i], col=colforcol[i], lty=1, lwd=2)
@@ -404,6 +404,7 @@ for (i in 1:ncol(prop_treated)) {
 legend("topleft" , inset=.05, c('Scenario 1', 'Scenario 2', tag_min, tag_max), lty=c(1,2,1,1), lwd=c(2,2,2,2), col=c("black", "black", "blue", "red"))
 
 ```
+
 ```{r plot_ss_iw, echo=FALSE}
 plot(doses, iw_steady[,1], main="Iw at steady states \n while varying Q", xlab="Q", ylab="Iw", ylim=c(0,0.70), lwd=2, lty=1, type="l", col='black')
 
