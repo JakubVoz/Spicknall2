@@ -105,7 +105,7 @@ plot(x, gr_sens, main="Growth rate : Scenario 1", xlab="Q", ylab="Growth rate", 
 lines(x, gr_res, type='l', col='red', lwd=2)
 
 lines(x, rep(0, length(x)), type='l', col='black', lwd=1, lty=2)
-abline(v=MIC, col='green')
+
 
 
 plot(x, gr_sens, main="Growth rate : Scenario 2", xlab="Q", ylab="Growth rate", ylim=c(-0.2,1), lwd=2, type="l", col='blue')
@@ -113,7 +113,6 @@ plot(x, gr_sens, main="Growth rate : Scenario 2", xlab="Q", ylab="Growth rate", 
 lines(x, gr_res2, type='l', col='red', lwd=2)
 
 lines(x, rep(0, length(x)), type='l', col='black', lwd=1, lty=2)
-abline(v=MIC, col='green')
 
 ```
 
@@ -157,7 +156,7 @@ legend("topleft" , inset=.05, c("Scenario 1", "Scenario 2", "DQ clinical limits"
 mu_prob <- seq(min_mu, max_mu, length.out = n_values)
 doses <- seq(cl, cu, length.out = n_values)
 
-plot(doses, mu_prob, main="Probability of resistant mutant apparition", xlab="Q", ylab="mu", ylim=c(0,0.15), lwd=2, type="l", col='black')
+plot(doses, mu_prob, main="Probability of resistant mutant apparition", xlab="Q", ylab=expression(mu), ylim=c(0,0.15), lwd=2, type="l", col='black')
 
 ```
 
@@ -168,7 +167,7 @@ sel_sel_coef2 <- sel_coef2[lowbound:highbound]
 rho1 <- sel_sel_coef*mu_prob
 rho2 <- sel_sel_coef2*mu_prob
 
-plot(doses, rho1, main="Treatment failure rate", xlab="Q", ylab="rho", lwd=2, type="l", col='black', ylim=c(0, 0.10))
+plot(doses, rho1, main="Treatment failure rate", xlab="Q", ylab=expression(rho), lwd=2, type="l", col='black', ylim=c(0, 0.10))
 
 lines(doses, rho2, type='l', col='red', lwd=2)
 
@@ -177,7 +176,7 @@ legend("topleft" , inset=.05, c("Scenario 1", "Scenario 2"), lty=c(1,1), lwd=c(2
 
 ```{r treated_pat, echo=FALSE, cache=TRUE}
 
-plot(doses, prop_treated, main="Proportion of treated patients", xlab="Q", ylab="eps", ylim=c(0,0.15), lwd=2, type="l", col='black')
+plot(doses, prop_treated, main="Proportion of treated patients", xlab="Q", ylab=expression(epsilon), ylim=c(0,0.15), lwd=2, type="l", col='black')
 
 ```
 

@@ -565,6 +565,10 @@ A=B=(max \varepsilon - min\varepsilon)/2
 $$
 In order to prevent effects of $I_w$ extinction due to high $\varepsilon$, we opted here for 0.00 as the minimum value of $\varepsilon$ and 0.18 as its maximum value. 
 
+$$
+\varepsilon=0.09*sin(\omega*t)+0.09 \\
+$$
+
 The $\varepsilon$ varies as follows for different values of pulsation $\omega$ (higher pulsations mean faster change in time) :
 
 ```{r, out.width = "600px", echo=FALSE, fig.align='center'}
